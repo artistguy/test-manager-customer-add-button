@@ -4,17 +4,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Customer Manager</title>
+<title>Customers — Manager.io Extension</title>
 
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
 
   body {
-    font-family: system-ui, sans-serif;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     background:#ffffff;
     color:#24292f;
-    min-height:100vh;
-    padding:20px;
+    padding:18px;
   }
 
   .ctrl-bar {
@@ -22,33 +21,32 @@
     align-items:center;
     gap:10px;
     flex-wrap:wrap;
-    padding:12px 16px;
-    margin-bottom:18px;
+    padding:12px 14px;
+    margin-bottom:14px;
     background:#f6f8fa;
     border:1px solid #d0d7de;
     border-radius:10px;
   }
 
   .load-btn {
-    padding:8px 18px;
+    padding:8px 14px;
     border:none;
-    border-radius:7px;
-    cursor:pointer;
-    font-size:13px;
-    font-weight:700;
+    border-radius:8px;
     background:#0969da;
     color:#fff;
+    font-weight:600;
+    cursor:pointer;
   }
 
   .load-btn:disabled { opacity:.5; cursor:not-allowed; }
 
   .prog-wrap {
     flex:1;
-    min-width:120px;
     height:6px;
     background:#d0d7de;
     border-radius:4px;
     overflow:hidden;
+    min-width:120px;
   }
 
   .prog-bar {
@@ -64,19 +62,10 @@
     white-space:nowrap;
   }
 
-  .err-box {
-    padding:12px 14px;
-    border:1px solid #d0d7de;
-    border-radius:8px;
-    background:#fff5f5;
-    color:#cf222e;
-    margin-bottom:12px;
-  }
-
   .layout {
     display:grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap:16px;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap:14px;
   }
 
   .panel {
@@ -90,95 +79,90 @@
     padding:10px 12px;
     background:#f6f8fa;
     border-bottom:1px solid #d0d7de;
-    font-weight:700;
     font-size:13px;
+    font-weight:600;
   }
+
+  .panel-body { padding:12px; }
 
   .search {
     width:100%;
-    padding:10px;
-    border:none;
-    border-bottom:1px solid #d0d7de;
-    outline:none;
+    padding:8px 10px;
+    border:1px solid #d0d7de;
+    border-radius:8px;
+    margin-bottom:10px;
+    font-size:13px;
   }
 
-  .table {
+  table {
     width:100%;
     border-collapse:collapse;
     font-size:13px;
   }
 
-  .table tr {
-    cursor:pointer;
+  th, td {
+    text-align:left;
+    padding:8px;
+    border-bottom:1px solid #eaeef2;
   }
 
-  .table tr:hover {
-    background:#f6f8fa;
+  tr:hover { background:#f6f8fa; cursor:pointer; }
+
+  .tag {
+    font-size:11px;
+    padding:2px 6px;
+    border-radius:999px;
+    background:#eef2f6;
+    display:inline-block;
   }
 
-  .table td {
+  .form-grid {
+    display:grid;
+    gap:10px;
+  }
+
+  .field label {
+    font-size:12px;
+    color:#57606a;
+    display:block;
+    margin-bottom:4px;
+  }
+
+  .field input, .field textarea {
+    width:100%;
     padding:8px 10px;
-    border-bottom:1px solid #f0f0f0;
+    border:1px solid #d0d7de;
+    border-radius:8px;
+    font-size:13px;
   }
 
-  .selected {
-    background:#e7f1ff !important;
-  }
+  textarea { min-height:70px; resize:vertical; }
 
-  .form {
-    padding:12px;
+  .row {
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:10px;
   }
 
-  .form label {
-    font-size:12px;
-    color:#57606a;
-    margin-bottom:4px;
-    display:block;
-  }
-
-  .field {
-    display:flex;
-    flex-direction:column;
-  }
-
-  input {
-    padding:8px;
-    border:1px solid #d0d7de;
-    border-radius:6px;
-    outline:none;
-  }
-
-  input:focus {
-    border-color:#0969da;
-  }
-
-  .full { grid-column:1 / -1; }
-
-  .actions {
-    grid-column:1 / -1;
-    display:flex;
-    gap:10px;
-    margin-top:6px;
-  }
-
   .btn {
-    padding:8px 12px;
+    padding:9px 12px;
     border:none;
-    border-radius:6px;
-    font-weight:700;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
     font-size:13px;
   }
 
   .btn-primary { background:#0969da; color:#fff; }
-  .btn-secondary { background:#f6f8fa; border:1px solid #d0d7de; }
+  .btn-muted { background:#f6f8fa; border:1px solid #d0d7de; }
 
-  .hint {
-    font-size:12px;
-    color:#57606a;
-    margin-top:6px;
+  .err-box {
+    color:#cf222e;
+    background:#fff5f5;
+    border:1px solid #ffd0d0;
+    padding:10px;
+    border-radius:8px;
+    font-size:13px;
   }
 
   .empty {
@@ -193,16 +177,16 @@
 <body>
 
 <div class="ctrl-bar">
-  <button class="load-btn" id="load-btn" onclick="loadAllRecords()">⬇ Load All Records</button>
+  <button class="load-btn" id="load-btn" onclick="loadAllRecords()">⬇ Load Customers</button>
   <div class="prog-wrap"><div class="prog-bar" id="prog-bar"></div></div>
-  <span class="status-txt" id="status-txt">Press Load to fetch customers</span>
+  <span class="status-txt" id="status-txt">Ready</span>
 </div>
 
-<div id="app"></div>
+<div id="app" class="layout"></div>
 
 <script>
 /* ══════════════════════════════════
-   DO NOT MODIFY
+   postMessage helper — DO NOT MODIFY
 ══════════════════════════════════ */
 function postMessageWithResponse(message) {
   return new Promise((resolve, reject) => {
@@ -226,20 +210,20 @@ function postMessageWithResponse(message) {
 }
 
 /* ══════════════════════════════════
-   PAGINATION LOOP (DO NOT CHANGE)
+   pagination — DO NOT MODIFY
 ══════════════════════════════════ */
 async function getCustomerBatch(onProgress) {
   const allItems = [];
-  let nextToken  = null;
-  let pageNum    = 0;
-  let apiTotal   = null;
+  let nextToken = null;
+  let pageNum = 0;
+  let apiTotal = null;
 
   do {
     const path = nextToken
       ? '/api4/customer-batch?PageSize=99999&next_page_token=' + encodeURIComponent(nextToken)
       : '/api4/customer-batch?PageSize=99999';
 
-    const data = await postMessageWithResponse({ type: 'api-request', method: 'GET', path });
+    const data = await postMessageWithResponse({ type:'api-request', method:'GET', path });
 
     const page = Array.isArray(data) ? data : (data.items || data.data || []);
     allItems.push(...page);
@@ -259,208 +243,203 @@ async function getCustomerBatch(onProgress) {
   return allItems;
 }
 
-/* ══════════════════════════════════
-   GLOBAL STATE
-══════════════════════════════════ */
-window.__state = {
-  customers: [],
-  filtered: [],
-  selected: null,
-  search: ''
-};
+/* state */
+let CUSTOMER_DATA = [];
+let SELECTED_INDEX = null;
 
-/* ══════════════════════════════════
-   LOAD DATA
-══════════════════════════════════ */
+/* load */
 async function loadAllRecords() {
   const btn = document.getElementById('load-btn');
   const bar = document.getElementById('prog-bar');
   const status = document.getElementById('status-txt');
 
   btn.disabled = true;
-  btn.textContent = 'Loading…';
-  bar.style.width = '0%';
+  status.textContent = "Loading...";
 
   try {
-    const items = await getCustomerBatch((loaded, total, page) => {
+    CUSTOMER_DATA = await getCustomerBatch((loaded, total, page) => {
       status.textContent = total
         ? `Page ${page} · ${loaded} / ${total}`
         : `Page ${page} · ${loaded} loaded`;
-      if (total) bar.style.width = Math.min(95, (loaded / total) * 100) + '%';
+      if (total) bar.style.width = Math.min(100, (loaded/total)*100) + "%";
     });
 
-    window.__state.customers = items;
-    window.__state.filtered = items;
-
-    bar.style.width = '100%';
-    status.textContent = `✓ ${items.length} customers loaded`;
-
-    btn.textContent = '↺ Reload';
+    bar.style.width = "100%";
+    status.textContent = `Loaded ${CUSTOMER_DATA.length} customers`;
     btn.disabled = false;
+    btn.textContent = "↻ Reload";
 
-    render(items);
+    render(CUSTOMER_DATA);
 
-  } catch (err) {
-    status.textContent = 'Error: ' + err.message;
-    btn.textContent = '↺ Retry';
+  } catch (e) {
+    status.textContent = e.message;
     btn.disabled = false;
-    document.getElementById('app').innerHTML =
-      `<div class="err-box">${err.message}</div>`;
   }
 }
 
-/* ══════════════════════════════════
-   VALIDATION
-══════════════════════════════════ */
-function validateCustomer(c) {
-  const errors = [];
+/* helpers */
+const get = (c, p) => c?.item?.[p];
 
-  if (!c.name || c.name.trim().length === 0) {
-    errors.push("Name is required");
-  }
-
-  if (c.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email)) {
-    errors.push("Invalid email format");
-  }
-
-  if (c.creditLimit != null && c.creditLimit < 0) {
-    errors.push("Credit limit cannot be negative");
-  }
-
-  return errors;
+function fmtMoney(v) {
+  return (v ?? 0).toLocaleString(undefined, { minimumFractionDigits:2 });
 }
 
-/* ══════════════════════════════════
-   SELECT CUSTOMER
-══════════════════════════════════ */
-function selectCustomer(index) {
-  window.__state.selected = index;
-  render(window.__state.customers);
-}
-
-/* ══════════════════════════════════
-   UPDATE FIELD
-══════════════════════════════════ */
-function updateField(field, value) {
-  const idx = window.__state.selected;
-  if (idx == null) return;
-
-  const raw = window.__state.customers[idx];
-  const c = raw.item || raw;
-
-  c[field] = field === 'creditLimit' ? Number(value) : value;
-
-  render(window.__state.customers);
-}
-
-/* ══════════════════════════════════
-   RENDER UI
-══════════════════════════════════ */
+/* render */
 function render(items) {
-  const app = document.getElementById('app');
+  const app = document.getElementById("app");
 
-  const normalized = items.map(x => x.item ? x.item : x);
+  if (!items || items.length === 0) {
+    app.innerHTML = `<div class="empty">No customers found</div>`;
+    return;
+  }
 
-  const state = window.__state;
+  const filtered = items;
 
-  const selectedItem = state.selected != null ? normalized[state.selected] : null;
-
-  const filtered = state.search
-    ? normalized.filter(c =>
-        (c.name || '').toLowerCase().includes(state.search.toLowerCase()) ||
-        (c.email || '').toLowerCase().includes(state.search.toLowerCase())
-      )
-    : normalized;
-
-  let html = `
-  <div class="layout">
-
+  const table = `
     <div class="panel">
-      <div class="panel-header">Customers (${filtered.length})</div>
-      <input class="search" placeholder="Search name or email..."
-        oninput="window.__state.search=this.value; render(window.__state.customers)" />
+      <div class="panel-header">Customers (${items.length})</div>
+      <div class="panel-body">
+        <input class="search" id="search" placeholder="Search name, email..." oninput="filterList()" />
 
-      <table class="table">
-        ${filtered.length === 0 ? `<tr><td class="empty">No customers found</td></tr>` : filtered.map((c, i) => {
-          const globalIndex = normalized.indexOf(c);
-          const isSel = state.selected === globalIndex;
-          return `
-            <tr class="${isSel ? 'selected' : ''}" onclick="selectCustomer(${globalIndex})">
-              <td><strong>${c.name || 'Unnamed'}</strong><br><small>${c.email || ''}</small></td>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Credit</th>
+              <th>Status</th>
             </tr>
-          `;
-        }).join('')}
-      </table>
+          </thead>
+          <tbody id="rows">
+            ${filtered.map((c,i)=>`
+              <tr onclick="selectCustomer(${i})">
+                <td>${get(c,'name') || '-'}</td>
+                <td>${get(c,'email') || '-'}</td>
+                <td>${fmtMoney(get(c,'creditLimit'))}</td>
+                <td>${get(c,'inactive') ? '<span class="tag">Inactive</span>' : '<span class="tag">Active</span>'}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
     </div>
+  `;
 
+  const form = `
     <div class="panel">
-      <div class="panel-header">Customer Editor</div>
+      <div class="panel-header">Customer Editor (local)</div>
+      <div class="panel-body">
+        <div class="form-grid">
 
-      ${selectedItem ? `
-        ${(() => {
-          const errors = validateCustomer(selectedItem);
+          <div class="field">
+            <label>Name</label>
+            <input id="f_name" />
+          </div>
 
-          return `
-          ${errors.length ? `<div class="err-box">${errors.join('<br>')}</div>` : ''}
-
-          <div class="form">
-
-            <div class="field full">
-              <label>Name *</label>
-              <input value="${selectedItem.name || ''}" oninput="updateField('name', this.value)">
+          <div class="row">
+            <div class="field">
+              <label>Code</label>
+              <input id="f_code" />
             </div>
 
             <div class="field">
               <label>Email</label>
-              <input value="${selectedItem.email || ''}" oninput="updateField('email', this.value)">
+              <input id="f_email" />
             </div>
+          </div>
 
-            <div class="field">
-              <label>Credit Limit</label>
-              <input type="number" value="${selectedItem.creditLimit || 0}"
-                oninput="updateField('creditLimit', this.value)">
-            </div>
+          <div class="field">
+            <label>Billing Address</label>
+            <textarea id="f_bill"></textarea>
 
-            <div class="field full">
-              <label>Billing Address</label>
-              <input value="${selectedItem.billingAddress || ''}"
-                oninput="updateField('billingAddress', this.value)">
-            </div>
+```
+      </div>
 
-            <div class="field full">
-              <label>Delivery Address</label>
-              <input value="${selectedItem.deliveryAddress || ''}"
-                oninput="updateField('deliveryAddress', this.value)">
-            </div>
+      <div class="field">
+        <label>Delivery Address</label>
+        <textarea id="f_del"></textarea>
+      </div>
 
-            <div class="field">
-              <label>Inactive</label>
-              <input type="checkbox" ${selectedItem.inactive ? 'checked' : ''}
-                onchange="updateField('inactive', this.checked)">
-            </div>
+      <div class="row">
+        <div class="field">
+          <label>Credit Limit</label>
+          <input id="f_credit" type="number" />
+        </div>
 
-            <div class="actions">
-              <button class="btn btn-secondary" onclick="render(window.__state.customers)">Reset View</button>
-              <button class="btn btn-primary" onclick="alert('Read-only mode: changes are local only')">Save</button>
-            </div>
+        <div class="field">
+          <label>Inactive</label>
+          <input id="f_inactive" type="checkbox" />
+        </div>
+      </div>
 
-            <div class="hint">Read-only extension — edits are not persisted to Manager.io</div>
-
-          </div>`;
-        })()}
-      ` : `<div class="empty">Select a customer to view or edit</div>`}
+      <button class="btn btn-primary" onclick="saveLocal()">Save (local)</button>
+      <button class="btn btn-muted" onclick="clearForm()">Clear</button>
 
     </div>
-
   </div>
-  `;
+</div>
+```
 
-  app.innerHTML = html;
+`;
+
+app.innerHTML = table + form;
 }
 
-/* initial empty render */
-render([]);
-</script>
+/* select */
+function selectCustomer(i) {
+const c = CUSTOMER_DATA[i];
+SELECTED_INDEX = i;
+
+document.getElementById("f_name").value = get(c,'name') || "";
+document.getElementById("f_code").value = get(c,'code') || "";
+document.getElementById("f_email").value = get(c,'email') || "";
+document.getElementById("f_bill").value = get(c,'billingAddress') || "";
+document.getElementById("f_del").value = get(c,'deliveryAddress') || "";
+document.getElementById("f_credit").value = get(c,'creditLimit') || 0;
+document.getElementById("f_inactive").checked = !!get(c,'inactive');
+}
+
+/* save locally (no API write allowed) */
+function saveLocal() {
+if (SELECTED_INDEX === null) return;
+
+const c = CUSTOMER_DATA[SELECTED_INDEX];
+
+c.item.name = document.getElementById("f_name").value;
+c.item.code = document.getElementById("f_code").value;
+c.item.email = document.getElementById("f_email").value;
+c.item.billingAddress = document.getElementById("f_bill").value;
+c.item.deliveryAddress = document.getElementById("f_del").value;
+c.item.creditLimit = Number(document.getElementById("f_credit").value || 0);
+c.item.inactive = document.getElementById("f_inactive").checked;
+
+render(CUSTOMER_DATA);
+}
+
+/* clear */
+function clearForm() {
+SELECTED_INDEX = null;
+["f_name","f_code","f_email","f_bill","f_del","f_credit"].forEach(id=>{
+const el = document.getElementById(id);
+if (el) el.value = "";
+});
+document.getElementById("f_inactive").checked = false;
+}
+
+/* filter */
+function filterList() {
+const q = document.getElementById("search").value.toLowerCase();
+
+const filtered = CUSTOMER_DATA.filter(c => {
+return (
+(get(c,'name')||"").toLowerCase().includes(q) ||
+(get(c,'email')||"").toLowerCase().includes(q) ||
+(get(c,'code')||"").toLowerCase().includes(q)
+);
+});
+
+render(filtered);
+} </script>
 
 </body>
 </html>
