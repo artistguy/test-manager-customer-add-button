@@ -20,64 +20,42 @@
   .ctrl-bar{
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:12px;
     flex-wrap:wrap;
-    padding:12px 16px;
-    margin-bottom:20px;
+    padding:14px 16px;
+    margin-bottom:18px;
     background:#f6f8fa;
     border:1px solid #d0d7de;
     border-radius:12px;
     box-shadow:0 1px 2px rgba(27,31,36,.04);
   }
 
-  .load-btn,
-  .primary-btn,
-  .secondary-btn{
+  .load-btn{
+    padding:9px 18px;
     border:none;
     border-radius:8px;
     cursor:pointer;
-    font-weight:700;
-    transition:all .18s ease;
-  }
-
-  .load-btn{
-    padding:9px 20px;
     font-size:13px;
+    font-weight:700;
     background:#0969da;
     color:#fff;
+    transition:.15s ease;
   }
 
-  .load-btn:hover,
-  .primary-btn:hover{
-    filter:brightness(.95);
+  .load-btn:hover{
+    opacity:.92;
   }
 
-  .load-btn:disabled,
-  .primary-btn:disabled{
-    opacity:.55;
+  .load-btn:disabled{
+    opacity:.45;
     cursor:not-allowed;
-  }
-
-  .primary-btn{
-    background:#1a7f37;
-    color:#fff;
-    padding:10px 16px;
-    font-size:14px;
-  }
-
-  .secondary-btn{
-    background:#f6f8fa;
-    color:#24292f;
-    border:1px solid #d0d7de;
-    padding:10px 16px;
-    font-size:14px;
   }
 
   .prog-wrap{
     flex:1;
     min-width:120px;
     height:6px;
-    background:#d8dee4;
+    background:#d0d7de;
     border-radius:999px;
     overflow:hidden;
   }
@@ -106,269 +84,247 @@
     margin-bottom:16px;
   }
 
-  .layout{
+  .main-grid{
     display:grid;
-    grid-template-columns: 1.1fr .9fr;
-    gap:20px;
+    grid-template-columns:360px 1fr;
+    gap:18px;
+    align-items:start;
   }
 
-  @media (max-width: 980px){
-    .layout{
-      grid-template-columns:1fr;
-    }
-  }
-
-  .card{
+  .panel{
     background:#fff;
     border:1px solid #d0d7de;
     border-radius:14px;
-    padding:18px;
-    box-shadow:0 2px 8px rgba(27,31,36,.05);
+    overflow:hidden;
+    box-shadow:0 1px 3px rgba(27,31,36,.05);
   }
 
-  .card-title{
-    font-size:18px;
-    font-weight:800;
-    margin-bottom:14px;
-  }
-
-  .invoice-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:18px;
-    flex-wrap:wrap;
-  }
-
-  .invoice-label{
-    font-size:14px;
-    font-weight:700;
-    color:#24292f;
-  }
-
-  .customer-select{
-    flex:1;
-    min-width:260px;
-    border:1px solid #d0d7de;
-    border-radius:10px;
-    padding:12px 14px;
-    background:#fff;
-    font-size:14px;
-    color:#24292f;
-  }
-
-  .customer-select:focus,
-  input:focus,
-  textarea:focus{
-    outline:none;
-    border-color:#0969da;
-    box-shadow:0 0 0 3px rgba(9,105,218,.12);
-  }
-
-  .quick-add-btn{
-    background:#1f883d;
-    color:#fff;
-    border:none;
-    border-radius:10px;
-    padding:12px 16px;
-    font-size:14px;
-    font-weight:700;
-    cursor:pointer;
-    white-space:nowrap;
-  }
-
-  .quick-add-btn:hover{
-    filter:brightness(.96);
-  }
-
-  .customer-preview{
+  .panel-head{
+    padding:16px 18px;
+    border-bottom:1px solid #d8dee4;
     background:#f6f8fa;
-    border:1px solid #d0d7de;
-    border-radius:10px;
-    padding:14px;
-    margin-top:8px;
   }
 
-  .preview-row{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:8px;
-    font-size:13px;
-  }
-
-  .preview-label{
-    color:#57606a;
-    font-weight:600;
-  }
-
-  .preview-value{
-    color:#24292f;
+  .panel-title{
+    font-size:15px;
     font-weight:700;
-    text-align:right;
-    word-break:break-word;
+    margin-bottom:4px;
   }
 
-  .grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
+  .panel-sub{
+    color:#57606a;
+    font-size:12px;
+    line-height:1.4;
   }
 
-  @media (max-width:640px){
-    .grid{
-      grid-template-columns:1fr;
-    }
+  .panel-body{
+    padding:18px;
+  }
+
+  .invoice-toolbar{
+    display:flex;
+    align-items:flex-end;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
   }
 
   .field{
     display:flex;
     flex-direction:column;
     gap:6px;
+    flex:1;
+    min-width:180px;
   }
 
   .field label{
-    font-size:13px;
-    font-weight:700;
-    color:#24292f;
+    font-size:12px;
+    font-weight:600;
+    color:#57606a;
   }
 
   .field input,
-  .field textarea{
+  .field textarea,
+  .field select{
+    width:100%;
     border:1px solid #d0d7de;
-    border-radius:10px;
-    padding:12px;
-    font-size:14px;
     background:#fff;
+    border-radius:8px;
+    padding:10px 12px;
+    font-size:13px;
+    color:#24292f;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+
+  .field textarea{
+    min-height:74px;
     resize:vertical;
   }
 
-  textarea{
-    min-height:90px;
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus{
+    outline:none;
+    border-color:#0969da;
+    box-shadow:0 0 0 3px rgba(9,105,218,.12);
   }
 
-  .actions{
-    display:flex;
-    gap:10px;
-    margin-top:16px;
-    flex-wrap:wrap;
+  .quick-add-btn{
+    height:40px;
+    border:none;
+    background:#1a7f37;
+    color:#fff;
+    padding:0 16px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.15s ease;
+    white-space:nowrap;
   }
 
-  .table-wrap{
+  .quick-add-btn:hover{
+    opacity:.92;
+  }
+
+  .save-btn{
+    width:100%;
+    border:none;
+    background:#0969da;
+    color:#fff;
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.15s ease;
+    margin-top:14px;
+  }
+
+  .save-btn:hover{
+    opacity:.92;
+  }
+
+  .save-btn:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+  }
+
+  .success-box{
+    margin-top:14px;
+    background:#dafbe1;
+    border:1px solid #aceebb;
+    color:#116329;
+    padding:12px 14px;
+    border-radius:10px;
+    font-size:13px;
+    line-height:1.5;
+  }
+
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:14px;
+    margin-bottom:18px;
+  }
+
+  .stat-card{
+    border:1px solid #d8dee4;
+    border-radius:12px;
+    padding:16px;
+    background:#fff;
+  }
+
+  .stat-label{
+    color:#57606a;
+    font-size:12px;
+    margin-bottom:8px;
+  }
+
+  .stat-value{
+    font-size:26px;
+    font-weight:800;
+    letter-spacing:-0.02em;
+  }
+
+  .search-wrap{
+    margin-bottom:14px;
+  }
+
+  .customer-table-wrap{
     overflow:auto;
-    border:1px solid #d0d7de;
+    border:1px solid #d8dee4;
     border-radius:12px;
   }
 
   table{
     width:100%;
     border-collapse:collapse;
-    font-size:13px;
+    min-width:860px;
   }
 
   thead{
     background:#f6f8fa;
   }
 
-  th, td{
-    padding:12px 14px;
-    border-bottom:1px solid #d8dee4;
-    text-align:left;
-    vertical-align:top;
-  }
-
   th{
-    font-weight:800;
-    color:#24292f;
+    text-align:left;
+    padding:12px 14px;
+    font-size:12px;
+    color:#57606a;
+    border-bottom:1px solid #d8dee4;
     white-space:nowrap;
   }
 
+  td{
+    padding:12px 14px;
+    border-bottom:1px solid #eef2f6;
+    font-size:13px;
+    vertical-align:top;
+  }
+
   tbody tr:hover{
-    background:#fafbfc;
+    background:#f9fbfd;
   }
 
   .badge{
     display:inline-flex;
     align-items:center;
-    justify-content:center;
-    padding:4px 10px;
+    gap:6px;
+    padding:4px 9px;
     border-radius:999px;
     font-size:11px;
-    font-weight:800;
-  }
-
-  .badge-active{
-    background:#dafbe1;
-    color:#116329;
-  }
-
-  .badge-inactive{
-    background:#ffebe9;
-    color:#cf222e;
-  }
-
-  .empty{
-    text-align:center;
-    padding:48px 20px;
-    color:#57606a;
-    border:1px dashed #d0d7de;
-    border-radius:12px;
-    background:#fafbfc;
-  }
-
-  .success-box{
-    margin-top:16px;
-    background:#dafbe1;
-    border:1px solid #7ee787;
-    color:#116329;
-    border-radius:10px;
-    padding:14px 16px;
-    font-size:14px;
     font-weight:700;
   }
 
-  .search-input{
-    width:100%;
-    margin-bottom:14px;
-    border:1px solid #d0d7de;
-    border-radius:10px;
-    padding:12px 14px;
-    font-size:14px;
+  .badge.active{
+    background:#dafbe1;
+    color:#116329;
   }
 
-  .stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    margin-bottom:18px;
+  .badge.inactive{
+    background:#fff1e5;
+    color:#9a6700;
   }
 
-  @media (max-width:640px){
-    .stats{
+  .muted{
+    color:#57606a;
+  }
+
+  .empty-state{
+    padding:48px 20px;
+    text-align:center;
+    color:#57606a;
+  }
+
+  .small{
+    font-size:12px;
+  }
+
+  @media (max-width:980px){
+    .main-grid{
       grid-template-columns:1fr;
     }
-  }
-
-  .stat{
-    background:#f6f8fa;
-    border:1px solid #d0d7de;
-    border-radius:12px;
-    padding:16px;
-  }
-
-  .stat-label{
-    font-size:12px;
-    color:#57606a;
-    margin-bottom:8px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:.04em;
-  }
-
-  .stat-value{
-    font-size:24px;
-    font-weight:900;
-    color:#24292f;
   }
 </style>
 
@@ -440,11 +396,7 @@ async function getCustomerBatch(onProgress) {
     }
 
     pageNum++;
-
-    if (onProgress) {
-      onProgress(allItems.length, apiTotal, pageNum);
-    }
-
+    if (onProgress) onProgress(allItems.length, apiTotal, pageNum);
     if (pageNum >= 1000) break;
 
   } while (nextToken);
@@ -453,274 +405,222 @@ async function getCustomerBatch(onProgress) {
 }
 
 /* ══════════════════════════════════
-   Global state
+   Global cache
 ══════════════════════════════════ */
-let CUSTOMER_CACHE = [];
-let FILTERED_CACHE = [];
-let CURRENT_SELECTED = null;
+let ALL_CUSTOMERS = [];
 
 /* ══════════════════════════════════
-   Utility helpers
+   Formatters
 ══════════════════════════════════ */
-function safe(v, fallback='—'){
-  return v ?? fallback;
-}
-
-function fmtMoney(v){
-  return '$' + Number(v || 0).toLocaleString(undefined,{
-    minimumFractionDigits:2,
-    maximumFractionDigits:2
-  });
+function fmtCurrency(v){
+  return new Intl.NumberFormat(undefined,{
+    style:'currency',
+    currency:'USD',
+    minimumFractionDigits:2
+  }).format(Number(v || 0));
 }
 
 function escapeHtml(str){
-  return String(str || '')
+  return String(str ?? '')
     .replace(/&/g,'&amp;')
     .replace(/</g,'&lt;')
     .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
 }
 
 /* ══════════════════════════════════
    Create customer (WRITE OPERATION)
 ══════════════════════════════════ */
 async function createCustomer() {
-  const saveBtn = document.getElementById('save-btn');
-  const successBox = document.getElementById('success-box');
 
-  const name = document.getElementById('cust-name').value.trim();
-  const code = document.getElementById('cust-code').value.trim();
-  const email = document.getElementById('cust-email').value.trim();
-  const billingAddress = document.getElementById('cust-billing').value.trim();
-  const deliveryAddress = document.getElementById('cust-delivery').value.trim();
-  const creditLimit = Number(document.getElementById('cust-credit').value || 0);
+  const btn = document.getElementById('save-customer-btn');
+  const msg = document.getElementById('save-message');
+
+  const name = document.getElementById('cust-name')?.value?.trim();
+  const code = document.getElementById('cust-code')?.value?.trim();
+  const email = document.getElementById('cust-email')?.value?.trim();
+  const billing = document.getElementById('cust-billing')?.value?.trim();
+  const delivery = document.getElementById('cust-delivery')?.value?.trim();
+  const creditLimit = Number(document.getElementById('cust-credit')?.value || 0);
+
+  msg.innerHTML = '';
 
   if (!name) {
-    alert('Customer name is required.');
+    msg.innerHTML = '<div class="err-box">Customer name is required.</div>';
     return;
   }
 
-  saveBtn.disabled = true;
-  saveBtn.textContent = 'Saving…';
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
 
   try {
+
     const payload = {
       item: {
         name,
         code: code || null,
         email: email || null,
-        billingAddress: billingAddress || '',
-        deliveryAddress: deliveryAddress || '',
-        defaultBillingAddress: billingAddress || '',
-        defaultDeliveryAddress: deliveryAddress || '',
-        hasDefaultBillingAddress: !!billingAddress,
-        hasDefaultDeliveryAddress: !!deliveryAddress,
-        creditLimit,
+        billingAddress: billing || '',
+        deliveryAddress: delivery || '',
+        creditLimit: creditLimit || 0,
+        currency: null,
+        division: null,
+        controlAccount: null,
         inactive: false,
         hasDefaultDueDateDays: false,
         defaultDueDateDays: null,
         hasDefaultHourlyRate: false,
         defaultHourlyRate: 0,
-        currency: null,
-        division: null,
-        controlAccount: null
+        customFields: null,
+        customFields2: {
+          strings: null,
+          decimals: null,
+          dates: null,
+          booleans: null,
+          stringArrays: null,
+          images: null
+        },
+        hasDefaultBillingAddress: !!billing,
+        defaultBillingAddress: billing || '',
+        hasDefaultDeliveryAddress: !!delivery,
+        defaultDeliveryAddress: delivery || ''
       }
     };
 
-    /* WRITE CAPABILITY */
-    await postMessageWithResponse({
+    /* WRITE OPERATION */
+    const response = await postMessageWithResponse({
       type: 'api-request',
       method: 'POST',
       path: '/api4/customer',
       body: payload
     });
 
-    if (successBox) {
-      successBox.innerHTML = '✓ Customer created successfully. Reloading records…';
-      successBox.style.display = 'block';
-    }
+    msg.innerHTML = `
+      <div class="success-box">
+        ✓ Customer created successfully.<br>
+        <strong>${escapeHtml(name)}</strong> was added to Manager.io.
+      </div>
+    `;
 
-    document.getElementById('customer-form').reset();
+    document.getElementById('cust-name').value = '';
+    document.getElementById('cust-code').value = '';
+    document.getElementById('cust-email').value = '';
+    document.getElementById('cust-billing').value = '';
+    document.getElementById('cust-delivery').value = '';
+    document.getElementById('cust-credit').value = '0';
 
     await loadAllRecords();
 
   } catch (err) {
-    alert('Unable to create customer.\n\n' + err.message);
-  } finally {
-    saveBtn.disabled = false;
-    saveBtn.textContent = '💾 Save Customer';
+
+    msg.innerHTML = `
+      <div class="err-box">
+        ⚠ Failed to create customer.<br>
+        <small>${escapeHtml(err.message || 'Unknown API error')}</small>
+      </div>
+    `;
   }
+
+  btn.disabled = false;
+  btn.textContent = '➕ Save Customer';
 }
 
 /* ══════════════════════════════════
-   Search/filter customers
+   Filter customer table
 ══════════════════════════════════ */
 function filterCustomers() {
-  const query = document.getElementById('search-input').value.trim().toLowerCase();
 
-  FILTERED_CACHE = CUSTOMER_CACHE.filter(customer => {
-    const item = customer?.item || {};
+  const q = document.getElementById('customer-search')
+    ?.value
+    ?.toLowerCase()
+    ?.trim() || '';
+
+  const filtered = ALL_CUSTOMERS.filter(row => {
+
+    const item = row?.item || {};
 
     return [
       item?.name,
       item?.email,
       item?.code,
-      item?.billingAddress
+      item?.billingAddress,
+      item?.deliveryAddress
     ]
-    .filter(Boolean)
     .join(' ')
     .toLowerCase()
-    .includes(query);
+    .includes(q);
+
   });
 
-  renderCustomerTable(FILTERED_CACHE);
+  renderCustomerRows(filtered);
 }
 
 /* ══════════════════════════════════
-   Update selected customer preview
+   Render customer table rows
 ══════════════════════════════════ */
-function handleCustomerSelect() {
-  const select = document.getElementById('customer-select');
-  const value = select.value;
+function renderCustomerRows(items){
 
-  CURRENT_SELECTED = CUSTOMER_CACHE.find(c =>
-    c?.key === value ||
-    c?.item?.name === value
-  );
+  const tbody = document.getElementById('customer-table-body');
 
-  const preview = document.getElementById('customer-preview');
+  if (!tbody) return;
 
-  if (!CURRENT_SELECTED) {
-    preview.innerHTML = '<div style="color:#57606a;">No customer selected.</div>';
-    return;
-  }
-
-  const item = CURRENT_SELECTED?.item || {};
-
-  preview.innerHTML = `
-    <div class="preview-row">
-      <span class="preview-label">Customer</span>
-      <span class="preview-value">${escapeHtml(item?.name)}</span>
-    </div>
-
-    <div class="preview-row">
-      <span class="preview-label">Email</span>
-      <span class="preview-value">${escapeHtml(safe(item?.email))}</span>
-    </div>
-
-    <div class="preview-row">
-      <span class="preview-label">Code</span>
-      <span class="preview-value">${escapeHtml(safe(item?.code))}</span>
-    </div>
-
-    <div class="preview-row">
-      <span class="preview-label">Credit Limit</span>
-      <span class="preview-value">${fmtMoney(item?.creditLimit)}</span>
-    </div>
-
-    <div class="preview-row">
-      <span class="preview-label">Billing Address</span>
-      <span class="preview-value">${escapeHtml(safe(item?.billingAddress))}</span>
-    </div>
-  `;
-}
-
-/* ══════════════════════════════════
-   Open quick add area
-══════════════════════════════════ */
-function focusQuickAdd() {
-  const formCard = document.getElementById('form-card');
-
-  if (formCard) {
-    formCard.scrollIntoView({
-      behavior:'smooth',
-      block:'start'
-    });
-  }
-
-  setTimeout(() => {
-    const input = document.getElementById('cust-name');
-    if (input) input.focus();
-  }, 300);
-}
-
-/* ══════════════════════════════════
-   Customer table renderer
-══════════════════════════════════ */
-function renderCustomerTable(items) {
-  const tableWrap = document.getElementById('table-wrap');
-
-  if (!items.length) {
-    tableWrap.innerHTML = `
-      <div class="empty">
-        <div style="font-size:18px;font-weight:800;margin-bottom:8px;">
-          No customers found
-        </div>
-        <div>
-          Try adjusting your search or create a new customer.
-        </div>
-      </div>
+  if (!items.length){
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7">
+          <div class="empty-state">
+            No customers matched your search.
+          </div>
+        </td>
+      </tr>
     `;
     return;
   }
 
-  tableWrap.innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>Customer</th>
-          <th>Email</th>
-          <th>Billing Address</th>
-          <th>Credit Limit</th>
-          <th>Status</th>
-        </tr>
-      </thead>
+  tbody.innerHTML = items.map((row,index) => {
 
-      <tbody>
-        ${items.map(customer => {
-          const item = customer?.item || {};
+    const item = row?.item || {};
 
-          return `
-            <tr>
-              <td>
-                <div style="font-weight:800;">
-                  ${escapeHtml(item?.name || 'Unnamed')}
-                </div>
+    return `
+      <tr>
+        <td>${index + 1}</td>
 
-                <div style="font-size:12px;color:#57606a;margin-top:4px;">
-                  ${escapeHtml(item?.code || 'No Code')}
-                </div>
-              </td>
+        <td>
+          <strong>${escapeHtml(item?.name ?? '—')}</strong>
+        </td>
 
-              <td>
-                ${escapeHtml(item?.email || '—')}
-              </td>
+        <td class="muted">
+          ${escapeHtml(item?.email ?? '—')}
+        </td>
 
-              <td>
-                ${escapeHtml(item?.billingAddress || '—')}
-              </td>
+        <td>
+          ${escapeHtml(item?.code ?? '—')}
+        </td>
 
-              <td>
-                ${fmtMoney(item?.creditLimit)}
-              </td>
+        <td>
+          ${fmtCurrency(item?.creditLimit || 0)}
+        </td>
 
-              <td>
-                <span class="badge ${item?.inactive ? 'badge-inactive' : 'badge-active'}">
-                  ${item?.inactive ? 'Inactive' : 'Active'}
-                </span>
-              </td>
-            </tr>
-          `;
-        }).join('')}
-      </tbody>
-    </table>
-  `;
+        <td class="small">
+          ${escapeHtml(item?.billingAddress ?? '—')}
+        </td>
+
+        <td>
+          <span class="badge ${item?.inactive ? 'inactive' : 'active'}">
+            ${item?.inactive ? 'Inactive' : 'Active'}
+          </span>
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
 /* ══════════════════════════════════
    loadAllRecords
 ══════════════════════════════════ */
 async function loadAllRecords() {
+
   const btn    = document.getElementById('load-btn');
   const bar    = document.getElementById('prog-bar');
   const status = document.getElementById('status-txt');
@@ -732,7 +632,9 @@ async function loadAllRecords() {
   app.innerHTML = '';
 
   try {
+
     const items = await getCustomerBatch((loaded, total, page) => {
+
       status.textContent = total
         ? `Page ${page} · ${loaded.toLocaleString()} / ${total.toLocaleString()} records`
         : `Page ${page} · ${loaded.toLocaleString()} records loaded…`;
@@ -741,6 +643,8 @@ async function loadAllRecords() {
         bar.style.width = Math.min(95, Math.round(loaded / total * 100)) + '%';
       }
     });
+
+    ALL_CUSTOMERS = items;
 
     bar.style.width = '100%';
     status.textContent = `✓ ${items.length.toLocaleString()} customer records loaded`;
@@ -751,23 +655,16 @@ async function loadAllRecords() {
     render(items);
 
   } catch (err) {
+
     status.textContent = '⚠ ' + err.message;
     btn.textContent = '↺ Retry';
     btn.disabled = false;
 
     app.innerHTML = `
       <div class="err-box">
-        <div style="font-weight:800;margin-bottom:8px;">
-          Unable to load Manager.io data
-        </div>
-
-        <div style="margin-bottom:6px;">
-          ${escapeHtml(err.message)}
-        </div>
-
-        <small>
-          Make sure this extension is running inside Manager.io.
-        </small>
+        ⚠ ${escapeHtml(err.message)}
+        <br>
+        <small>Make sure this extension is running inside Manager.io.</small>
       </div>
     `;
   }
@@ -777,213 +674,203 @@ async function loadAllRecords() {
    render(items)
 ══════════════════════════════════ */
 function render(items) {
+
   const app = document.getElementById('app');
 
-  CUSTOMER_CACHE = Array.isArray(items) ? items : [];
-  FILTERED_CACHE = [...CUSTOMER_CACHE];
+  if (!Array.isArray(items) || items.length === 0){
 
-  const totalCustomers = CUSTOMER_CACHE.length;
+    app.innerHTML = `
+      <div class="panel">
+        <div class="empty-state">
+          <h2 style="margin-bottom:10px;">No Customers Found</h2>
+          <p>No customer records were returned from /api4/customer-batch.</p>
+        </div>
+      </div>
+    `;
 
-  const activeCustomers = CUSTOMER_CACHE.filter(i =>
-    !i?.item?.inactive
-  ).length;
+    return;
+  }
 
-  const totalCredit = CUSTOMER_CACHE.reduce((sum, customer) => {
-    return sum + Number(customer?.item?.creditLimit || 0);
-  }, 0);
+  const totalCustomers = items.length;
 
-  const customerOptions = CUSTOMER_CACHE
-    .sort((a,b) => {
-      const an = a?.item?.name || '';
-      const bn = b?.item?.name || '';
-      return an.localeCompare(bn);
-    })
-    .map(customer => {
-      const name = customer?.item?.name || 'Unnamed';
-      const key = customer?.key || name;
+  const activeCustomers = items.filter(i => !i?.item?.inactive).length;
 
-      return `
-        <option value="${escapeHtml(key)}">
-          ${escapeHtml(name)}
-        </option>
-      `;
-    })
-    .join('');
+  const inactiveCustomers = items.filter(i => i?.item?.inactive).length;
+
+  const withEmail = items.filter(i => i?.item?.email).length;
 
   app.innerHTML = `
-    <div class="stats">
-      <div class="stat">
+    <div class="main-grid">
+
+      <!-- LEFT PANEL -->
+      <div class="panel">
+
+        <div class="panel-head">
+          <div class="panel-title">
+            Sales Invoice Customer Quick Add
+          </div>
+
+          <div class="panel-sub">
+            Adds a customer creation button to the left side of the customer selector area inside the sales invoice workflow.
+          </div>
+        </div>
+
+        <div class="panel-body">
+
+          <!-- Simulated Sales Invoice Toolbar -->
+          <div class="invoice-toolbar">
+
+            <!-- BUTTON TO LEFT OF CUSTOMER DROPDOWN -->
+            <button class="quick-add-btn" onclick="document.getElementById('cust-name').focus()">
+              ➕ New Customer
+            </button>
+
+            <div class="field">
+              <label>Choose Customer</label>
+
+              <select>
+                ${items.slice(0,100).map(row => `
+                  <option>
+                    ${escapeHtml(row?.item?.name ?? 'Unnamed Customer')}
+                  </option>
+                `).join('')}
+              </select>
+            </div>
+
+          </div>
+
+          <div class="field" style="margin-bottom:12px;">
+            <label>Customer Name *</label>
+            <input id="cust-name" type="text" placeholder="Enter customer name">
+          </div>
+
+          <div class="field" style="margin-bottom:12px;">
+            <label>Customer Code</label>
+            <input id="cust-code" type="text" placeholder="Optional internal code">
+          </div>
+
+          <div class="field" style="margin-bottom:12px;">
+            <label>Email</label>
+            <input id="cust-email" type="email" placeholder="customer@example.com">
+          </div>
+
+          <div class="field" style="margin-bottom:12px;">
+            <label>Credit Limit</label>
+            <input id="cust-credit" type="number" value="0" min="0" step="0.01">
+          </div>
+
+          <div class="field" style="margin-bottom:12px;">
+            <label>Billing Address</label>
+            <textarea id="cust-billing" placeholder="Billing address"></textarea>
+
+```
+      </div>
+
+      <div class="field">
+        <label>Delivery Address</label>
+        <textarea id="cust-delivery" placeholder="Delivery address"></textarea>
+      </div>
+
+      <button id="save-customer-btn" class="save-btn" onclick="createCustomer()">
+        ➕ Save Customer
+      </button>
+
+      <div id="save-message"></div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div>
+
+    <!-- STATS -->
+    <div class="stat-grid">
+
+      <div class="stat-card">
         <div class="stat-label">Total Customers</div>
         <div class="stat-value">
           ${totalCustomers.toLocaleString()}
         </div>
       </div>
 
-      <div class="stat">
+      <div class="stat-card">
         <div class="stat-label">Active Customers</div>
         <div class="stat-value">
           ${activeCustomers.toLocaleString()}
         </div>
       </div>
 
-      <div class="stat">
-        <div class="stat-label">Combined Credit Limit</div>
+      <div class="stat-card">
+        <div class="stat-label">Inactive Customers</div>
         <div class="stat-value">
-          ${fmtMoney(totalCredit)}
+          ${inactiveCustomers.toLocaleString()}
         </div>
       </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Customers With Email</div>
+        <div class="stat-value">
+          ${withEmail.toLocaleString()}
+        </div>
+      </div>
+
     </div>
 
-    <div class="layout">
+    <!-- TABLE -->
+    <div class="panel">
 
-      <!-- LEFT -->
-      <div class="card">
-
-        <div class="card-title">
-          Sales Invoice Form Integration
+      <div class="panel-head">
+        <div class="panel-title">
+          Customer Directory
         </div>
 
-        <div class="invoice-row">
-          <button class="quick-add-btn" onclick="focusQuickAdd()">
-            ➕ Add Customer
-          </button>
-
-          <div style="display:flex;flex-direction:column;gap:6px;flex:1;">
-            <span class="invoice-label">
-              Choose Customer
-            </span>
-
-            <select
-              class="customer-select"
-              id="customer-select"
-              onchange="handleCustomerSelect()"
-            >
-              <option value="">
-                Select a customer…
-              </option>
-
-              ${customerOptions}
-            </select>
-          </div>
+        <div class="panel-sub">
+          Live customer records loaded from /api4/customer-batch
         </div>
+      </div>
 
-        <div id="customer-preview" class="customer-preview">
-          <div style="color:#57606a;">
-            Select a customer to preview details.
-          </div>
-        </div>
+      <div class="panel-body">
 
-        <div style="margin-top:22px;">
+        <div class="search-wrap">
           <input
-            id="search-input"
-            class="search-input"
+            id="customer-search"
             type="text"
-            placeholder="Search customers by name, email, code, or address…"
+            placeholder="Search customers..."
             oninput="filterCustomers()"
+            style="
+              width:100%;
+              border:1px solid #d0d7de;
+              border-radius:10px;
+              padding:12px 14px;
+              font-size:13px;
+            "
           >
+        </div>
 
-          <div id="table-wrap" class="table-wrap"></div>
+        <div class="customer-table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Code</th>
+                <th>Credit Limit</th>
+                <th>Billing Address</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody id="customer-table-body"></tbody>
+
+          </table>
+
         </div>
 
       </div>
 
-      <!-- RIGHT -->
-      <div class="card" id="form-card">
-
-        <div class="card-title">
-          Quick Add Customer
-        </div>
-
-        <form id="customer-form" onsubmit="event.preventDefault(); createCustomer();">
-
-          <div class="grid">
-
-            <div class="field">
-              <label>Customer Name *</label>
-              <input
-                id="cust-name"
-                type="text"
-                placeholder="Acme Corporation"
-                required
-              >
-            </div>
-
-            <div class="field">
-              <label>Customer Code</label>
-              <input
-                id="cust-code"
-                type="text"
-                placeholder="ACM-100"
-              >
-            </div>
-
-            <div class="field">
-              <label>Email Address</label>
-              <input
-                id="cust-email"
-                type="email"
-                placeholder="billing@example.com"
-              >
-            </div>
-
-            <div class="field">
-              <label>Credit Limit</label>
-              <input
-                id="cust-credit"
-                type="number"
-                min="0"
-                step="0.01"
-                placeholder="0.00"
-              >
-            </div>
-
-          </div>
-
-          <div class="field" style="margin-top:14px;">
-            <label>Billing Address</label>
-
-            <textarea
-              id="cust-billing"
-              placeholder="Enter billing address"
-            ></textarea>
-
-```
-      </div>
-
-      <div class="field" style="margin-top:14px;">
-        <label>Delivery Address</label>
-
-        <textarea
-          id="cust-delivery"
-          placeholder="Enter delivery address"
-        ></textarea>
-      </div>
-
-      <div class="actions">
-        <button
-          type="submit"
-          class="primary-btn"
-          id="save-btn"
-        >
-          💾 Save Customer
-        </button>
-
-        <button
-          type="reset"
-          class="secondary-btn"
-        >
-          Reset Form
-        </button>
-      </div>
-
-    </form>
-
-    <div
-      id="success-box"
-      class="success-box"
-      style="display:none;"
-    >
-      ✓ Customer saved successfully
     </div>
 
   </div>
@@ -993,22 +880,15 @@ function render(items) {
 
 `;
 
-renderCustomerTable(FILTERED_CACHE);
-
-if (!CUSTOMER_CACHE.length) {
-document.getElementById('table-wrap').innerHTML = ` <div class="empty"> <div style="font-size:20px;font-weight:900;margin-bottom:10px;">
-No customers available </div>
-
-```
-    <div style="margin-bottom:14px;">
-      Create your first customer using the quick add form.
-    </div>
-  </div>
-`;
-```
-
+renderCustomerRows(items);
 }
-} </script>
+
+/* ══════════════════════════════════
+Auto-load on startup
+══════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+loadAllRecords();
+}); </script>
 
 </body>
 </html>
