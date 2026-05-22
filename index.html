@@ -7,363 +7,325 @@
 <title>Manager.io Customer Quick Add Extension</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+  * { box-sizing:border-box; margin:0; padding:0; }
 
-:root{
-  --bg:#0d1117;
-  --panel:#161b22;
-  --panel2:#1c2128;
-  --border:#30363d;
-  --text:#e6edf3;
-  --muted:#8b949e;
-  --blue:#58a6ff;
-  --green:#3fb950;
-  --red:#f85149;
-  --yellow:#d29922;
-}
+  :root{
+    --bg:#ffffff;
+    --panel:#f6f8fa;
+    --border:#d0d7de;
+    --text:#24292f;
+    --muted:#57606a;
+    --primary:#0969da;
+    --primary-hover:#0550ae;
+    --danger:#cf222e;
+    --success:#1a7f37;
+    --shadow:0 2px 10px rgba(0,0,0,.06);
+  }
 
-body{
-  font-family:system-ui,-apple-system,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  padding:20px;
-}
+  body{
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:20px;
+  }
 
-.ctrl-bar{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-  padding:14px 18px;
-  margin-bottom:20px;
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:12px;
-}
+  .ctrl-bar{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    padding:12px 16px;
+    margin-bottom:18px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:var(--shadow);
+  }
 
-.load-btn,
-.primary-btn,
-.secondary-btn,
-.danger-btn{
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:700;
-  transition:.15s ease;
-}
+  .load-btn,
+  .primary-btn,
+  .secondary-btn{
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:700;
+    transition:all .15s ease;
+  }
 
-.load-btn{
-  padding:10px 20px;
-  background:var(--blue);
-  color:#fff;
-  font-size:13px;
-}
+  .load-btn,
+  .primary-btn{
+    padding:9px 18px;
+    background:var(--primary);
+    color:#fff;
+  }
 
-.load-btn:hover,
-.primary-btn:hover,
-.secondary-btn:hover,
-.danger-btn:hover{
-  transform:translateY(-1px);
-  opacity:.92;
-}
+  .load-btn:hover,
+  .primary-btn:hover{
+    background:var(--primary-hover);
+  }
 
-.load-btn:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-}
+  .load-btn:disabled,
+  .primary-btn:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+  }
 
-.primary-btn{
-  background:var(--green);
-  color:#fff;
-  padding:11px 18px;
-}
+  .secondary-btn{
+    padding:9px 14px;
+    background:#fff;
+    color:var(--text);
+    border:1px solid var(--border);
+  }
 
-.secondary-btn{
-  background:#21262d;
-  color:var(--text);
-  border:1px solid var(--border);
-  padding:11px 18px;
-}
+  .secondary-btn:hover{
+    background:#f3f4f6;
+  }
 
-.danger-btn{
-  background:var(--red);
-  color:#fff;
-  padding:11px 18px;
-}
+  .prog-wrap{
+    flex:1;
+    min-width:120px;
+    height:6px;
+    background:#d8dee4;
+    border-radius:999px;
+    overflow:hidden;
+  }
 
-.prog-wrap{
-  flex:1;
-  min-width:120px;
-  height:6px;
-  background:#30363d;
-  border-radius:999px;
-  overflow:hidden;
-}
+  .prog-bar{
+    height:100%;
+    width:0%;
+    background:var(--primary);
+    transition:width .25s ease;
+  }
 
-.prog-bar{
-  height:100%;
-  width:0%;
-  background:var(--blue);
-  border-radius:999px;
-  transition:width .25s;
-}
+  .status-txt{
+    font-size:12px;
+    color:var(--muted);
+    white-space:nowrap;
+  }
 
-.status-txt{
-  font-size:12px;
-  color:var(--muted);
-  white-space:nowrap;
-}
+  .err-box{
+    color:var(--danger);
+    background:#fff5f5;
+    border:1px solid #ffd8d8;
+    border-radius:10px;
+    padding:14px 16px;
+    font-size:13px;
+    margin-bottom:16px;
+  }
 
-.err-box{
-  color:#fff;
-  background:rgba(248,81,73,.12);
-  border:1px solid rgba(248,81,73,.35);
-  border-radius:10px;
-  padding:14px 16px;
-  font-size:13px;
-  margin-bottom:16px;
-}
-
-.success-box{
-  color:#fff;
-  background:rgba(63,185,80,.12);
-  border:1px solid rgba(63,185,80,.35);
-  border-radius:10px;
-  padding:14px 16px;
-  font-size:13px;
-  margin-bottom:16px;
-}
-
-.layout{
-  display:grid;
-  grid-template-columns:420px 1fr;
-  gap:20px;
-}
-
-.panel{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:14px;
-  overflow:hidden;
-}
-
-.panel-header{
-  padding:18px 20px;
-  border-bottom:1px solid var(--border);
-  background:linear-gradient(180deg,#1f2630 0%, #161b22 100%);
-}
-
-.panel-title{
-  font-size:18px;
-  font-weight:800;
-}
-
-.panel-sub{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:6px;
-}
-
-.panel-body{
-  padding:20px;
-}
-
-.form-grid{
-  display:grid;
-  gap:16px;
-}
-
-.form-group{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-}
-
-label{
-  font-size:13px;
-  font-weight:700;
-  color:#c9d1d9;
-}
-
-input,
-select,
-textarea{
-  width:100%;
-  padding:12px 14px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:#0d1117;
-  color:var(--text);
-  font-size:14px;
-  outline:none;
-  transition:border-color .15s;
-}
-
-input:focus,
-select:focus,
-textarea:focus{
-  border-color:var(--blue);
-}
-
-textarea{
-  resize:vertical;
-  min-height:80px;
-}
-
-.inline-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.error-text{
-  font-size:12px;
-  color:var(--red);
-}
-
-.actions{
-  display:flex;
-  gap:12px;
-  margin-top:8px;
-  flex-wrap:wrap;
-}
-
-.stats-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-  gap:14px;
-  margin-bottom:18px;
-}
-
-.stat-card{
-  background:var(--panel2);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:16px;
-}
-
-.stat-label{
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:8px;
-}
-
-.stat-value{
-  font-size:24px;
-  font-weight:800;
-}
-
-.table-wrap{
-  overflow:auto;
-  border-radius:12px;
-  border:1px solid var(--border);
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-}
-
-thead{
-  background:#1b2330;
-}
-
-th{
-  text-align:left;
-  padding:14px;
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:.04em;
-  color:#8b949e;
-  border-bottom:1px solid var(--border);
-}
-
-td{
-  padding:14px;
-  border-bottom:1px solid rgba(48,54,61,.6);
-  font-size:14px;
-}
-
-tr:hover{
-  background:rgba(88,166,255,.04);
-}
-
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:4px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-}
-
-.badge-green{
-  background:rgba(63,185,80,.12);
-  color:#3fb950;
-}
-
-.badge-yellow{
-  background:rgba(210,153,34,.12);
-  color:#d29922;
-}
-
-.search-box{
-  margin-bottom:16px;
-}
-
-.empty{
-  padding:40px 20px;
-  text-align:center;
-  color:var(--muted);
-}
-
-.modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  z-index:999;
-}
-
-.modal{
-  width:min(640px,100%);
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:18px;
-  overflow:hidden;
-}
-
-.modal-header{
-  padding:18px 20px;
-  border-bottom:1px solid var(--border);
-}
-
-.modal-body{
-  padding:20px;
-}
-
-.modal-footer{
-  display:flex;
-  justify-content:flex-end;
-  gap:12px;
-  padding:18px 20px;
-  border-top:1px solid var(--border);
-}
-
-@media (max-width:980px){
   .layout{
-    grid-template-columns:1fr;
+    display:grid;
+    grid-template-columns:380px 1fr;
+    gap:18px;
   }
 
-  .inline-grid{
-    grid-template-columns:1fr;
+  @media (max-width: 980px){
+    .layout{
+      grid-template-columns:1fr;
+    }
   }
-}
+
+  .card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+
+  .card-head{
+    padding:16px 18px;
+    border-bottom:1px solid var(--border);
+    background:#fbfbfc;
+  }
+
+  .card-title{
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:4px;
+  }
+
+  .card-sub{
+    color:var(--muted);
+    font-size:12px;
+  }
+
+  .card-body{
+    padding:18px;
+  }
+
+  .form-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+
+  .field label{
+    font-size:12px;
+    color:var(--muted);
+    font-weight:600;
+  }
+
+  .field input,
+  .field textarea,
+  .field select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    font-size:14px;
+    outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+    background:#fff;
+  }
+
+  .field textarea{
+    resize:vertical;
+    min-height:80px;
+  }
+
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(9,105,218,.15);
+  }
+
+  .invoice-row{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:10px;
+    align-items:end;
+  }
+
+  .mini-note{
+    margin-top:8px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
+  }
+
+  .actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:8px;
+  }
+
+  .success-box{
+    background:#edfdf3;
+    color:var(--success);
+    border:1px solid #aceebb;
+    padding:12px 14px;
+    border-radius:10px;
+    font-size:13px;
+    margin-bottom:14px;
+  }
+
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:14px;
+    margin-bottom:18px;
+  }
+
+  .stat{
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px;
+    background:#fff;
+  }
+
+  .stat-label{
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+
+  .stat-value{
+    font-size:24px;
+    font-weight:800;
+  }
+
+  .table-wrap{
+    overflow:auto;
+    border:1px solid var(--border);
+    border-radius:12px;
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:800px;
+  }
+
+  th{
+    text-align:left;
+    font-size:12px;
+    color:var(--muted);
+    background:#f9fafb;
+    padding:12px 14px;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:1;
+  }
+
+  td{
+    padding:12px 14px;
+    border-bottom:1px solid #edf1f4;
+    font-size:13px;
+    vertical-align:top;
+  }
+
+  tr:hover td{
+    background:#fafcff;
+  }
+
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:700;
+    background:#e7f3ff;
+    color:var(--primary);
+  }
+
+  .search-wrap{
+    margin-bottom:14px;
+  }
+
+  .empty{
+    text-align:center;
+    padding:50px 20px;
+    color:var(--muted);
+  }
+
+  .spinner{
+    width:16px;
+    height:16px;
+    border:2px solid rgba(255,255,255,.4);
+    border-top-color:#fff;
+    border-radius:50%;
+    display:inline-block;
+    animation:spin .8s linear infinite;
+    vertical-align:middle;
+    margin-right:8px;
+  }
+
+  @keyframes spin{
+    to{ transform:rotate(360deg); }
+  }
 </style>
 
 </head>
@@ -372,73 +334,17 @@ tr:hover{
 
 <div class="ctrl-bar">
   <button class="load-btn" id="load-btn" onclick="loadAllRecords()">⬇ Load All Records</button>
+
   <div class="prog-wrap">
     <div class="prog-bar" id="prog-bar"></div>
   </div>
-  <span class="status-txt" id="status-txt">Press Load to fetch data from Manager</span>
+
+  <span class="status-txt" id="status-txt">
+    Press Load to fetch data from Manager
+  </span>
 </div>
 
-<div id="messages"></div>
 <div id="app"></div>
-
-<div class="modal-backdrop" id="customer-modal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="panel-title">Add New Customer</div>
-      <div class="panel-sub">Create a customer without leaving the invoice screen</div>
-    </div>
-
-```
-<div class="modal-body">
-  <div class="form-grid">
-
-    <div class="form-group">
-      <label>Customer Name *</label>
-      <input type="text" id="customer-name" placeholder="Customer or company name">
-      <div class="error-text" id="err-customer-name"></div>
-    </div>
-
-    <div class="inline-grid">
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="customer-email" placeholder="email@example.com">
-        <div class="error-text" id="err-customer-email"></div>
-      </div>
-
-      <div class="form-group">
-        <label>Phone</label>
-        <input type="text" id="customer-phone" placeholder="+1 555 123 4567">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Billing Address</label>
-      <textarea id="customer-address" placeholder="Street, city, state, zip"></textarea>
-    </div>
-
-    <div class="inline-grid">
-      <div class="form-group">
-        <label>Tax Number</label>
-        <input type="text" id="customer-tax" placeholder="Optional">
-      </div>
-
-      <div class="form-group">
-        <label>Customer Code</label>
-        <input type="text" id="customer-code" placeholder="Optional">
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<div class="modal-footer">
-  <button class="secondary-btn" onclick="closeCustomerModal()">Cancel</button>
-  <button class="primary-btn" id="save-customer-btn" onclick="saveCustomer()">Save Customer</button>
-</div>
-```
-
-  </div>
-</div>
 
 <script>
 /* ══════════════════════════════════
@@ -464,10 +370,10 @@ function postMessageWithResponse(message) {
 }
 
 /* ══════════════════════════════════
-   getSalesInvoiceBatch
+   getCustomerBatch
    Fetches ALL pages — DO NOT SIMPLIFY.
 ══════════════════════════════════ */
-async function getSalesInvoiceBatch(onProgress) {
+async function getCustomerBatch(onProgress) {
   const allItems = [];
   let nextToken  = null;
   let pageNum    = 0;
@@ -475,8 +381,8 @@ async function getSalesInvoiceBatch(onProgress) {
 
   do {
     const path = nextToken
-      ? '/api4/sales-invoice-batch?PageSize=99999&next_page_token=' + encodeURIComponent(nextToken)
-      : '/api4/sales-invoice-batch?PageSize=99999';
+      ? '/api4/customer-batch?PageSize=99999&next_page_token=' + encodeURIComponent(nextToken)
+      : '/api4/customer-batch?PageSize=99999';
 
     const data = await postMessageWithResponse({ type: 'api-request', method: 'GET', path });
 
@@ -490,7 +396,11 @@ async function getSalesInvoiceBatch(onProgress) {
     }
 
     pageNum++;
-    if (onProgress) onProgress(allItems.length, apiTotal, pageNum);
+
+    if (onProgress) {
+      onProgress(allItems.length, apiTotal, pageNum);
+    }
+
     if (pageNum >= 1000) break;
 
   } while (nextToken);
@@ -498,249 +408,243 @@ async function getSalesInvoiceBatch(onProgress) {
   return allItems;
 }
 
-let STATE = {
-  items: [],
-  filtered: [],
-  selectedInvoice: null
-};
+/* ══════════════════════════════════
+   Global state
+══════════════════════════════════ */
+let ALL_CUSTOMERS = [];
 
 /* ══════════════════════════════════
-   Utility helpers
+   Utilities
 ══════════════════════════════════ */
-function escapeHtml(v){
-  return String(v ?? '')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
 }
 
-function formatDate(value){
-  if(!value) return '—';
-  const d = new Date(value);
-  if(isNaN(d)) return value;
-  return d.toLocaleDateString(undefined,{
-    year:'numeric',
-    month:'short',
-    day:'numeric'
-  });
+function customerDisplayName(item) {
+  return (
+    item?.name ??
+    item?.customer ??
+    item?.display_name ??
+    item?.business_name ??
+    item?.full_name ??
+    item?.code ??
+    'Unnamed Customer'
+  );
 }
 
-function formatCurrency(v){
-  return new Intl.NumberFormat(undefined,{
-    style:'currency',
-    currency:'USD',
-    minimumFractionDigits:2
-  }).format(Number(v || 0));
-}
+function formatDate(date) {
+  if (!date) return '—';
 
-function showMessage(type,msg){
-  const wrap = document.getElementById('messages');
-  wrap.innerHTML = `
-    <div class="${type === 'error' ? 'err-box' : 'success-box'}">
-      ${escapeHtml(msg)}
-    </div>
-  `;
-
-  setTimeout(()=>{
-    wrap.innerHTML = '';
-  },5000);
-}
-
-/* ══════════════════════════════════
-   Write operation
-══════════════════════════════════ */
-async function createCustomer(payload){
-  return await postMessageWithResponse({
-    type:'api-request',
-    method:'POST',
-    path:'/api4/customers',
-    body:payload
-  });
-}
-
-/* ══════════════════════════════════
-   Modal controls
-══════════════════════════════════ */
-function openCustomerModal(){
-  document.getElementById('customer-modal').style.display = 'flex';
-}
-
-function closeCustomerModal(){
-  document.getElementById('customer-modal').style.display = 'none';
-
-  [
-    'customer-name',
-    'customer-email',
-    'customer-phone',
-    'customer-address',
-    'customer-tax',
-    'customer-code'
-  ].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.value = '';
-  });
-
-  [
-    'err-customer-name',
-    'err-customer-email'
-  ].forEach(id=>{
-    document.getElementById(id).textContent = '';
-  });
-}
-
-/* ══════════════════════════════════
-   Validation
-══════════════════════════════════ */
-function validateCustomerForm(){
-  let valid = true;
-
-  const name = document.getElementById('customer-name').value.trim();
-  const email = document.getElementById('customer-email').value.trim();
-
-  document.getElementById('err-customer-name').textContent = '';
-  document.getElementById('err-customer-email').textContent = '';
-
-  if(!name){
-    document.getElementById('err-customer-name').textContent = 'Customer name is required';
-    valid = false;
-  }
-
-  if(email){
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(!emailRegex.test(email)){
-      document.getElementById('err-customer-email').textContent = 'Invalid email address';
-      valid = false;
-    }
-  }
-
-  return valid;
-}
-
-/* ══════════════════════════════════
-   Save customer
-══════════════════════════════════ */
-async function saveCustomer(){
-  if(!validateCustomerForm()) return;
-
-  const btn = document.getElementById('save-customer-btn');
-
-  btn.disabled = true;
-  btn.textContent = 'Saving…';
-
-  try{
-    const payload = {
-      name: document.getElementById('customer-name').value.trim(),
-      email: document.getElementById('customer-email').value.trim() || null,
-      phone: document.getElementById('customer-phone').value.trim() || null,
-      billing_address: document.getElementById('customer-address').value.trim() || null,
-      tax_number: document.getElementById('customer-tax').value.trim() || null,
-      code: document.getElementById('customer-code').value.trim() || null
-    };
-
-    await createCustomer(payload);
-
-    closeCustomerModal();
-
-    showMessage('success','Customer created successfully.');
-
-  }catch(err){
-    showMessage('error','Unable to create customer: ' + err.message);
-  }finally{
-    btn.disabled = false;
-    btn.textContent = 'Save Customer';
+  try {
+    return new Date(date).toLocaleDateString(undefined, {
+      year:'numeric',
+      month:'short',
+      day:'numeric'
+    });
+  } catch {
+    return date;
   }
 }
 
 /* ══════════════════════════════════
-   Search invoices
+   Create customer (WRITE OPERATION)
 ══════════════════════════════════ */
-function filterInvoices(q){
-  q = String(q || '').toLowerCase();
+async function createCustomer(event) {
+  event.preventDefault();
 
-  STATE.filtered = STATE.items.filter(item=>{
-    const str = JSON.stringify(item || {}).toLowerCase();
-    return str.includes(q);
-  });
+  const form = document.getElementById('customer-form');
+  const submitBtn = document.getElementById('save-btn');
+  const msgBox = document.getElementById('message-box');
 
-  renderTable();
-}
+  msgBox.innerHTML = '';
 
-/* ══════════════════════════════════
-   Render table
-══════════════════════════════════ */
-function renderTable(){
-  const tbody = document.getElementById('invoice-tbody');
+  const payload = {
+    name: document.getElementById('customer-name')?.value?.trim() || '',
+    code: document.getElementById('customer-code')?.value?.trim() || '',
+    email: document.getElementById('customer-email')?.value?.trim() || '',
+    phone: document.getElementById('customer-phone')?.value?.trim() || '',
+    address_line_1: document.getElementById('customer-address1')?.value?.trim() || '',
+    address_line_2: document.getElementById('customer-address2')?.value?.trim() || '',
+    city: document.getElementById('customer-city')?.value?.trim() || '',
+    state: document.getElementById('customer-state')?.value?.trim() || '',
+    zip_code: document.getElementById('customer-zip')?.value?.trim() || '',
+    country: document.getElementById('customer-country')?.value?.trim() || '',
+    notes: document.getElementById('customer-notes')?.value?.trim() || ''
+  };
 
-  if(!tbody) return;
-
-  if(!STATE.filtered.length){
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="6">
-          <div class="empty">
-            No invoices found
-          </div>
-        </td>
-      </tr>
+  if (!payload.name) {
+    msgBox.innerHTML = `
+      <div class="err-box">
+        Customer name is required.
+      </div>
     `;
     return;
   }
 
-  tbody.innerHTML = STATE.filtered.map((item,idx)=>{
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="spinner"></span>Creating Customer...';
 
-    const customer =
-      item?.customer?.name ??
-      item?.customer_name ??
-      item?.name ??
-      'Unknown Customer';
+  try {
 
-    const invoiceNo =
-      item?.reference ??
-      item?.invoice_number ??
-      item?.number ??
-      ('INV-' + (idx + 1));
+    /* Primary write endpoint */
+    const result = await postMessageWithResponse({
+      type: 'api-request',
+      method: 'POST',
+      path: '/api4/customer-form',
+      body: payload
+    });
 
-    const amount =
-      item?.total ??
-      item?.amount ??
-      item?.balance ??
-      0;
-
-    const status =
-      amount > 0
-        ? '<span class="badge badge-green">Open</span>'
-        : '<span class="badge badge-yellow">Draft</span>';
-
-    return `
-      <tr>
-        <td>${escapeHtml(invoiceNo)}</td>
-        <td>${escapeHtml(customer)}</td>
-        <td>${formatDate(item?.date || item?.created_at)}</td>
-        <td>${formatCurrency(amount)}</td>
-        <td>${status}</td>
-        <td>
-          <button class="secondary-btn" onclick="editInvoice(${idx})">
-            Edit
-          </button>
-        </td>
-      </tr>
+    msgBox.innerHTML = `
+      <div class="success-box">
+        ✓ Customer created successfully and added to the database.
+      </div>
     `;
-  }).join('');
+
+    form.reset();
+
+    /* Reload customer list */
+    await loadAllRecords();
+
+    console.log('Customer create response:', result);
+
+  } catch (primaryErr) {
+
+    try {
+
+      /* Fallback create endpoint */
+      const fallbackResult = await postMessageWithResponse({
+        type: 'api-request',
+        method: 'POST',
+        path: '/api4/customers',
+        body: payload
+      });
+
+      msgBox.innerHTML = `
+        <div class="success-box">
+          ✓ Customer created successfully using fallback endpoint.
+        </div>
+      `;
+
+      form.reset();
+
+      await loadAllRecords();
+
+      console.log('Fallback customer response:', fallbackResult);
+
+    } catch (fallbackErr) {
+
+      console.error(primaryErr);
+      console.error(fallbackErr);
+
+      msgBox.innerHTML = `
+        <div class="err-box">
+          <strong>Unable to create customer.</strong><br><br>
+          Primary Error: ${escapeHtml(primaryErr?.message || 'Unknown error')}<br>
+          Fallback Error: ${escapeHtml(fallbackErr?.message || 'Unknown error')}<br><br>
+          Ensure your Manager.io API version allows POST write operations.
+        </div>
+      `;
+    }
+
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = '💾 Save Customer';
+  }
 }
 
 /* ══════════════════════════════════
-   Edit invoice
+   Search filter
 ══════════════════════════════════ */
-function editInvoice(index){
-  const item = STATE.filtered[index];
+function filterCustomers() {
+  const q = document.getElementById('search-input')?.value?.toLowerCase() || '';
 
-  STATE.selectedInvoice = item;
+  const filtered = ALL_CUSTOMERS.filter(item => {
+    const values = [
+      item?.name,
+      item?.customer,
+      item?.email,
+      item?.phone,
+      item?.code
+    ].join(' ').toLowerCase();
 
-  showMessage(
-    'success',
-    'Invoice selected. You can now add a customer directly from this screen.'
-  );
+    return values.includes(q);
+  });
+
+  renderTable(filtered);
+}
+
+/* ══════════════════════════════════
+   Invoice customer select helper
+══════════════════════════════════ */
+function syncSelectedCustomer() {
+  const select = document.getElementById('invoice-customer-select');
+  const preview = document.getElementById('selected-customer-preview');
+
+  const option = select?.selectedOptions?.[0];
+
+  preview.innerHTML = option
+    ? `<span class="pill">Selected: ${escapeHtml(option.textContent)}</span>`
+    : '';
+}
+
+/* ══════════════════════════════════
+   Render customer table
+══════════════════════════════════ */
+function renderTable(items) {
+  const target = document.getElementById('table-container');
+
+  if (!items.length) {
+    target.innerHTML = `
+      <div class="empty">
+        <h3 style="margin-bottom:8px">No customers found</h3>
+        <p>Try adjusting your search or create a new customer.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const rows = items.map((item, index) => {
+
+    const name = customerDisplayName(item);
+
+    return `
+      <tr>
+        <td>${index + 1}</td>
+        <td>
+          <strong>${escapeHtml(name)}</strong>
+        </td>
+        <td>${escapeHtml(item?.email ?? '—')}</td>
+        <td>${escapeHtml(item?.phone ?? '—')}</td>
+        <td>${escapeHtml(item?.code ?? '—')}</td>
+        <td>${escapeHtml(item?._links?.self?.href ?? '—')}</td>
+        <td>${formatDate(item?.created_at ?? item?.created ?? item?.date)}</td>
+      </tr>
+    `;
+  }).join('');
+
+  target.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Customer</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Code</th>
+            <th>API Resource</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
 }
 
 /* ══════════════════════════════════
@@ -755,12 +659,12 @@ async function loadAllRecords() {
 
   btn.disabled = true;
   btn.textContent = 'Loading…';
+
   bar.style.width = '0%';
-  app.innerHTML = '';
 
   try {
 
-    const items = await getSalesInvoiceBatch((loaded, total, page) => {
+    const items = await getCustomerBatch((loaded, total, page) => {
 
       status.textContent = total
         ? `Page ${page} · ${loaded.toLocaleString()} / ${total.toLocaleString()} records`
@@ -771,17 +675,22 @@ async function loadAllRecords() {
       }
     });
 
+    ALL_CUSTOMERS = Array.isArray(items) ? items : [];
+
     bar.style.width = '100%';
-    status.textContent = `✓ ${items.length.toLocaleString()} records loaded`;
+
+    status.textContent =
+      `✓ ${ALL_CUSTOMERS.length.toLocaleString()} records loaded`;
 
     btn.textContent = '↺ Reload';
     btn.disabled = false;
 
-    render(items);
+    render(ALL_CUSTOMERS);
 
   } catch (err) {
 
     status.textContent = '⚠ ' + err.message;
+
     btn.textContent = '↺ Retry';
     btn.disabled = false;
 
@@ -790,7 +699,7 @@ async function loadAllRecords() {
         ⚠ ${escapeHtml(err.message)}
         <br><br>
         <small>
-          Make sure this extension is running inside Manager.io
+          Make sure this extension is running inside Manager.io and API access is enabled.
         </small>
       </div>
     `;
@@ -798,173 +707,285 @@ async function loadAllRecords() {
 }
 
 /* ══════════════════════════════════
-   Main render
+   render(items)
 ══════════════════════════════════ */
-function render(items){
-
-  STATE.items = Array.isArray(items) ? items : [];
-  STATE.filtered = [...STATE.items];
+function render(items) {
 
   const app = document.getElementById('app');
 
-  if(!items.length){
-    app.innerHTML = `
-      <div class="panel">
-        <div class="panel-body">
-          <div class="empty">
-            <h2 style="margin-bottom:12px">No Invoice Records Found</h2>
-            <p>No records were returned from /api4/sales-invoice-batch</p>
-          </div>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
   const total = items.length;
 
-  const totalAmount = items.reduce((a,b)=>{
-    return a + Number(
-      b?.total ??
-      b?.amount ??
-      b?.balance ??
-      0
-    );
-  },0);
+  const sorted = [...items].sort((a,b) => {
+    return customerDisplayName(a).localeCompare(customerDisplayName(b));
+  });
 
-  const draftCount = items.filter(i=>{
-    const amount = Number(i?.total ?? i?.amount ?? 0);
-    return amount <= 0;
-  }).length;
+  const options = sorted.map(item => {
+    const name = customerDisplayName(item);
+
+    return `
+      <option value="${escapeHtml(name)}">
+        ${escapeHtml(name)}
+      </option>
+    `;
+  }).join('');
 
   app.innerHTML = `
     <div class="layout">
 
-      <!-- LEFT -->
-      <div class="panel">
+      <!-- LEFT PANEL -->
+      <div class="card">
 
-        <div class="panel-header">
-          <div class="panel-title">Quick Customer Add</div>
-          <div class="panel-sub">
-            Create or edit customer records directly from invoice workflow
+        <div class="card-head">
+          <div class="card-title">
+            Quick Customer Add
+          </div>
+
+          <div class="card-sub">
+            Add new customers directly from the sales invoice workflow.
           </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
 
-          <div class="form-grid">
+          <div id="message-box"></div>
 
-            <div class="form-group">
-              <label>Selected Invoice</label>
-              <input type="text"
-                     readonly
-                     value="${escapeHtml(
-                       STATE.selectedInvoice?.reference ||
-                       STATE.selectedInvoice?.invoice_number ||
-                       'No invoice selected'
-                     )}">
-            </div>
+          <!-- Simulated invoice customer row -->
+          <div class="field" style="margin-bottom:18px">
 
-            <div class="form-group">
-              <label>Invoice Customer</label>
-              <input type="text"
-                     readonly
-                     value="${escapeHtml(
-                       STATE.selectedInvoice?.customer?.name ||
-                       STATE.selectedInvoice?.customer_name ||
-                       'Not assigned'
-                     )}">
-            </div>
+            <label>
+              Sales Invoice — Customer Selection
+            </label>
 
-            <div class="actions">
-              <button class="primary-btn" onclick="openCustomerModal()">
-                ＋ Add New Customer
+            <div class="invoice-row">
+
+              <select id="invoice-customer-select" onchange="syncSelectedCustomer()">
+                <option value="">Select Customer...</option>
+                ${options}
+              </select>
+
+              <button
+                type="button"
+                class="primary-btn"
+                onclick="document.getElementById('customer-name').focus()"
+              >
+                ➕ New Customer
               </button>
 
-              <button class="secondary-btn" onclick="loadAllRecords()">
-                Refresh Data
-              </button>
+            </div>
+
+            <div id="selected-customer-preview" class="mini-note"></div>
+
+            <div class="mini-note">
+              This mimics the placement to the right of the customer dropdown
+              inside the sales invoice form.
             </div>
 
           </div>
 
+          <!-- Create Customer Form -->
+          <form id="customer-form" onsubmit="createCustomer(event)">
+
+            <div class="form-grid">
+
+              <div class="field">
+                <label>Customer Name *</label>
+                <input
+                  id="customer-name"
+                  type="text"
+                  required
+                  placeholder="Acme Corporation"
+                >
+              </div>
+
+              <div class="field">
+                <label>Customer Code</label>
+                <input
+                  id="customer-code"
+                  type="text"
+                  placeholder="CUST-001"
+                >
+              </div>
+
+              <div class="field">
+                <label>Email Address</label>
+                <input
+                  id="customer-email"
+                  type="email"
+                  placeholder="customer@example.com"
+                >
+              </div>
+
+              <div class="field">
+                <label>Phone Number</label>
+                <input
+                  id="customer-phone"
+                  type="text"
+                  placeholder="+1 555-123-4567"
+                >
+              </div>
+
+              <div class="field">
+                <label>Address Line 1</label>
+                <input
+                  id="customer-address1"
+                  type="text"
+                  placeholder="123 Main Street"
+                >
+              </div>
+
+              <div class="field">
+                <label>Address Line 2</label>
+                <input
+                  id="customer-address2"
+                  type="text"
+                  placeholder="Suite 200"
+                >
+              </div>
+
+              <div class="field">
+                <label>City</label>
+                <input
+                  id="customer-city"
+                  type="text"
+                  placeholder="New York"
+                >
+              </div>
+
+              <div class="field">
+                <label>State / Province</label>
+                <input
+                  id="customer-state"
+                  type="text"
+                  placeholder="NY"
+                >
+              </div>
+
+              <div class="field">
+                <label>ZIP / Postal Code</label>
+                <input
+                  id="customer-zip"
+                  type="text"
+                  placeholder="10001"
+                >
+              </div>
+
+              <div class="field">
+                <label>Country</label>
+                <input
+                  id="customer-country"
+                  type="text"
+                  placeholder="United States"
+                >
+              </div>
+
+              <div class="field">
+                <label>Notes</label>
+                <textarea
+                  id="customer-notes"
+                  placeholder="Additional notes or billing instructions..."
+                ></textarea>
+
+```
+          </div>
+
+        </div>
+
+        <div class="actions">
+
+          <button
+            id="save-btn"
+            type="submit"
+            class="primary-btn"
+          >
+            💾 Save Customer
+          </button>
+
+          <button
+            type="reset"
+            class="secondary-btn"
+          >
+            Reset
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Total Customers</div>
+        <div class="stat-value">
+          ${total.toLocaleString()}
         </div>
       </div>
 
-      <!-- RIGHT -->
-      <div>
-
-        <div class="stats-grid">
-
-          <div class="stat-card">
-            <div class="stat-label">Total Invoices</div>
-            <div class="stat-value">${total.toLocaleString()}</div>
-          </div>
-
-          <div class="stat-card">
-            <div class="stat-label">Total Invoice Value</div>
-            <div class="stat-value">${formatCurrency(totalAmount)}</div>
-          </div>
-
-          <div class="stat-card">
-            <div class="stat-label">Draft Invoices</div>
-            <div class="stat-value">${draftCount.toLocaleString()}</div>
-          </div>
-
+      <div class="stat">
+        <div class="stat-label">API Endpoint</div>
+        <div class="stat-value" style="font-size:15px">
+          /api4/customer-batch
         </div>
+      </div>
 
-        <div class="panel">
-
-          <div class="panel-header">
-            <div class="panel-title">Invoice Records</div>
-            <div class="panel-sub">
-              Select an invoice and add customers without leaving the page
-            </div>
-          </div>
-
-          <div class="panel-body">
-
-            <div class="search-box">
-              <input
-                type="text"
-                placeholder="Search invoices, customer names, references..."
-                oninput="filterInvoices(this.value)"
-              >
-            </div>
-
-            <div class="table-wrap">
-
-              <table>
-
-                <thead>
-                  <tr>
-                    <th>Invoice</th>
-                    <th>Customer</th>
-                    <th>Date</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-
-                <tbody id="invoice-tbody"></tbody>
-
-              </table>
-
-            </div>
-
-          </div>
-
+      <div class="stat">
+        <div class="stat-label">Write Access</div>
+        <div class="stat-value" style="font-size:15px">
+          ENABLED
         </div>
-
       </div>
 
     </div>
-  `;
 
-  renderTable();
-}
-</script>
+    <div class="card">
+
+      <div class="card-head">
+        <div class="card-title">
+          Customer Database
+        </div>
+
+        <div class="card-sub">
+          Live records loaded through the paginated Manager.io API.
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <div class="search-wrap">
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Search customers..."
+            oninput="filterCustomers()"
+            style="
+              width:100%;
+              padding:11px 12px;
+              border:1px solid var(--border);
+              border-radius:10px;
+              font-size:14px;
+            "
+          >
+        </div>
+
+        <div id="table-container"></div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+```
+
+`;
+
+renderTable(sorted);
+} </script>
 
 </body>
 </html>
