@@ -4,29 +4,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Manager.io Customer Quick Add Extension</title>
+<title>Manager.io Customer Quick Add</title>
 
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
 
-  :root{
-    --bg:#ffffff;
-    --card:#ffffff;
-    --muted:#57606a;
-    --text:#24292f;
-    --border:#d0d7de;
-    --soft:#f6f8fa;
-    --blue:#0969da;
-    --blue2:#1f6feb;
-    --green:#1a7f37;
-    --red:#cf222e;
-    --shadow:0 2px 8px rgba(27,31,36,.08);
-  }
-
-  body{
-    font-family:system-ui,-apple-system,sans-serif;
-    background:var(--bg);
-    color:var(--text);
+  body {
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:#ffffff;
+    color:#24292f;
     min-height:100vh;
     padding:20px;
   }
@@ -38,368 +24,324 @@
     flex-wrap:wrap;
     padding:12px 16px;
     margin-bottom:18px;
-    background:var(--soft);
-    border:1px solid var(--border);
+    background:#f6f8fa;
+    border:1px solid #d0d7de;
     border-radius:12px;
-    box-shadow:var(--shadow);
   }
 
   .load-btn,
   .primary-btn,
-  .secondary-btn{
+  .secondary-btn {
+    padding:10px 18px;
     border:none;
     border-radius:8px;
     cursor:pointer;
-    transition:.15s ease;
+    font-size:13px;
     font-weight:700;
+    transition:all .15s ease;
   }
 
-  .load-btn{
-    padding:8px 20px;
-    font-size:13px;
-    background:var(--blue);
+  .load-btn {
+    background:#0969da;
     color:#fff;
   }
 
+  .primary-btn {
+    background:#1a7f37;
+    color:#fff;
+  }
+
+  .secondary-btn {
+    background:#f6f8fa;
+    color:#24292f;
+    border:1px solid #d0d7de;
+  }
+
   .load-btn:hover,
-  .primary-btn:hover{
-    opacity:.92;
+  .primary-btn:hover,
+  .secondary-btn:hover {
+    transform:translateY(-1px);
   }
 
   .load-btn:disabled,
-  .primary-btn:disabled{
-    opacity:.45;
+  .primary-btn:disabled,
+  .secondary-btn:disabled {
+    opacity:.55;
     cursor:not-allowed;
+    transform:none;
   }
 
-  .prog-wrap{
+  .prog-wrap {
     flex:1;
     min-width:120px;
-    height:5px;
+    height:6px;
     background:#d8dee4;
-    border-radius:3px;
+    border-radius:999px;
     overflow:hidden;
   }
 
-  .prog-bar{
+  .prog-bar {
     height:100%;
     width:0%;
-    background:var(--blue);
-    border-radius:3px;
+    background:#0969da;
     transition:width .25s;
   }
 
-  .status-txt{
+  .status-txt {
     font-size:12px;
-    color:var(--muted);
+    color:#57606a;
     white-space:nowrap;
   }
 
-  .err-box{
-    color:var(--red);
+  .err-box {
+    color:#cf222e;
     background:#fff8f8;
-    border:1px solid #ffd8d3;
+    border:1px solid #ffcecb;
     border-radius:10px;
     padding:14px 16px;
     font-size:13px;
     margin-bottom:16px;
   }
 
-  .layout{
-    display:grid;
-    grid-template-columns:420px 1fr;
-    gap:18px;
-    align-items:start;
+  .success-box {
+    color:#1a7f37;
+    background:#f0fff4;
+    border:1px solid #8ddb9b;
+    border-radius:10px;
+    padding:14px 16px;
+    font-size:13px;
+    margin-bottom:16px;
   }
 
-  @media (max-width:980px){
-    .layout{
+  .grid {
+    display:grid;
+    grid-template-columns: 1.2fr .8fr;
+    gap:20px;
+  }
+
+  @media (max-width: 1000px) {
+    .grid {
       grid-template-columns:1fr;
     }
   }
 
-  .card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:14px;
-    box-shadow:var(--shadow);
+  .card {
+    background:#ffffff;
+    border:1px solid #d0d7de;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 1px 2px rgba(27,31,36,.04);
   }
 
-  .card-header{
+  .card-header {
     padding:16px 18px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
+    border-bottom:1px solid #d8dee4;
+    background:#f6f8fa;
   }
 
-  .card-title{
-    font-size:17px;
-    font-weight:800;
+  .card-title {
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:4px;
   }
 
-  .card-sub{
-    margin-top:4px;
-    color:var(--muted);
+  .card-sub {
     font-size:12px;
+    color:#57606a;
   }
 
-  .form-wrap{
+  .card-body {
     padding:18px;
   }
 
-  .grid{
+  .stats {
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+    gap:12px;
+    margin-bottom:20px;
+  }
+
+  .stat {
+    border:1px solid #d0d7de;
+    border-radius:12px;
+    padding:14px;
+    background:#fff;
+  }
+
+  .stat-label {
+    font-size:12px;
+    color:#57606a;
+    margin-bottom:6px;
+  }
+
+  .stat-value {
+    font-size:24px;
+    font-weight:800;
+  }
+
+  .search-wrap {
+    margin-bottom:16px;
+  }
+
+  .search-input {
+    width:100%;
+    padding:12px 14px;
+    border:1px solid #d0d7de;
+    border-radius:10px;
+    font-size:14px;
+    background:#fff;
+  }
+
+  .search-input:focus,
+  .field input:focus,
+  .field textarea:focus {
+    outline:none;
+    border-color:#0969da;
+    box-shadow:0 0 0 3px rgba(9,105,218,.12);
+  }
+
+  .invoice-list {
+    max-height:600px;
+    overflow:auto;
+    border:1px solid #d8dee4;
+    border-radius:12px;
+  }
+
+  .invoice-item {
+    padding:14px 16px;
+    border-bottom:1px solid #eef1f4;
+    cursor:pointer;
+    transition:background .15s;
+  }
+
+  .invoice-item:hover {
+    background:#f6f8fa;
+  }
+
+  .invoice-item:last-child {
+    border-bottom:none;
+  }
+
+  .invoice-top {
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:8px;
+  }
+
+  .invoice-number {
+    font-weight:700;
+    font-size:14px;
+  }
+
+  .invoice-date {
+    color:#57606a;
+    font-size:12px;
+  }
+
+  .invoice-customer {
+    font-size:13px;
+    margin-bottom:4px;
+  }
+
+  .invoice-amount {
+    font-weight:700;
+    color:#0969da;
+    font-size:13px;
+  }
+
+  .empty-state {
+    text-align:center;
+    padding:50px 20px;
+    color:#57606a;
+  }
+
+  .form-grid {
+    display:grid;
     gap:14px;
   }
 
-  .field{
+  .field {
     display:flex;
     flex-direction:column;
     gap:6px;
   }
 
-  .field.full{
-    grid-column:1/-1;
-  }
-
-  .field label{
+  .field label {
     font-size:12px;
     font-weight:700;
-    color:#374151;
+    color:#57606a;
   }
 
   .field input,
-  .field textarea{
+  .field textarea,
+  .field select {
     width:100%;
-    border:1px solid var(--border);
-    border-radius:10px;
     padding:11px 12px;
-    font-size:14px;
-    background:#fff;
-    transition:border-color .15s, box-shadow .15s;
-  }
-
-  .field textarea{
-    resize:vertical;
-    min-height:80px;
-  }
-
-  .field input:focus,
-  .field textarea:focus{
-    outline:none;
-    border-color:var(--blue);
-    box-shadow:0 0 0 3px rgba(9,105,218,.12);
-  }
-
-  .actions{
-    margin-top:18px;
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-
-  .primary-btn{
-    background:var(--blue);
-    color:#fff;
-    padding:11px 18px;
-    font-size:14px;
-  }
-
-  .secondary-btn{
-    background:#fff;
-    border:1px solid var(--border);
-    color:#24292f;
-    padding:11px 18px;
-    font-size:14px;
-  }
-
-  .helper{
-    margin-top:12px;
-    font-size:12px;
-    color:var(--muted);
-    line-height:1.5;
-  }
-
-  .success{
-    margin-top:14px;
-    background:#ecfdf3;
-    border:1px solid #a6e3b8;
-    color:#166534;
-    padding:12px 14px;
+    border:1px solid #d0d7de;
     border-radius:10px;
-    font-size:13px;
+    font-size:14px;
+    background:#fff;
   }
 
-  .stats{
+  .field textarea {
+    min-height:80px;
+    resize:vertical;
+  }
+
+  .two-col {
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:1fr 1fr;
     gap:12px;
-    padding:18px;
-    border-bottom:1px solid var(--border);
   }
 
-  @media (max-width:760px){
-    .stats{
-      grid-template-columns:repeat(2,1fr);
-    }
-
-    .grid{
+  @media (max-width:700px) {
+    .two-col {
       grid-template-columns:1fr;
     }
   }
 
-  .stat{
-    background:var(--soft);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:14px;
-  }
-
-  .stat-label{
-    font-size:11px;
-    color:var(--muted);
-    margin-bottom:6px;
-    text-transform:uppercase;
-    letter-spacing:.04em;
-  }
-
-  .stat-value{
-    font-size:22px;
-    font-weight:800;
-  }
-
-  .toolbar{
-    padding:16px 18px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-  }
-
-  .search{
-    flex:1;
-    min-width:220px;
-    position:relative;
-  }
-
-  .search input{
-    width:100%;
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:11px 14px;
-    font-size:14px;
-  }
-
-  .table-wrap{
-    overflow:auto;
-    max-height:650px;
-  }
-
-  table{
-    width:100%;
-    border-collapse:collapse;
-  }
-
-  th{
-    position:sticky;
-    top:0;
-    z-index:1;
-    background:#f3f4f6;
-    text-align:left;
-    font-size:12px;
-    color:#4b5563;
-    padding:12px 14px;
-    border-bottom:1px solid var(--border);
-  }
-
-  td{
-    padding:13px 14px;
-    border-bottom:1px solid #edf0f2;
-    font-size:13px;
-    vertical-align:top;
-  }
-
-  tr:hover{
-    background:#fafbfc;
-  }
-
-  .pill{
+  .pill {
     display:inline-flex;
     align-items:center;
-    padding:4px 8px;
-    border-radius:999px;
-    font-size:11px;
-    font-weight:700;
+    gap:6px;
     background:#ddf4ff;
     color:#0969da;
-  }
-
-  .inactive{
-    background:#fff1f0;
-    color:#cf222e;
-  }
-
-  .empty{
-    padding:40px 20px;
-    text-align:center;
-    color:var(--muted);
-  }
-
-  .mini-btn{
-    border:none;
-    background:#e7f3ff;
-    color:#0969da;
-    padding:7px 10px;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:12px;
+    border-radius:999px;
+    padding:5px 10px;
+    font-size:11px;
     font-weight:700;
   }
 
-  .mini-btn:hover{
-    background:#d8ecff;
-  }
-
-  .invoice-banner{
-    margin-bottom:18px;
-    border:1px solid #bfd8ff;
-    background:#f0f7ff;
-    color:#0b4ea2;
+  .customer-preview {
+    border:1px solid #d0d7de;
     border-radius:12px;
-    padding:16px 18px;
+    padding:14px;
+    background:#f9fbfc;
+  }
+
+  .customer-preview h4 {
+    margin-bottom:6px;
+  }
+
+  .toolbar {
     display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:16px;
+    gap:10px;
     flex-wrap:wrap;
+    margin-top:18px;
   }
 
-  .invoice-banner strong{
-    display:block;
-    margin-bottom:5px;
+  .muted {
+    color:#57606a;
+    font-size:12px;
   }
 
-  .floating-add-btn{
-    background:var(--blue);
-    color:#fff;
-    border:none;
-    border-radius:10px;
-    padding:11px 14px;
-    font-weight:800;
-    cursor:pointer;
-    box-shadow:var(--shadow);
+  .divider {
+    height:1px;
+    background:#d8dee4;
+    margin:18px 0;
   }
 
-  .floating-add-btn:hover{
-    background:var(--blue2);
-  }
-
-  .muted{
-    color:var(--muted);
-  }
 </style>
 
 </head>
@@ -408,7 +350,9 @@
 
 <div class="ctrl-bar">
   <button class="load-btn" id="load-btn" onclick="loadAllRecords()">⬇ Load All Records</button>
-  <div class="prog-wrap"><div class="prog-bar" id="prog-bar"></div></div>
+  <div class="prog-wrap">
+    <div class="prog-bar" id="prog-bar"></div>
+  </div>
   <span class="status-txt" id="status-txt">Press Load to fetch data from Manager</span>
 </div>
 
@@ -438,10 +382,10 @@ function postMessageWithResponse(message) {
 }
 
 /* ══════════════════════════════════
-   getCustomerBatch
+   getSalesInvoiceBatch
    Fetches ALL pages — DO NOT SIMPLIFY.
 ══════════════════════════════════ */
-async function getCustomerBatch(onProgress) {
+async function getSalesInvoiceBatch(onProgress) {
   const allItems = [];
   let nextToken  = null;
   let pageNum    = 0;
@@ -449,8 +393,8 @@ async function getCustomerBatch(onProgress) {
 
   do {
     const path = nextToken
-      ? '/api4/customer-batch?PageSize=99999&next_page_token=' + encodeURIComponent(nextToken)
-      : '/api4/customer-batch?PageSize=99999';
+      ? '/api4/sales-invoice-batch?PageSize=99999&next_page_token=' + encodeURIComponent(nextToken)
+      : '/api4/sales-invoice-batch?PageSize=99999';
 
     const data = await postMessageWithResponse({ type: 'api-request', method: 'GET', path });
 
@@ -464,7 +408,9 @@ async function getCustomerBatch(onProgress) {
     }
 
     pageNum++;
+
     if (onProgress) onProgress(allItems.length, apiTotal, pageNum);
+
     if (pageNum >= 1000) break;
 
   } while (nextToken);
@@ -473,417 +419,281 @@ async function getCustomerBatch(onProgress) {
 }
 
 /* ══════════════════════════════════
-   State
+   Fetch all customers with pagination
 ══════════════════════════════════ */
-let ALL_CUSTOMERS = [];
-let FILTERED_CUSTOMERS = [];
+async function getCustomerBatch() {
+  const allItems = [];
+  let nextToken = null;
+  let pageNum = 0;
 
-/* ══════════════════════════════════
-   Utility helpers
-══════════════════════════════════ */
-function escapeHtml(value){
-  return String(value ?? '')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
+  do {
+    const path = nextToken
+      ? '/api4/customer-batch?PageSize=99999&next_page_token=' + encodeURIComponent(nextToken)
+      : '/api4/customer-batch?PageSize=99999';
+
+    const data = await postMessageWithResponse({
+      type: 'api-request',
+      method: 'GET',
+      path
+    });
+
+    const page = Array.isArray(data)
+      ? data
+      : (data.items || data.data || []);
+
+    allItems.push(...page);
+
+    nextToken =
+      data.next_page_token ||
+      data.nextPageToken ||
+      data._links?.next?.href ||
+      null;
+
+    pageNum++;
+
+    if (pageNum >= 1000) break;
+
+  } while (nextToken);
+
+  return allItems;
 }
 
-function fmtCurrency(v){
-  return '$' + Number(v || 0).toLocaleString(undefined,{
+/* ══════════════════════════════════
+   Save customer
+══════════════════════════════════ */
+async function saveCustomer(payload) {
+  return await postMessageWithResponse({
+    type: 'api-request',
+    method: 'POST',
+    path: '/api4/customer-batch',
+    body: payload
+  });
+}
+
+/* ══════════════════════════════════
+   Utility formatters
+══════════════════════════════════ */
+function fmtCurrency(v) {
+  const n = Number(v || 0);
+  return '$' + n.toLocaleString(undefined, {
     minimumFractionDigits:2,
     maximumFractionDigits:2
   });
 }
 
-function setStatus(message){
-  const el = document.getElementById('status-txt');
-  if(el) el.textContent = message;
+function fmtDate(v) {
+  if (!v) return '—';
+
+  try {
+    return new Date(v).toLocaleDateString(undefined, {
+      year:'numeric',
+      month:'short',
+      day:'numeric'
+    });
+  } catch {
+    return v;
+  }
 }
 
 /* ══════════════════════════════════
-   Customer creation
+   loadAllRecords
 ══════════════════════════════════ */
-async function createCustomer(){
-  const saveBtn = document.getElementById('save-btn');
-  const success = document.getElementById('success-box');
+async function loadAllRecords() {
+  const btn    = document.getElementById('load-btn');
+  const bar    = document.getElementById('prog-bar');
+  const status = document.getElementById('status-txt');
+  const app    = document.getElementById('app');
 
-  const payload = {
-    name: document.getElementById('customer-name')?.value?.trim() || '',
-    code: document.getElementById('customer-code')?.value?.trim() || null,
-    email: document.getElementById('customer-email')?.value?.trim() || null,
-    billingAddress: document.getElementById('billing-address')?.value?.trim() || '',
-    deliveryAddress: document.getElementById('delivery-address')?.value?.trim() || '',
-    creditLimit: Number(document.getElementById('credit-limit')?.value || 0),
-    inactive: false,
-    hasDefaultBillingAddress: true,
-    defaultBillingAddress: document.getElementById('billing-address')?.value?.trim() || '',
-    hasDefaultDeliveryAddress: true,
-    defaultDeliveryAddress: document.getElementById('delivery-address')?.value?.trim() || ''
-  };
+  btn.disabled = true;
+  btn.textContent = 'Loading…';
+  bar.style.width = '0%';
+  app.innerHTML = '';
 
-  if(!payload.name){
-    alert('Customer name is required.');
-    return;
-  }
+  try {
 
-  saveBtn.disabled = true;
-  saveBtn.textContent = 'Saving…';
-  success.style.display = 'none';
+    const items = await getSalesInvoiceBatch((loaded, total, page) => {
+      status.textContent = total
+        ? `Page ${page} · ${loaded.toLocaleString()} / ${total.toLocaleString()} invoices`
+        : `Page ${page} · ${loaded.toLocaleString()} invoices loaded`;
 
-  try{
-    const response = await postMessageWithResponse({
-      type:'api-request',
-      method:'POST',
-      path:'/api4/customer-batch',
-      body:[payload]
+      if (total) {
+        bar.style.width = Math.min(95, Math.round(loaded / total * 100)) + '%';
+      }
     });
 
-    success.style.display = 'block';
-    success.innerHTML = '✓ Customer created successfully. Reloading records…';
+    const customers = await getCustomerBatch();
 
-    document.getElementById('customer-form').reset();
+    bar.style.width = '100%';
 
-    setStatus('Refreshing customer records…');
+    status.textContent =
+      `✓ ${items.length.toLocaleString()} invoices · ${customers.length.toLocaleString()} customers loaded`;
 
-    const items = await getCustomerBatch((loaded,total,page)=>{
-      setStatus(
-        total
-          ? `Reloading · ${loaded.toLocaleString()} / ${total.toLocaleString()}`
-          : `Reloading · ${loaded.toLocaleString()}`
-      );
-    });
+    btn.textContent = '↺ Reload';
+    btn.disabled = false;
 
-    render(items);
+    render(items, customers);
 
-  }catch(err){
-    alert('Unable to create customer.\n\n' + err.message);
-  }finally{
-    saveBtn.disabled = false;
-    saveBtn.textContent = '➕ Create Customer';
-  }
-}
+  } catch (err) {
 
-/* ══════════════════════════════════
-   Search customers
-══════════════════════════════════ */
-function applySearch(){
-  const q = document.getElementById('search-input')?.value?.trim()?.toLowerCase() || '';
+    status.textContent = '⚠ ' + err.message;
+    btn.textContent = '↺ Retry';
+    btn.disabled = false;
 
-  FILTERED_CUSTOMERS = ALL_CUSTOMERS.filter(row=>{
-    const item = row?.item || {};
-    return [
-      item?.name,
-      item?.email,
-      item?.billingAddress,
-      item?.deliveryAddress,
-      item?.code
-    ]
-    .filter(Boolean)
-    .some(v => String(v).toLowerCase().includes(q));
-  });
-
-  renderTable();
-}
-
-/* ══════════════════════════════════
-   Fill form from table
-══════════════════════════════════ */
-function useCustomer(index){
-  const row = FILTERED_CUSTOMERS[index];
-  const item = row?.item || {};
-
-  document.getElementById('customer-name').value = item?.name || '';
-  document.getElementById('customer-code').value = item?.code || '';
-  document.getElementById('customer-email').value = item?.email || '';
-  document.getElementById('billing-address').value = item?.billingAddress || '';
-  document.getElementById('delivery-address').value = item?.deliveryAddress || '';
-  document.getElementById('credit-limit').value = item?.creditLimit || 0;
-
-  window.scrollTo({
-    top:0,
-    behavior:'smooth'
-  });
-}
-
-/* ══════════════════════════════════
-   Render table
-══════════════════════════════════ */
-function renderTable(){
-  const tbody = document.getElementById('customer-tbody');
-  const empty = document.getElementById('empty-state');
-
-  if(!tbody) return;
-
-  if(!FILTERED_CUSTOMERS.length){
-    tbody.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
-
-  empty.style.display = 'none';
-
-  tbody.innerHTML = FILTERED_CUSTOMERS.map((row,index)=>{
-    const item = row?.item || {};
-
-    return `
-      <tr>
-        <td>
-          <div style="font-weight:700">${escapeHtml(item?.name || 'Unnamed')}</div>
-          <div class="muted" style="font-size:12px;margin-top:4px">
-            ${escapeHtml(item?.email || 'No email')}
-          </div>
-        </td>
-
-        <td>${escapeHtml(item?.code || '—')}</td>
-
-        <td>${fmtCurrency(item?.creditLimit || 0)}</td>
-
-        <td>
-          <div style="max-width:240px;white-space:pre-wrap">
-            ${escapeHtml(item?.billingAddress || '—')}
-          </div>
-        </td>
-
-        <td>
-          ${
-            item?.inactive
-            ? '<span class="pill inactive">Inactive</span>'
-            : '<span class="pill">Active</span>'
-          }
-        </td>
-
-        <td>
-          <button class="mini-btn" onclick="useCustomer(${index})">
-            Use
-          </button>
-        </td>
-      </tr>
+    app.innerHTML = `
+      <div class="err-box">
+        <strong>Unable to load Manager.io data</strong><br><br>
+        ${err.message}<br><br>
+        <small>Make sure this extension is running inside Manager.io and the API endpoints are enabled.</small>
+      </div>
     `;
-  }).join('');
+  }
 }
 
 /* ══════════════════════════════════
-   render(items)
+   Main render
 ══════════════════════════════════ */
-function render(items) {
+function render(items, customers) {
+
   const app = document.getElementById('app');
 
-  ALL_CUSTOMERS = Array.isArray(items) ? items : [];
-  FILTERED_CUSTOMERS = [...ALL_CUSTOMERS];
-
-  const total = ALL_CUSTOMERS.length;
-
-  const activeCount = ALL_CUSTOMERS.filter(x => !x?.item?.inactive).length;
-  const inactiveCount = ALL_CUSTOMERS.filter(x => x?.item?.inactive).length;
-
-  const emailCount = ALL_CUSTOMERS.filter(x => x?.item?.email).length;
-
-  if(!total){
+  if (!Array.isArray(items) || items.length === 0) {
     app.innerHTML = `
       <div class="card">
-        <div class="empty">
-          <div style="font-size:48px;margin-bottom:10px">📭</div>
-          <h2 style="margin-bottom:8px">No customers found</h2>
-          <p class="muted">
-            Use the quick-add form below to create your first customer directly from the invoice workflow.
-          </p>
+        <div class="empty-state">
+          <h2 style="margin-bottom:10px;">No Sales Invoices Found</h2>
+          <p>No invoice records were returned from <strong>/api4/sales-invoice-batch</strong>.</p>
         </div>
       </div>
     `;
     return;
   }
 
+  const totalInvoices = items.length;
+  const totalCustomers = customers?.length || 0;
+
+  const searchData = [...items];
+
   app.innerHTML = `
-    <div class="invoice-banner">
-      <div>
-        <strong>Invoice Form Integration</strong>
-        This extension adds a customer quick-create workflow designed for the
-        <strong>Create Sales Invoice</strong> screen in Manager.io.
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Sales Invoices</div>
+        <div class="stat-value">${totalInvoices.toLocaleString()}</div>
       </div>
 
-      <button class="floating-add-btn" onclick="document.getElementById('customer-name').focus()">
-        ➕ Add Customer
-      </button>
+      <div class="stat">
+        <div class="stat-label">Customers</div>
+        <div class="stat-value">${totalCustomers.toLocaleString()}</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Extension Mode</div>
+        <div class="pill">WRITE ENABLED</div>
+      </div>
     </div>
 
-    <div class="layout">
+    <div id="message-area"></div>
 
-      <!-- LEFT PANEL -->
+    <div class="grid">
+
       <div class="card">
-
         <div class="card-header">
-          <div>
-            <div class="card-title">
-              Quick Add Customer
-            </div>
-
-            <div class="card-sub">
-              Add customers directly while creating a new invoice
-            </div>
-          </div>
+          <div class="card-title">Sales Invoice Records</div>
+          <div class="card-sub">Browse invoices and quickly add new customers directly from the invoice workflow.</div>
         </div>
 
-        <div class="form-wrap">
+        <div class="card-body">
 
-          <form id="customer-form" onsubmit="event.preventDefault(); createCustomer();">
+          <div class="search-wrap">
+            <input
+              id="invoice-search"
+              class="search-input"
+              type="text"
+              placeholder="Search invoice number, customer, amount, or reference..."
+            />
+          </div>
 
-            <div class="grid">
+          <div class="invoice-list" id="invoice-list"></div>
 
-              <div class="field full">
-                <label>Customer Name *</label>
-                <input
-                  id="customer-name"
-                  type="text"
-                  placeholder="Enter customer name"
-                  required
-                >
-              </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Quick Add Customer</div>
+          <div class="card-sub">Create a new customer directly from the sales invoice process.</div>
+        </div>
+
+        <div class="card-body">
+
+          <div class="form-grid">
+
+            <div class="field">
+              <label>Customer Name *</label>
+              <input type="text" id="customer-name" placeholder="Customer name">
+            </div>
+
+            <div class="two-col">
 
               <div class="field">
                 <label>Customer Code</label>
-                <input
-                  id="customer-code"
-                  type="text"
-                  placeholder="Optional code"
-                >
+                <input type="text" id="customer-code" placeholder="Optional code">
               </div>
 
               <div class="field">
                 <label>Email</label>
-                <input
-                  id="customer-email"
-                  type="email"
-                  placeholder="customer@example.com"
-                >
+                <input type="email" id="customer-email" placeholder="name@example.com">
               </div>
 
-              <div class="field full">
-                <label>Billing Address</label>
-                <textarea
-                  id="billing-address"
-                  placeholder="Billing address"
-                ></textarea>
+            </div>
+
+            <div class="field">
+              <label>Billing Address</label>
+              <textarea id="billing-address" placeholder="Billing address"></textarea>
 
 ```
-          </div>
+        </div>
 
-          <div class="field full">
-            <label>Delivery Address</label>
-            <textarea
-              id="delivery-address"
-              placeholder="Delivery address"
-            ></textarea>
-          </div>
+        <div class="field">
+          <label>Delivery Address</label>
+          <textarea id="delivery-address" placeholder="Delivery address"></textarea>
+        </div>
+
+        <div class="two-col">
 
           <div class="field">
             <label>Credit Limit</label>
-            <input
-              id="credit-limit"
-              type="number"
-              step="0.01"
-              min="0"
-              value="0"
-            >
+            <input type="number" id="credit-limit" value="0" min="0" step="0.01">
+          </div>
+
+          <div class="field">
+            <label>Default Hourly Rate</label>
+            <input type="number" id="hourly-rate" value="0" min="0" step="0.01">
           </div>
 
         </div>
 
-        <div class="actions">
-          <button type="submit" class="primary-btn" id="save-btn">
-            ➕ Create Customer
+        <div class="customer-preview">
+          <h4>Preview</h4>
+          <div class="muted" id="preview-text">
+            Enter customer details to preview the payload before saving.
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="toolbar">
+          <button class="primary-btn" id="save-btn">
+            💾 Save Customer
           </button>
 
-          <button
-            type="button"
-            class="secondary-btn"
-            onclick="document.getElementById('customer-form').reset()"
-          >
-            Reset
+          <button class="secondary-btn" id="reset-btn">
+            Reset Form
           </button>
         </div>
 
-        <div class="success" id="success-box" style="display:none"></div>
-
-        <div class="helper">
-          After creating a customer, reload or refresh the invoice customer
-          dropdown in Manager.io to select the newly created customer.
-        </div>
-
-      </form>
-
-    </div>
-  </div>
-
-  <!-- RIGHT PANEL -->
-  <div class="card">
-
-    <div class="stats">
-
-      <div class="stat">
-        <div class="stat-label">Total Customers</div>
-        <div class="stat-value">
-          ${total.toLocaleString()}
-        </div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Active</div>
-        <div class="stat-value">
-          ${activeCount.toLocaleString()}
-        </div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Inactive</div>
-        <div class="stat-value">
-          ${inactiveCount.toLocaleString()}
-        </div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">With Email</div>
-        <div class="stat-value">
-          ${emailCount.toLocaleString()}
-        </div>
       </div>
 
     </div>
-
-    <div class="toolbar">
-      <div class="search">
-        <input
-          id="search-input"
-          type="text"
-          placeholder="Search customers…"
-          oninput="applySearch()"
-        >
-      </div>
-    </div>
-
-    <div class="table-wrap">
-
-      <table>
-        <thead>
-          <tr>
-            <th>Customer</th>
-            <th>Code</th>
-            <th>Credit Limit</th>
-            <th>Billing Address</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
-        </thead>
-
-        <tbody id="customer-tbody"></tbody>
-      </table>
-
-      <div id="empty-state" class="empty" style="display:none">
-        No matching customers found.
-      </div>
-
-    </div>
-
   </div>
 
 </div>
@@ -891,7 +701,280 @@ function render(items) {
 
 `;
 
-renderTable();
+/* ══════════════════════════════════
+Invoice list rendering
+══════════════════════════════════ */
+
+const invoiceList = document.getElementById('invoice-list');
+
+function drawInvoices(list) {
+
+```
+if (!list.length) {
+  invoiceList.innerHTML = `
+    <div class="empty-state">
+      <h3 style="margin-bottom:8px;">No matching invoices</h3>
+      <p>Try a different search term.</p>
+    </div>
+  `;
+  return;
+}
+
+invoiceList.innerHTML = list.map(item => {
+
+  const number =
+    item?.reference ||
+    item?.invoiceNumber ||
+    item?.number ||
+    'Invoice';
+
+  const customer =
+    item?.customer?.name ||
+    item?.customerName ||
+    item?.name ||
+    'Unknown Customer';
+
+  const total =
+    item?.total ||
+    item?.amount ||
+    item?.balance ||
+    0;
+
+  const date =
+    item?.date ||
+    item?.issueDate ||
+    item?.createdDate ||
+    null;
+
+  return `
+    <div class="invoice-item">
+
+      <div class="invoice-top">
+        <div class="invoice-number">${number}</div>
+        <div class="invoice-date">${fmtDate(date)}</div>
+      </div>
+
+      <div class="invoice-customer">${customer}</div>
+
+      <div class="invoice-amount">${fmtCurrency(total)}</div>
+
+    </div>
+  `;
+}).join('');
+```
+
+}
+
+drawInvoices(searchData);
+
+/* ══════════════════════════════════
+Search functionality
+══════════════════════════════════ */
+
+document.getElementById('invoice-search').addEventListener('input', e => {
+
+```
+const q = e.target.value.trim().toLowerCase();
+
+if (!q) {
+  drawInvoices(searchData);
+  return;
+}
+
+const filtered = searchData.filter(item => {
+
+  const haystack = JSON.stringify(item || {})
+    .toLowerCase();
+
+  return haystack.includes(q);
+});
+
+drawInvoices(filtered);
+```
+
+});
+
+/* ══════════════════════════════════
+Preview updater
+══════════════════════════════════ */
+
+const previewFields = [
+'customer-name',
+'customer-code',
+'customer-email',
+'billing-address',
+'delivery-address',
+'credit-limit',
+'hourly-rate'
+];
+
+previewFields.forEach(id => {
+document.getElementById(id).addEventListener('input', updatePreview);
+});
+
+function updatePreview() {
+
+```
+const payload = buildPayload();
+
+document.getElementById('preview-text').innerHTML = `
+  <strong>${payload.item.name || 'Unnamed Customer'}</strong><br>
+  Code: ${payload.item.code || '—'}<br>
+  Email: ${payload.item.email || '—'}<br>
+  Credit Limit: ${fmtCurrency(payload.item.creditLimit)}<br>
+  Billing Address: ${payload.item.billingAddress || '—'}
+`;
+```
+
+}
+
+updatePreview();
+
+/* ══════════════════════════════════
+Reset form
+══════════════════════════════════ */
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+
+```
+[
+  'customer-name',
+  'customer-code',
+  'customer-email',
+  'billing-address',
+  'delivery-address'
+].forEach(id => {
+  document.getElementById(id).value = '';
+});
+
+document.getElementById('credit-limit').value = 0;
+document.getElementById('hourly-rate').value = 0;
+
+updatePreview();
+```
+
+});
+
+/* ══════════════════════════════════
+Save customer
+══════════════════════════════════ */
+
+document.getElementById('save-btn').addEventListener('click', async () => {
+
+```
+const msg = document.getElementById('message-area');
+const btn = document.getElementById('save-btn');
+
+msg.innerHTML = '';
+
+const payload = buildPayload();
+
+if (!payload.item.name?.trim()) {
+
+  msg.innerHTML = `
+    <div class="err-box">
+      Customer name is required before saving.
+    </div>
+  `;
+
+  return;
+}
+
+try {
+
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  await saveCustomer(payload);
+
+  msg.innerHTML = `
+    <div class="success-box">
+      <strong>Customer saved successfully.</strong><br><br>
+      ${payload.item.name} was added to Manager.io.
+    </div>
+  `;
+
+  customers.push(payload);
+
+  btn.disabled = false;
+  btn.textContent = '💾 Save Customer';
+
+} catch (err) {
+
+  btn.disabled = false;
+  btn.textContent = '💾 Save Customer';
+
+  msg.innerHTML = `
+    <div class="err-box">
+      <strong>Failed to save customer</strong><br><br>
+      ${err.message || 'Unknown API error'}
+    </div>
+  `;
+}
+```
+
+});
+
+/* ══════════════════════════════════
+Payload builder
+══════════════════════════════════ */
+
+function buildPayload() {
+
+```
+const billing = document.getElementById('billing-address').value || '';
+
+const delivery =
+  document.getElementById('delivery-address').value || billing;
+
+return {
+  item: {
+    name: document.getElementById('customer-name').value?.trim() || '',
+    code: document.getElementById('customer-code').value?.trim() || null,
+    creditLimit: Number(document.getElementById('credit-limit').value || 0),
+    currency: null,
+    billingAddress: billing,
+    deliveryAddress: delivery,
+    email: document.getElementById('customer-email').value?.trim() || null,
+    division: null,
+    controlAccount: null,
+    hasDefaultDueDateDays: false,
+    defaultDueDateDays: null,
+    hasDefaultHourlyRate: Number(document.getElementById('hourly-rate').value || 0) > 0,
+    defaultHourlyRate: Number(document.getElementById('hourly-rate').value || 0),
+    inactive: false,
+    customFields: null,
+    customFields2: {
+      strings: null,
+      decimals: null,
+      dates: null,
+      booleans: null,
+      stringArrays: null,
+      images: null
+    },
+    obsolete_StartingBalance2: 0,
+    obsolete_ExchangeRate2: 0,
+    obsolete_ExchangeRateIsInverse2: false,
+    obsolete_BusinessIdentifier: null,
+    obsolete_SouthAfrica_VAT_Number: null,
+    obsolete_Philippines_TIN_Number: null,
+    obsolete_Telephone: null,
+    obsolete_Fax: null,
+    obsolete_Mobile: null,
+    obsolete_Notes: null,
+    obsolete_HasStartingBalance: false,
+    obsolete_StartingBalanceType: 0,
+    obsolete_StartingBalance: 0,
+    obsolete_CustomerPortal: false,
+    hasDefaultBillingAddress: !!billing,
+    defaultBillingAddress: billing || null,
+    hasDefaultDeliveryAddress: !!delivery,
+    defaultDeliveryAddress: delivery || null
+  }
+};
+```
+
+}
 } </script>
 
 </body>
