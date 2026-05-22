@@ -7,34 +7,30 @@
 <title>Manager.io Customer Quick Add Extension</title>
 
 <style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  * { box-sizing:border-box; margin:0; padding:0; }
+
+  :root{
+    --bg:#ffffff;
+    --panel:#f6f8fa;
+    --border:#d0d7de;
+    --text:#24292f;
+    --muted:#57606a;
+    --primary:#0969da;
+    --primary-hover:#0550ae;
+    --danger:#cf222e;
+    --success:#1a7f37;
+    --shadow:0 2px 10px rgba(0,0,0,.06);
   }
 
-  :root {
-    --bg: #ffffff;
-    --panel: #f6f8fa;
-    --border: #d0d7de;
-    --text: #24292f;
-    --muted: #57606a;
-    --primary: #0969da;
-    --primary-hover: #0550ae;
-    --success: #1a7f37;
-    --danger: #cf222e;
-    --shadow: rgba(31,35,40,0.08);
+  body{
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:20px;
   }
 
-  body {
-    font-family: system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 20px;
-  }
-
-  .ctrl-bar {
+  .ctrl-bar{
     display:flex;
     align-items:center;
     gap:10px;
@@ -44,439 +40,291 @@
     background:var(--panel);
     border:1px solid var(--border);
     border-radius:12px;
-    box-shadow: 0 1px 2px var(--shadow);
+    box-shadow:var(--shadow);
   }
 
-  .load-btn {
-    padding:8px 20px;
+  .load-btn,
+  .primary-btn,
+  .secondary-btn{
     border:none;
     border-radius:8px;
     cursor:pointer;
     font-size:13px;
     font-weight:700;
-    background:var(--primary);
-    color:#fff;
     transition:all .15s ease;
   }
 
-  .load-btn:hover:not(:disabled) {
-    background: var(--primary-hover);
+  .load-btn,
+  .primary-btn{
+    padding:9px 18px;
+    background:var(--primary);
+    color:#fff;
   }
 
-  .load-btn:disabled {
-    opacity:.45;
+  .load-btn:hover,
+  .primary-btn:hover{
+    background:var(--primary-hover);
+  }
+
+  .load-btn:disabled,
+  .primary-btn:disabled{
+    opacity:.5;
     cursor:not-allowed;
   }
 
-  .prog-wrap {
+  .secondary-btn{
+    padding:9px 14px;
+    background:#fff;
+    color:var(--text);
+    border:1px solid var(--border);
+  }
+
+  .secondary-btn:hover{
+    background:#f3f4f6;
+  }
+
+  .prog-wrap{
     flex:1;
-    min-width:100px;
+    min-width:120px;
     height:6px;
-    background:var(--border);
+    background:#d8dee4;
     border-radius:999px;
     overflow:hidden;
   }
 
-  .prog-bar {
+  .prog-bar{
     height:100%;
     width:0%;
     background:var(--primary);
-    border-radius:999px;
-    transition:width .25s;
+    transition:width .25s ease;
   }
 
-  .status-txt {
+  .status-txt{
     font-size:12px;
     color:var(--muted);
     white-space:nowrap;
   }
 
-  .err-box {
+  .err-box{
     color:var(--danger);
     background:#fff5f5;
-    border:1px solid #ffb3b3;
+    border:1px solid #ffd8d8;
     border-radius:10px;
     padding:14px 16px;
     font-size:13px;
     margin-bottom:16px;
-    line-height:1.5;
   }
 
-  .app-shell {
-    display: grid;
-    gap: 18px;
+  .layout{
+    display:grid;
+    grid-template-columns:380px 1fr;
+    gap:18px;
   }
 
-  .card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    box-shadow: 0 1px 2px var(--shadow);
-    overflow: hidden;
+  @media (max-width: 980px){
+    .layout{
+      grid-template-columns:1fr;
+    }
   }
 
-  .card-header {
-    padding: 16px 18px;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(to bottom, #ffffff, #f9fafb);
+  .card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
   }
 
-  .card-title {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 6px;
+  .card-head{
+    padding:16px 18px;
+    border-bottom:1px solid var(--border);
+    background:#fbfbfc;
   }
 
-  .card-subtitle {
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.5;
+  .card-title{
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:4px;
   }
 
-  .card-body {
-    padding: 18px;
+  .card-sub{
+    color:var(--muted);
+    font-size:12px;
   }
 
-  .invoice-preview {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    background: #fff;
+  .card-body{
+    padding:18px;
   }
 
-  .invoice-toolbar {
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--border);
-    background: #f9fafb;
-    font-size: 12px;
-    color: var(--muted);
+  .form-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
   }
 
-  .invoice-row {
-    display: grid;
-    grid-template-columns: 160px 1fr;
-    gap: 18px;
-    align-items: start;
-    padding: 20px;
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
   }
 
-  .label {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text);
-    padding-top: 12px;
-  }
-
-  .customer-field-wrap {
-    display: flex;
-    align-items: stretch;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .customer-select {
-    flex: 1;
-    min-width: 280px;
-    height: 44px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0 14px;
-    background: #fff;
-    color: var(--text);
-    font-size: 14px;
-    outline: none;
-    transition: border-color .15s ease;
-  }
-
-  .customer-select:focus {
-    border-color: var(--primary);
-  }
-
-  .quick-add-btn {
-    height: 44px;
-    padding: 0 16px;
-    border: none;
-    border-radius: 10px;
-    background: var(--primary);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all .15s ease;
-    white-space: nowrap;
-  }
-
-  .quick-add-btn:hover {
-    background: var(--primary-hover);
-  }
-
-  .selected-info {
-    margin-top: 12px;
-    padding: 12px 14px;
-    border-radius: 10px;
-    background: #f6f8fa;
-    border: 1px solid var(--border);
-    font-size: 13px;
-    color: var(--muted);
-  }
-
-  .selected-name {
-    color: var(--text);
-    font-weight: 700;
-    display: block;
-    margin-bottom: 4px;
-  }
-
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
-    gap: 14px;
-    margin-top: 18px;
-  }
-
-  .stat-box {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    background: #fff;
-  }
-
-  .stat-label {
-    color: var(--muted);
-    font-size: 12px;
-    margin-bottom: 8px;
-  }
-
-  .stat-value {
-    font-size: 24px;
-    font-weight: 800;
-  }
-
-  .customer-list {
-    margin-top: 20px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .customer-list-header {
-    padding: 12px 16px;
-    background: #f9fafb;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-    font-weight: 700;
-  }
-
-  .customer-scroll {
-    max-height: 320px;
-    overflow: auto;
-  }
-
-  .customer-item {
-    padding: 12px 16px;
-    border-bottom: 1px solid #eef1f4;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .customer-item:last-child {
-    border-bottom: none;
-  }
-
-  .customer-name {
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .customer-meta {
-    color: var(--muted);
-    font-size: 12px;
-    margin-top: 4px;
-  }
-
-  .badge {
-    font-size: 11px;
-    font-weight: 700;
-    padding: 5px 8px;
-    border-radius: 999px;
-    background: #ddf4ff;
-    color: #0969da;
-  }
-
-  .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 999;
-  }
-
-  .modal-backdrop.open {
-    display: flex;
-  }
-
-  .modal {
-    width: 100%;
-    max-width: 540px;
-    background: #fff;
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    overflow: hidden;
-    box-shadow: 0 24px 48px rgba(0,0,0,.18);
-  }
-
-  .modal-header {
-    padding: 18px 20px;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(to bottom, #ffffff, #f9fafb);
-  }
-
-  .modal-title {
-    font-size: 18px;
-    font-weight: 700;
-  }
-
-  .modal-subtitle {
-    margin-top: 6px;
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
-  .modal-body {
-    padding: 20px;
-  }
-
-  .form-grid {
-    display: grid;
-    gap: 16px;
-  }
-
-  .field {
-    display: grid;
-    gap: 8px;
-  }
-
-  .field label {
-    font-size: 13px;
-    font-weight: 700;
+  .field label{
+    font-size:12px;
+    color:var(--muted);
+    font-weight:600;
   }
 
   .field input,
-  .field textarea {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-size: 14px;
-    background: #fff;
-    color: var(--text);
-    outline: none;
-    transition: border-color .15s ease;
-    font-family: inherit;
+  .field textarea,
+  .field select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    font-size:14px;
+    outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+    background:#fff;
+  }
+
+  .field textarea{
+    resize:vertical;
+    min-height:80px;
   }
 
   .field input:focus,
-  .field textarea:focus {
-    border-color: var(--primary);
+  .field textarea:focus,
+  .field select:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(9,105,218,.15);
   }
 
-  .field textarea {
-    resize: vertical;
-    min-height: 90px;
+  .invoice-row{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:10px;
+    align-items:end;
   }
 
-  .modal-footer {
-    padding: 18px 20px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    background: #fafbfc;
+  .mini-note{
+    margin-top:8px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
   }
 
-  .btn-secondary {
-    padding: 10px 16px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: #fff;
-    color: var(--text);
-    cursor: pointer;
-    font-weight: 600;
+  .actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:8px;
   }
 
-  .btn-primary {
-    padding: 10px 18px;
-    border-radius: 10px;
-    border: none;
-    background: var(--primary);
-    color: #fff;
-    cursor: pointer;
-    font-weight: 700;
+  .success-box{
+    background:#edfdf3;
+    color:var(--success);
+    border:1px solid #aceebb;
+    padding:12px 14px;
+    border-radius:10px;
+    font-size:13px;
+    margin-bottom:14px;
   }
 
-  .btn-primary:hover {
-    background: var(--primary-hover);
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:14px;
+    margin-bottom:18px;
   }
 
-  .btn-primary:disabled {
-    opacity: .5;
-    cursor: not-allowed;
+  .stat{
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px;
+    background:#fff;
   }
 
-  .success-box {
-    margin-top: 14px;
-    padding: 12px 14px;
-    border-radius: 10px;
-    border: 1px solid #a6e3b1;
-    background: #ecfdf3;
-    color: var(--success);
-    font-size: 13px;
-    line-height: 1.5;
+  .stat-label{
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:8px;
   }
 
-  .empty-state {
-    padding: 50px 24px;
-    text-align: center;
-    color: var(--muted);
+  .stat-value{
+    font-size:24px;
+    font-weight:800;
   }
 
-  .empty-state h3 {
-    color: var(--text);
-    margin-bottom: 10px;
-    font-size: 18px;
+  .table-wrap{
+    overflow:auto;
+    border:1px solid var(--border);
+    border-radius:12px;
   }
 
-  .hint {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 8px;
-    line-height: 1.5;
+  table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:800px;
   }
 
-  @media (max-width: 720px) {
-    .invoice-row {
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
+  th{
+    text-align:left;
+    font-size:12px;
+    color:var(--muted);
+    background:#f9fafb;
+    padding:12px 14px;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:1;
+  }
 
-    .label {
-      padding-top: 0;
-    }
+  td{
+    padding:12px 14px;
+    border-bottom:1px solid #edf1f4;
+    font-size:13px;
+    vertical-align:top;
+  }
 
-    .customer-field-wrap {
-      flex-direction: column;
-    }
+  tr:hover td{
+    background:#fafcff;
+  }
 
-    .quick-add-btn,
-    .customer-select {
-      width: 100%;
-    }
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:700;
+    background:#e7f3ff;
+    color:var(--primary);
+  }
+
+  .search-wrap{
+    margin-bottom:14px;
+  }
+
+  .empty{
+    text-align:center;
+    padding:50px 20px;
+    color:var(--muted);
+  }
+
+  .spinner{
+    width:16px;
+    height:16px;
+    border:2px solid rgba(255,255,255,.4);
+    border-top-color:#fff;
+    border-radius:50%;
+    display:inline-block;
+    animation:spin .8s linear infinite;
+    vertical-align:middle;
+    margin-right:8px;
+  }
+
+  @keyframes spin{
+    to{ transform:rotate(360deg); }
   }
 </style>
 
@@ -497,58 +345,6 @@
 </div>
 
 <div id="app"></div>
-
-<!-- Modal -->
-
-<div class="modal-backdrop" id="modal-backdrop">
-  <div class="modal">
-
-```
-<div class="modal-header">
-  <div class="modal-title">Add New Customer</div>
-  <div class="modal-subtitle">
-    Create a customer directly from the sales invoice form without leaving the page.
-  </div>
-</div>
-
-<div class="modal-body">
-
-  <div class="form-grid">
-
-    <div class="field">
-      <label for="customer-name">Customer Name *</label>
-      <input type="text" id="customer-name" placeholder="Enter customer name">
-    </div>
-
-    <div class="field">
-      <label for="customer-email">Email Address</label>
-      <input type="email" id="customer-email" placeholder="customer@example.com">
-    </div>
-
-    <div class="field">
-      <label for="customer-phone">Phone Number</label>
-      <input type="text" id="customer-phone" placeholder="+1 (555) 123-4567">
-    </div>
-
-    <div class="field">
-      <label for="customer-address">Billing Address</label>
-      <textarea id="customer-address" placeholder="Street, City, State, ZIP"></textarea>
-    </div>
-
-  </div>
-
-  <div id="modal-message"></div>
-
-</div>
-
-<div class="modal-footer">
-  <button class="btn-secondary" onclick="closeModal()">Cancel</button>
-  <button class="btn-primary" id="save-btn" onclick="createCustomer()">Create Customer</button>
-</div>
-```
-
-  </div>
-</div>
 
 <script>
 /* ══════════════════════════════════
@@ -600,7 +396,11 @@ async function getCustomerBatch(onProgress) {
     }
 
     pageNum++;
-    if (onProgress) onProgress(allItems.length, apiTotal, pageNum);
+
+    if (onProgress) {
+      onProgress(allItems.length, apiTotal, pageNum);
+    }
+
     if (pageNum >= 1000) break;
 
   } while (nextToken);
@@ -611,13 +411,247 @@ async function getCustomerBatch(onProgress) {
 /* ══════════════════════════════════
    Global state
 ══════════════════════════════════ */
-let CUSTOMER_RECORDS = [];
-let CREATE_ENDPOINT = null;
+let ALL_CUSTOMERS = [];
+
+/* ══════════════════════════════════
+   Utilities
+══════════════════════════════════ */
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function customerDisplayName(item) {
+  return (
+    item?.name ??
+    item?.customer ??
+    item?.display_name ??
+    item?.business_name ??
+    item?.full_name ??
+    item?.code ??
+    'Unnamed Customer'
+  );
+}
+
+function formatDate(date) {
+  if (!date) return '—';
+
+  try {
+    return new Date(date).toLocaleDateString(undefined, {
+      year:'numeric',
+      month:'short',
+      day:'numeric'
+    });
+  } catch {
+    return date;
+  }
+}
+
+/* ══════════════════════════════════
+   Create customer (WRITE OPERATION)
+══════════════════════════════════ */
+async function createCustomer(event) {
+  event.preventDefault();
+
+  const form = document.getElementById('customer-form');
+  const submitBtn = document.getElementById('save-btn');
+  const msgBox = document.getElementById('message-box');
+
+  msgBox.innerHTML = '';
+
+  const payload = {
+    name: document.getElementById('customer-name')?.value?.trim() || '',
+    code: document.getElementById('customer-code')?.value?.trim() || '',
+    email: document.getElementById('customer-email')?.value?.trim() || '',
+    phone: document.getElementById('customer-phone')?.value?.trim() || '',
+    address_line_1: document.getElementById('customer-address1')?.value?.trim() || '',
+    address_line_2: document.getElementById('customer-address2')?.value?.trim() || '',
+    city: document.getElementById('customer-city')?.value?.trim() || '',
+    state: document.getElementById('customer-state')?.value?.trim() || '',
+    zip_code: document.getElementById('customer-zip')?.value?.trim() || '',
+    country: document.getElementById('customer-country')?.value?.trim() || '',
+    notes: document.getElementById('customer-notes')?.value?.trim() || ''
+  };
+
+  if (!payload.name) {
+    msgBox.innerHTML = `
+      <div class="err-box">
+        Customer name is required.
+      </div>
+    `;
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="spinner"></span>Creating Customer...';
+
+  try {
+
+    /* Primary write endpoint */
+    const result = await postMessageWithResponse({
+      type: 'api-request',
+      method: 'POST',
+      path: '/api4/customer-form',
+      body: payload
+    });
+
+    msgBox.innerHTML = `
+      <div class="success-box">
+        ✓ Customer created successfully and added to the database.
+      </div>
+    `;
+
+    form.reset();
+
+    /* Reload customer list */
+    await loadAllRecords();
+
+    console.log('Customer create response:', result);
+
+  } catch (primaryErr) {
+
+    try {
+
+      /* Fallback create endpoint */
+      const fallbackResult = await postMessageWithResponse({
+        type: 'api-request',
+        method: 'POST',
+        path: '/api4/customers',
+        body: payload
+      });
+
+      msgBox.innerHTML = `
+        <div class="success-box">
+          ✓ Customer created successfully using fallback endpoint.
+        </div>
+      `;
+
+      form.reset();
+
+      await loadAllRecords();
+
+      console.log('Fallback customer response:', fallbackResult);
+
+    } catch (fallbackErr) {
+
+      console.error(primaryErr);
+      console.error(fallbackErr);
+
+      msgBox.innerHTML = `
+        <div class="err-box">
+          <strong>Unable to create customer.</strong><br><br>
+          Primary Error: ${escapeHtml(primaryErr?.message || 'Unknown error')}<br>
+          Fallback Error: ${escapeHtml(fallbackErr?.message || 'Unknown error')}<br><br>
+          Ensure your Manager.io API version allows POST write operations.
+        </div>
+      `;
+    }
+
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = '💾 Save Customer';
+  }
+}
+
+/* ══════════════════════════════════
+   Search filter
+══════════════════════════════════ */
+function filterCustomers() {
+  const q = document.getElementById('search-input')?.value?.toLowerCase() || '';
+
+  const filtered = ALL_CUSTOMERS.filter(item => {
+    const values = [
+      item?.name,
+      item?.customer,
+      item?.email,
+      item?.phone,
+      item?.code
+    ].join(' ').toLowerCase();
+
+    return values.includes(q);
+  });
+
+  renderTable(filtered);
+}
+
+/* ══════════════════════════════════
+   Invoice customer select helper
+══════════════════════════════════ */
+function syncSelectedCustomer() {
+  const select = document.getElementById('invoice-customer-select');
+  const preview = document.getElementById('selected-customer-preview');
+
+  const option = select?.selectedOptions?.[0];
+
+  preview.innerHTML = option
+    ? `<span class="pill">Selected: ${escapeHtml(option.textContent)}</span>`
+    : '';
+}
+
+/* ══════════════════════════════════
+   Render customer table
+══════════════════════════════════ */
+function renderTable(items) {
+  const target = document.getElementById('table-container');
+
+  if (!items.length) {
+    target.innerHTML = `
+      <div class="empty">
+        <h3 style="margin-bottom:8px">No customers found</h3>
+        <p>Try adjusting your search or create a new customer.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const rows = items.map((item, index) => {
+
+    const name = customerDisplayName(item);
+
+    return `
+      <tr>
+        <td>${index + 1}</td>
+        <td>
+          <strong>${escapeHtml(name)}</strong>
+        </td>
+        <td>${escapeHtml(item?.email ?? '—')}</td>
+        <td>${escapeHtml(item?.phone ?? '—')}</td>
+        <td>${escapeHtml(item?.code ?? '—')}</td>
+        <td>${escapeHtml(item?._links?.self?.href ?? '—')}</td>
+        <td>${formatDate(item?.created_at ?? item?.created ?? item?.date)}</td>
+      </tr>
+    `;
+  }).join('');
+
+  target.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Customer</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Code</th>
+            <th>API Resource</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
 
 /* ══════════════════════════════════
    loadAllRecords
 ══════════════════════════════════ */
 async function loadAllRecords() {
+
   const btn    = document.getElementById('load-btn');
   const bar    = document.getElementById('prog-bar');
   const status = document.getElementById('status-txt');
@@ -625,8 +659,8 @@ async function loadAllRecords() {
 
   btn.disabled = true;
   btn.textContent = 'Loading…';
+
   bar.style.width = '0%';
-  app.innerHTML = '';
 
   try {
 
@@ -641,34 +675,31 @@ async function loadAllRecords() {
       }
     });
 
-    CUSTOMER_RECORDS = items;
-
-    CREATE_ENDPOINT =
-      items?.[0]?._actions?.create?.href ||
-      '/api4/customer-batch';
+    ALL_CUSTOMERS = Array.isArray(items) ? items : [];
 
     bar.style.width = '100%';
 
     status.textContent =
-      `✓ ${items.length.toLocaleString()} customer records loaded`;
+      `✓ ${ALL_CUSTOMERS.length.toLocaleString()} records loaded`;
 
     btn.textContent = '↺ Reload';
     btn.disabled = false;
 
-    render(items);
+    render(ALL_CUSTOMERS);
 
   } catch (err) {
 
     status.textContent = '⚠ ' + err.message;
+
     btn.textContent = '↺ Retry';
     btn.disabled = false;
 
     app.innerHTML = `
       <div class="err-box">
-        <strong>Unable to load customer data</strong><br><br>
-        ${escapeHtml(err.message)}<br><br>
+        ⚠ ${escapeHtml(err.message)}
+        <br><br>
         <small>
-          Make sure this extension is running inside Manager.io and that API access is enabled.
+          Make sure this extension is running inside Manager.io and API access is enabled.
         </small>
       </div>
     `;
@@ -676,434 +707,285 @@ async function loadAllRecords() {
 }
 
 /* ══════════════════════════════════
-   Render UI
+   render(items)
 ══════════════════════════════════ */
 function render(items) {
 
   const app = document.getElementById('app');
 
-  if (!Array.isArray(items) || items.length === 0) {
-
-    app.innerHTML = `
-      <div class="card">
-        <div class="empty-state">
-          <h3>No customer records found</h3>
-          <p>
-            Your customer database is currently empty.<br>
-            Use the “+ Add New Customer” button below to create your first customer directly from the invoice form.
-          </p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-body">
-          <div class="invoice-preview">
-
-            <div class="invoice-toolbar">
-              Sales Invoice Form Preview
-            </div>
-
-            <div class="invoice-row">
-
-              <div class="label">Customer</div>
-
-              <div>
-
-                <div class="customer-field-wrap">
-
-                  <select class="customer-select">
-                    <option>No customers available</option>
-                  </select>
-
-                  <button class="quick-add-btn" onclick="openModal()">
-                    + Add New Customer
-                  </button>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-      </div>
-    `;
-
-    return;
-  }
-
   const total = items.length;
 
-  const customerOptions = items.map((item, index) => {
+  const sorted = [...items].sort((a,b) => {
+    return customerDisplayName(a).localeCompare(customerDisplayName(b));
+  });
 
-    const name =
-      item?.name ||
-      item?.customer ||
-      item?.display_name ||
-      item?.business_name ||
-      item?.full_name ||
-      `Customer ${index + 1}`;
+  const options = sorted.map(item => {
+    const name = customerDisplayName(item);
 
     return `
-      <option value="${index}">
+      <option value="${escapeHtml(name)}">
         ${escapeHtml(name)}
       </option>
     `;
-
-  }).join('');
-
-  const topCustomers = items.slice(0, 12).map((item, index) => {
-
-    const name =
-      item?.name ||
-      item?.customer ||
-      item?.display_name ||
-      item?.business_name ||
-      item?.full_name ||
-      `Customer ${index + 1}`;
-
-    const href =
-      item?._links?.self?.href ??
-      'N/A';
-
-    return `
-      <div class="customer-item">
-
-        <div>
-          <div class="customer-name">
-            ${escapeHtml(name)}
-          </div>
-
-          <div class="customer-meta">
-            ${escapeHtml(href)}
-          </div>
-        </div>
-
-        <div class="badge">
-          Customer
-        </div>
-
-      </div>
-    `;
-
   }).join('');
 
   app.innerHTML = `
-    <div class="app-shell">
+    <div class="layout">
 
+      <!-- LEFT PANEL -->
       <div class="card">
 
-        <div class="card-header">
+        <div class="card-head">
           <div class="card-title">
-            Sales Invoice Customer Quick Add
+            Quick Customer Add
           </div>
 
-          <div class="card-subtitle">
-            This extension adds a production-ready “Add New Customer” button beside the customer selection field in the sales invoice form.
-            New customers can be created without leaving the invoice screen.
+          <div class="card-sub">
+            Add new customers directly from the sales invoice workflow.
           </div>
         </div>
 
         <div class="card-body">
 
-          <div class="invoice-preview">
+          <div id="message-box"></div>
 
-            <div class="invoice-toolbar">
-              Simulated Manager.io Sales Invoice Form
-            </div>
+          <!-- Simulated invoice customer row -->
+          <div class="field" style="margin-bottom:18px">
+
+            <label>
+              Sales Invoice — Customer Selection
+            </label>
 
             <div class="invoice-row">
 
-              <div class="label">
-                Customer
-              </div>
+              <select id="invoice-customer-select" onchange="syncSelectedCustomer()">
+                <option value="">Select Customer...</option>
+                ${options}
+              </select>
 
-              <div>
+              <button
+                type="button"
+                class="primary-btn"
+                onclick="document.getElementById('customer-name').focus()"
+              >
+                ➕ New Customer
+              </button>
 
-                <div class="customer-field-wrap">
+            </div>
 
-                  <select
-                    class="customer-select"
-                    id="customer-select"
-                    onchange="handleCustomerChange()"
-                  >
-                    ${customerOptions}
-                  </select>
+            <div id="selected-customer-preview" class="mini-note"></div>
 
-                  <button
-                    class="quick-add-btn"
-                    onclick="openModal()"
-                  >
-                    + Add New Customer
-                  </button>
-
-                </div>
-
-                <div class="selected-info" id="selected-info">
-                  <span class="selected-name">
-                    ${escapeHtml(
-                      items?.[0]?.name ||
-                      items?.[0]?.customer ||
-                      items?.[0]?.display_name ||
-                      'Customer'
-                    )}
-                  </span>
-
-                  Selected customer ready for invoice assignment.
-                </div>
-
-                <div class="hint">
-                  Clicking “Add New Customer” opens an inline creation form and submits directly to the Manager.io customer API using postMessageWithResponse().
-                </div>
-
-              </div>
-
+            <div class="mini-note">
+              This mimics the placement to the right of the customer dropdown
+              inside the sales invoice form.
             </div>
 
           </div>
 
-          <div class="stats-grid">
+          <!-- Create Customer Form -->
+          <form id="customer-form" onsubmit="createCustomer(event)">
 
-            <div class="stat-box">
-              <div class="stat-label">Loaded Customers</div>
-              <div class="stat-value">
-                ${total.toLocaleString()}
+            <div class="form-grid">
+
+              <div class="field">
+                <label>Customer Name *</label>
+                <input
+                  id="customer-name"
+                  type="text"
+                  required
+                  placeholder="Acme Corporation"
+                >
               </div>
-            </div>
 
-            <div class="stat-box">
-              <div class="stat-label">API Endpoint</div>
-              <div class="stat-value" style="font-size:16px">
-                /api4/customer-batch
+              <div class="field">
+                <label>Customer Code</label>
+                <input
+                  id="customer-code"
+                  type="text"
+                  placeholder="CUST-001"
+                >
               </div>
-            </div>
 
-            <div class="stat-box">
-              <div class="stat-label">Create Action</div>
-              <div class="stat-value" style="font-size:15px">
-                POST Enabled
+              <div class="field">
+                <label>Email Address</label>
+                <input
+                  id="customer-email"
+                  type="email"
+                  placeholder="customer@example.com"
+                >
               </div>
-            </div>
 
-          </div>
+              <div class="field">
+                <label>Phone Number</label>
+                <input
+                  id="customer-phone"
+                  type="text"
+                  placeholder="+1 555-123-4567"
+                >
+              </div>
 
-          <div class="customer-list">
+              <div class="field">
+                <label>Address Line 1</label>
+                <input
+                  id="customer-address1"
+                  type="text"
+                  placeholder="123 Main Street"
+                >
+              </div>
 
-            <div class="customer-list-header">
-              Recently Loaded Customers
-            </div>
+              <div class="field">
+                <label>Address Line 2</label>
+                <input
+                  id="customer-address2"
+                  type="text"
+                  placeholder="Suite 200"
+                >
+              </div>
 
-            <div class="customer-scroll">
-              ${topCustomers}
-            </div>
+              <div class="field">
+                <label>City</label>
+                <input
+                  id="customer-city"
+                  type="text"
+                  placeholder="New York"
+                >
+              </div>
 
+              <div class="field">
+                <label>State / Province</label>
+                <input
+                  id="customer-state"
+                  type="text"
+                  placeholder="NY"
+                >
+              </div>
+
+              <div class="field">
+                <label>ZIP / Postal Code</label>
+                <input
+                  id="customer-zip"
+                  type="text"
+                  placeholder="10001"
+                >
+              </div>
+
+              <div class="field">
+                <label>Country</label>
+                <input
+                  id="customer-country"
+                  type="text"
+                  placeholder="United States"
+                >
+              </div>
+
+              <div class="field">
+                <label>Notes</label>
+                <textarea
+                  id="customer-notes"
+                  placeholder="Additional notes or billing instructions..."
+                ></textarea>
+
+```
           </div>
 
         </div>
 
+        <div class="actions">
+
+          <button
+            id="save-btn"
+            type="submit"
+            class="primary-btn"
+          >
+            💾 Save Customer
+          </button>
+
+          <button
+            type="reset"
+            class="secondary-btn"
+          >
+            Reset
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Total Customers</div>
+        <div class="stat-value">
+          ${total.toLocaleString()}
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">API Endpoint</div>
+        <div class="stat-value" style="font-size:15px">
+          /api4/customer-batch
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Write Access</div>
+        <div class="stat-value" style="font-size:15px">
+          ENABLED
+        </div>
       </div>
 
     </div>
-  `;
-}
 
-/* ══════════════════════════════════
-   Handle dropdown selection
-══════════════════════════════════ */
-function handleCustomerChange() {
+    <div class="card">
 
-  const select = document.getElementById('customer-select');
-  const info   = document.getElementById('selected-info');
+      <div class="card-head">
+        <div class="card-title">
+          Customer Database
+        </div>
 
-  if (!select || !info) return;
-
-  const idx = Number(select.value);
-
-  const item = CUSTOMER_RECORDS?.[idx];
-
-  if (!item) return;
-
-  const name =
-    item?.name ||
-    item?.customer ||
-    item?.display_name ||
-    item?.business_name ||
-    item?.full_name ||
-    'Customer';
-
-  const href =
-    item?._links?.self?.href ||
-    'No API link available';
-
-  info.innerHTML = `
-    <span class="selected-name">
-      ${escapeHtml(name)}
-    </span>
-
-    Selected customer loaded from:<br>
-    <small>${escapeHtml(href)}</small>
-  `;
-}
-
-/* ══════════════════════════════════
-   Open / close modal
-══════════════════════════════════ */
-function openModal() {
-
-  clearModal();
-
-  document
-    .getElementById('modal-backdrop')
-    .classList
-    .add('open');
-
-  setTimeout(() => {
-    document.getElementById('customer-name')?.focus();
-  }, 50);
-}
-
-function closeModal() {
-
-  document
-    .getElementById('modal-backdrop')
-    .classList
-    .remove('open');
-}
-
-function clearModal() {
-
-  document.getElementById('customer-name').value = '';
-  document.getElementById('customer-email').value = '';
-  document.getElementById('customer-phone').value = '';
-  document.getElementById('customer-address').value = '';
-  document.getElementById('modal-message').innerHTML = '';
-}
-
-/* ══════════════════════════════════
-   Create customer
-══════════════════════════════════ */
-async function createCustomer() {
-
-  const saveBtn = document.getElementById('save-btn');
-
-  const name    = document.getElementById('customer-name').value.trim();
-  const email   = document.getElementById('customer-email').value.trim();
-  const phone   = document.getElementById('customer-phone').value.trim();
-  const address = document.getElementById('customer-address').value.trim();
-
-  const message = document.getElementById('modal-message');
-
-  if (!name) {
-
-    message.innerHTML = `
-      <div class="err-box">
-        Customer name is required.
+        <div class="card-sub">
+          Live records loaded through the paginated Manager.io API.
+        </div>
       </div>
-    `;
 
-    return;
-  }
+      <div class="card-body">
 
-  saveBtn.disabled = true;
-  saveBtn.textContent = 'Creating…';
+        <div class="search-wrap">
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Search customers..."
+            oninput="filterCustomers()"
+            style="
+              width:100%;
+              padding:11px 12px;
+              border:1px solid var(--border);
+              border-radius:10px;
+              font-size:14px;
+            "
+          >
+        </div>
 
-  try {
+        <div id="table-container"></div>
 
-    const payload = {
-      name,
-      email,
-      phone,
-      billing_address: address
-    };
-
-    const path =
-      CREATE_ENDPOINT ||
-      '/api4/customer-batch';
-
-    const response = await postMessageWithResponse({
-      type: 'api-request',
-      method: 'POST',
-      path,
-      body: payload
-    });
-
-    const newCustomer = {
-      name,
-      email,
-      phone,
-      billing_address: address,
-      _links: {
-        self: {
-          href:
-            response?._links?.self?.href ||
-            'Newly created customer'
-        }
-      }
-    };
-
-    CUSTOMER_RECORDS.unshift(newCustomer);
-
-    message.innerHTML = `
-      <div class="success-box">
-        ✓ Customer created successfully and added to the invoice customer list.
       </div>
-    `;
+    </div>
 
-    setTimeout(() => {
+  </div>
 
-      closeModal();
+</div>
+```
 
-      render(CUSTOMER_RECORDS);
+`;
 
-      const select = document.getElementById('customer-select');
-
-      if (select) {
-        select.value = '0';
-        handleCustomerChange();
-      }
-
-    }, 1000);
-
-  } catch (err) {
-
-    message.innerHTML = `
-      <div class="err-box">
-        <strong>Unable to create customer</strong><br><br>
-        ${escapeHtml(err.message || 'Unknown API error')}
-      </div>
-    `;
-
-  } finally {
-
-    saveBtn.disabled = false;
-    saveBtn.textContent = 'Create Customer';
-  }
-}
-
-/* ══════════════════════════════════
-   Utility helpers
-══════════════════════════════════ */
-function escapeHtml(value) {
-
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-/* ══════════════════════════════════
-   Close modal on backdrop click
-══════════════════════════════════ */
-document.getElementById('modal-backdrop').addEventListener('click', function(event) {
-
-  if (event.target === this) {
-    closeModal();
-  }
-});
-</script>
+renderTable(sorted);
+} </script>
 
 </body>
 </html>
