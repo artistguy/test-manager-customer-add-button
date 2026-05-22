@@ -4,13 +4,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Manager.io Customer Quick Add</title>
+<title>Manager.io Customer Quick Add Extension</title>
 
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
 
   body {
-    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background:#ffffff;
     color:#24292f;
     min-height:100vh;
@@ -27,48 +27,29 @@
     background:#f6f8fa;
     border:1px solid #d0d7de;
     border-radius:12px;
+    box-shadow:0 1px 2px rgba(0,0,0,.04);
   }
 
-  .load-btn,
-  .primary-btn,
-  .secondary-btn {
-    padding:10px 18px;
+  .load-btn {
+    padding:8px 20px;
     border:none;
     border-radius:8px;
     cursor:pointer;
     font-size:13px;
     font-weight:700;
-    transition:all .15s ease;
-  }
-
-  .load-btn {
     background:#0969da;
     color:#fff;
+    transition:all .15s;
   }
 
-  .primary-btn {
-    background:#1a7f37;
-    color:#fff;
-  }
-
-  .secondary-btn {
-    background:#f6f8fa;
-    color:#24292f;
-    border:1px solid #d0d7de;
-  }
-
-  .load-btn:hover,
-  .primary-btn:hover,
-  .secondary-btn:hover {
+  .load-btn:hover:not(:disabled) {
+    opacity:.92;
     transform:translateY(-1px);
   }
 
-  .load-btn:disabled,
-  .primary-btn:disabled,
-  .secondary-btn:disabled {
-    opacity:.55;
+  .load-btn:disabled {
+    opacity:.45;
     cursor:not-allowed;
-    transform:none;
   }
 
   .prog-wrap {
@@ -84,6 +65,7 @@
     height:100%;
     width:0%;
     background:#0969da;
+    border-radius:999px;
     transition:width .25s;
   }
 
@@ -97,40 +79,31 @@
     color:#cf222e;
     background:#fff8f8;
     border:1px solid #ffcecb;
-    border-radius:10px;
+    border-radius:12px;
     padding:14px 16px;
     font-size:13px;
     margin-bottom:16px;
   }
 
-  .success-box {
-    color:#1a7f37;
-    background:#f0fff4;
-    border:1px solid #8ddb9b;
-    border-radius:10px;
-    padding:14px 16px;
-    font-size:13px;
-    margin-bottom:16px;
-  }
-
-  .grid {
+  .layout {
     display:grid;
-    grid-template-columns: 1.2fr .8fr;
-    gap:20px;
+    grid-template-columns: 380px 1fr;
+    gap:18px;
+    align-items:start;
   }
 
-  @media (max-width: 1000px) {
-    .grid {
+  @media (max-width: 1100px) {
+    .layout {
       grid-template-columns:1fr;
     }
   }
 
   .card {
-    background:#ffffff;
+    background:#fff;
     border:1px solid #d0d7de;
-    border-radius:16px;
+    border-radius:14px;
+    box-shadow:0 2px 8px rgba(0,0,0,.04);
     overflow:hidden;
-    box-shadow:0 1px 2px rgba(27,31,36,.04);
   }
 
   .card-header {
@@ -140,43 +113,141 @@
   }
 
   .card-title {
-    font-size:16px;
+    font-size:15px;
     font-weight:700;
-    margin-bottom:4px;
+    color:#24292f;
   }
 
-  .card-sub {
+  .card-subtitle {
     font-size:12px;
     color:#57606a;
+    margin-top:4px;
   }
 
   .card-body {
     padding:18px;
   }
 
-  .stats {
+  .invoice-preview {
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+
+  .field-group {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .field-label {
+    font-size:12px;
+    font-weight:700;
+    color:#57606a;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+  }
+
+  .customer-row {
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .customer-select {
+    flex:1;
+    min-width:0;
+    height:42px;
+    border:1px solid #d0d7de;
+    border-radius:10px;
+    padding:0 12px;
+    font-size:14px;
+    background:#fff;
+    color:#24292f;
+  }
+
+  .customer-select:focus {
+    outline:none;
+    border-color:#0969da;
+    box-shadow:0 0 0 3px rgba(9,105,218,.12);
+  }
+
+  .add-btn {
+    height:42px;
+    padding:0 14px;
+    border:none;
+    border-radius:10px;
+    background:#2da44e;
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:all .15s;
+  }
+
+  .add-btn:hover {
+    opacity:.92;
+    transform:translateY(-1px);
+  }
+
+  .invoice-box {
+    background:#f6f8fa;
+    border:1px solid #d8dee4;
+    border-radius:12px;
+    padding:14px;
+  }
+
+  .invoice-row {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 0;
+    border-bottom:1px solid #eaeef2;
+    font-size:13px;
+  }
+
+  .invoice-row:last-child {
+    border-bottom:none;
+  }
+
+  .invoice-label {
+    color:#57606a;
+    font-weight:600;
+  }
+
+  .invoice-value {
+    color:#24292f;
+    font-weight:700;
+  }
+
+  .stats-grid {
     display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
     gap:12px;
-    margin-bottom:20px;
+    margin-bottom:18px;
   }
 
   .stat {
-    border:1px solid #d0d7de;
+    background:#f6f8fa;
+    border:1px solid #d8dee4;
     border-radius:12px;
     padding:14px;
-    background:#fff;
   }
 
   .stat-label {
-    font-size:12px;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
     color:#57606a;
+    font-weight:700;
     margin-bottom:6px;
   }
 
   .stat-value {
-    font-size:24px;
+    font-size:22px;
     font-weight:800;
+    color:#0969da;
   }
 
   .search-wrap {
@@ -185,163 +256,120 @@
 
   .search-input {
     width:100%;
-    padding:12px 14px;
+    height:42px;
     border:1px solid #d0d7de;
     border-radius:10px;
+    padding:0 14px;
     font-size:14px;
     background:#fff;
   }
 
-  .search-input:focus,
-  .field input:focus,
-  .field textarea:focus {
+  .search-input:focus {
     outline:none;
     border-color:#0969da;
     box-shadow:0 0 0 3px rgba(9,105,218,.12);
   }
 
-  .invoice-list {
-    max-height:600px;
-    overflow:auto;
+  .table-wrap {
     border:1px solid #d8dee4;
     border-radius:12px;
-  }
-
-  .invoice-item {
-    padding:14px 16px;
-    border-bottom:1px solid #eef1f4;
-    cursor:pointer;
-    transition:background .15s;
-  }
-
-  .invoice-item:hover {
-    background:#f6f8fa;
-  }
-
-  .invoice-item:last-child {
-    border-bottom:none;
-  }
-
-  .invoice-top {
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:8px;
-  }
-
-  .invoice-number {
-    font-weight:700;
-    font-size:14px;
-  }
-
-  .invoice-date {
-    color:#57606a;
-    font-size:12px;
-  }
-
-  .invoice-customer {
-    font-size:13px;
-    margin-bottom:4px;
-  }
-
-  .invoice-amount {
-    font-weight:700;
-    color:#0969da;
-    font-size:13px;
-  }
-
-  .empty-state {
-    text-align:center;
-    padding:50px 20px;
-    color:#57606a;
-  }
-
-  .form-grid {
-    display:grid;
-    gap:14px;
-  }
-
-  .field {
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-  }
-
-  .field label {
-    font-size:12px;
-    font-weight:700;
-    color:#57606a;
-  }
-
-  .field input,
-  .field textarea,
-  .field select {
-    width:100%;
-    padding:11px 12px;
-    border:1px solid #d0d7de;
-    border-radius:10px;
-    font-size:14px;
+    overflow:hidden;
     background:#fff;
   }
 
-  .field textarea {
-    min-height:80px;
-    resize:vertical;
+  table {
+    width:100%;
+    border-collapse:collapse;
   }
 
-  .two-col {
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
+  thead {
+    background:#f6f8fa;
   }
 
-  @media (max-width:700px) {
-    .two-col {
-      grid-template-columns:1fr;
-    }
+  th {
+    text-align:left;
+    padding:12px 14px;
+    font-size:12px;
+    font-weight:800;
+    color:#57606a;
+    border-bottom:1px solid #d8dee4;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+  }
+
+  td {
+    padding:12px 14px;
+    font-size:13px;
+    border-bottom:1px solid #eaeef2;
+    vertical-align:top;
+  }
+
+  tbody tr:hover {
+    background:#f6f8fa;
+  }
+
+  tbody tr:last-child td {
+    border-bottom:none;
+  }
+
+  .customer-name {
+    font-weight:700;
+    color:#24292f;
+  }
+
+  .muted {
+    color:#6e7781;
   }
 
   .pill {
     display:inline-flex;
     align-items:center;
     gap:6px;
-    background:#ddf4ff;
-    color:#0969da;
+    padding:4px 8px;
     border-radius:999px;
-    padding:5px 10px;
     font-size:11px;
     font-weight:700;
+    background:#dafbe1;
+    color:#116329;
   }
 
-  .customer-preview {
-    border:1px solid #d0d7de;
-    border-radius:12px;
-    padding:14px;
-    background:#f9fbfc;
+  .pill.inactive {
+    background:#ffebe9;
+    color:#cf222e;
   }
 
-  .customer-preview h4 {
-    margin-bottom:6px;
-  }
-
-  .toolbar {
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:18px;
-  }
-
-  .muted {
+  .empty-state {
+    padding:60px 20px;
+    text-align:center;
     color:#57606a;
+  }
+
+  .empty-icon {
+    font-size:40px;
+    margin-bottom:12px;
+  }
+
+  .helper-box {
+    margin-top:16px;
+    padding:14px;
+    border-radius:12px;
+    background:#fff8c5;
+    border:1px solid #eac54f;
+    color:#6e4f00;
+    font-size:13px;
+    line-height:1.5;
+  }
+
+  .code-block {
+    margin-top:10px;
+    background:#24292f;
+    color:#f6f8fa;
+    border-radius:10px;
+    padding:12px;
+    overflow:auto;
     font-size:12px;
+    font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
   }
-
-  .divider {
-    height:1px;
-    background:#d8dee4;
-    margin:18px 0;
-  }
-
 </style>
 
 </head>
@@ -382,10 +410,10 @@ function postMessageWithResponse(message) {
 }
 
 /* ══════════════════════════════════
-   getSalesInvoiceBatch
+   getCustomerBatch
    Fetches ALL pages — DO NOT SIMPLIFY.
 ══════════════════════════════════ */
-async function getSalesInvoiceBatch(onProgress) {
+async function getCustomerBatch(onProgress) {
   const allItems = [];
   let nextToken  = null;
   let pageNum    = 0;
@@ -393,8 +421,8 @@ async function getSalesInvoiceBatch(onProgress) {
 
   do {
     const path = nextToken
-      ? '/api4/sales-invoice-batch?PageSize=99999&next_page_token=' + encodeURIComponent(nextToken)
-      : '/api4/sales-invoice-batch?PageSize=99999';
+      ? '/api4/customer-batch?PageSize=99999&next_page_token=' + encodeURIComponent(nextToken)
+      : '/api4/customer-batch?PageSize=99999';
 
     const data = await postMessageWithResponse({ type: 'api-request', method: 'GET', path });
 
@@ -408,9 +436,7 @@ async function getSalesInvoiceBatch(onProgress) {
     }
 
     pageNum++;
-
     if (onProgress) onProgress(allItems.length, apiTotal, pageNum);
-
     if (pageNum >= 1000) break;
 
   } while (nextToken);
@@ -419,80 +445,25 @@ async function getSalesInvoiceBatch(onProgress) {
 }
 
 /* ══════════════════════════════════
-   Fetch all customers with pagination
+   Format helpers
 ══════════════════════════════════ */
-async function getCustomerBatch() {
-  const allItems = [];
-  let nextToken = null;
-  let pageNum = 0;
-
-  do {
-    const path = nextToken
-      ? '/api4/customer-batch?PageSize=99999&next_page_token=' + encodeURIComponent(nextToken)
-      : '/api4/customer-batch?PageSize=99999';
-
-    const data = await postMessageWithResponse({
-      type: 'api-request',
-      method: 'GET',
-      path
-    });
-
-    const page = Array.isArray(data)
-      ? data
-      : (data.items || data.data || []);
-
-    allItems.push(...page);
-
-    nextToken =
-      data.next_page_token ||
-      data.nextPageToken ||
-      data._links?.next?.href ||
-      null;
-
-    pageNum++;
-
-    if (pageNum >= 1000) break;
-
-  } while (nextToken);
-
-  return allItems;
+function safe(v, fallback = '—') {
+  return v ?? fallback;
 }
 
-/* ══════════════════════════════════
-   Save customer
-══════════════════════════════════ */
-async function saveCustomer(payload) {
-  return await postMessageWithResponse({
-    type: 'api-request',
-    method: 'POST',
-    path: '/api4/customer-batch',
-    body: payload
+function formatMoney(value) {
+  const num = Number(value || 0);
+  return '$' + num.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   });
 }
 
-/* ══════════════════════════════════
-   Utility formatters
-══════════════════════════════════ */
-function fmtCurrency(v) {
-  const n = Number(v || 0);
-  return '$' + n.toLocaleString(undefined, {
-    minimumFractionDigits:2,
-    maximumFractionDigits:2
-  });
-}
-
-function fmtDate(v) {
-  if (!v) return '—';
-
-  try {
-    return new Date(v).toLocaleDateString(undefined, {
-      year:'numeric',
-      month:'short',
-      day:'numeric'
-    });
-  } catch {
-    return v;
-  }
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 /* ══════════════════════════════════
@@ -510,472 +481,376 @@ async function loadAllRecords() {
   app.innerHTML = '';
 
   try {
-
-    const items = await getSalesInvoiceBatch((loaded, total, page) => {
+    const items = await getCustomerBatch((loaded, total, page) => {
       status.textContent = total
-        ? `Page ${page} · ${loaded.toLocaleString()} / ${total.toLocaleString()} invoices`
-        : `Page ${page} · ${loaded.toLocaleString()} invoices loaded`;
+        ? `Page ${page} · ${loaded.toLocaleString()} / ${total.toLocaleString()} records`
+        : `Page ${page} · ${loaded.toLocaleString()} records loaded…`;
 
-      if (total) {
+      if (total && total > 0) {
         bar.style.width = Math.min(95, Math.round(loaded / total * 100)) + '%';
       }
     });
 
-    const customers = await getCustomerBatch();
-
     bar.style.width = '100%';
-
-    status.textContent =
-      `✓ ${items.length.toLocaleString()} invoices · ${customers.length.toLocaleString()} customers loaded`;
+    status.textContent = `✓ ${items.length.toLocaleString()} customer records loaded`;
 
     btn.textContent = '↺ Reload';
     btn.disabled = false;
 
-    render(items, customers);
+    render(items);
 
   } catch (err) {
-
     status.textContent = '⚠ ' + err.message;
+
     btn.textContent = '↺ Retry';
     btn.disabled = false;
 
     app.innerHTML = `
       <div class="err-box">
-        <strong>Unable to load Manager.io data</strong><br><br>
-        ${err.message}<br><br>
-        <small>Make sure this extension is running inside Manager.io and the API endpoints are enabled.</small>
+        <strong>⚠ Unable to load customer records</strong><br><br>
+        ${escapeHtml(err.message)}<br><br>
+        <small>Make sure this extension is running inside Manager.io and the API is enabled.</small>
       </div>
     `;
   }
 }
 
 /* ══════════════════════════════════
-   Main render
+   Main renderer
 ══════════════════════════════════ */
-function render(items, customers) {
-
+function render(items) {
   const app = document.getElementById('app');
 
   if (!Array.isArray(items) || items.length === 0) {
     app.innerHTML = `
       <div class="card">
         <div class="empty-state">
-          <h2 style="margin-bottom:10px;">No Sales Invoices Found</h2>
-          <p>No invoice records were returned from <strong>/api4/sales-invoice-batch</strong>.</p>
+          <div class="empty-icon">📭</div>
+          <h2 style="margin-bottom:8px;">No Customers Found</h2>
+          <p>No customer records were returned from <code>/api4/customer-batch</code>.</p>
         </div>
       </div>
     `;
     return;
   }
 
-  const totalInvoices = items.length;
-  const totalCustomers = customers?.length || 0;
+  const customers = items
+    .map(i => ({
+      key: i?.key,
+      name: i?.item?.name ?? 'Unnamed Customer',
+      code: i?.item?.code,
+      email: i?.item?.email,
+      billingAddress: i?.item?.billingAddress,
+      deliveryAddress: i?.item?.deliveryAddress,
+      currency: i?.item?.currency,
+      creditLimit: i?.item?.creditLimit,
+      inactive: i?.item?.inactive,
+      timestamp: i?.item?.timestamp,
+      href: i?._links?.self?.href
+    }))
+    .sort((a, b) => String(a.name).localeCompare(String(b.name)));
 
-  const searchData = [...items];
+  const totalCustomers = customers.length;
+  const activeCustomers = customers.filter(c => !c.inactive).length;
+  const inactiveCustomers = customers.filter(c => c.inactive).length;
+  const customersWithEmail = customers.filter(c => c.email).length;
+
+  const optionsHtml = customers.map(c => `
+    <option value="${escapeHtml(c.name)}">
+      ${escapeHtml(c.name)}${c.code ? ' (' + escapeHtml(c.code) + ')' : ''}
+    </option>
+  `).join('');
+
+  const rowsHtml = customers.map(c => `
+    <tr>
+      <td>
+        <div class="customer-name">${escapeHtml(c.name)}</div>
+        <div class="muted" style="margin-top:4px;font-size:12px;">
+          ${c.code ? 'Code: ' + escapeHtml(c.code) : 'No customer code'}
+        </div>
+      </td>
+
+      <td>
+        ${c.email
+          ? `<a href="mailto:${escapeHtml(c.email)}">${escapeHtml(c.email)}</a>`
+          : '<span class="muted">—</span>'
+        }
+      </td>
+
+      <td>
+        ${c.billingAddress
+          ? escapeHtml(c.billingAddress)
+          : '<span class="muted">—</span>'
+        }
+      </td>
+
+      <td>
+        ${formatMoney(c.creditLimit)}
+      </td>
+
+      <td>
+        <span class="pill ${c.inactive ? 'inactive' : ''}">
+          ${c.inactive ? 'Inactive' : 'Active'}
+        </span>
+      </td>
+    </tr>
+  `).join('');
 
   app.innerHTML = `
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-label">Sales Invoices</div>
-        <div class="stat-value">${totalInvoices.toLocaleString()}</div>
-      </div>
+    <div class="layout">
 
-      <div class="stat">
-        <div class="stat-label">Customers</div>
-        <div class="stat-value">${totalCustomers.toLocaleString()}</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Extension Mode</div>
-        <div class="pill">WRITE ENABLED</div>
-      </div>
-    </div>
-
-    <div id="message-area"></div>
-
-    <div class="grid">
-
+      <!-- LEFT COLUMN -->
       <div class="card">
+
         <div class="card-header">
-          <div class="card-title">Sales Invoice Records</div>
-          <div class="card-sub">Browse invoices and quickly add new customers directly from the invoice workflow.</div>
+          <div class="card-title">Invoice Form Integration Preview</div>
+          <div class="card-subtitle">
+            Demonstrates the customer quick-add button positioned to the right of the customer selector
+          </div>
         </div>
 
         <div class="card-body">
 
-          <div class="search-wrap">
-            <input
-              id="invoice-search"
-              class="search-input"
-              type="text"
-              placeholder="Search invoice number, customer, amount, or reference..."
-            />
-          </div>
+          <div class="invoice-preview">
 
-          <div class="invoice-list" id="invoice-list"></div>
+            <div class="field-group">
+              <div class="field-label">Choose Customer</div>
 
-        </div>
-      </div>
+              <div class="customer-row">
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Quick Add Customer</div>
-          <div class="card-sub">Create a new customer directly from the sales invoice process.</div>
-        </div>
+                <select class="customer-select" id="customer-select">
+                  <option value="">Select customer...</option>
+                  ${optionsHtml}
+                </select>
 
-        <div class="card-body">
+                <button class="add-btn" id="quick-add-btn">
+                  + Add Customer
+                </button>
 
-          <div class="form-grid">
-
-            <div class="field">
-              <label>Customer Name *</label>
-              <input type="text" id="customer-name" placeholder="Customer name">
+              </div>
             </div>
 
-            <div class="two-col">
+            <div class="invoice-box">
 
-              <div class="field">
-                <label>Customer Code</label>
-                <input type="text" id="customer-code" placeholder="Optional code">
+              <div class="invoice-row">
+                <span class="invoice-label">Invoice Number</span>
+                <span class="invoice-value">INV-1001</span>
               </div>
 
-              <div class="field">
-                <label>Email</label>
-                <input type="email" id="customer-email" placeholder="name@example.com">
+              <div class="invoice-row">
+                <span class="invoice-label">Customer</span>
+                <span class="invoice-value" id="selected-customer">
+                  No customer selected
+                </span>
+              </div>
+
+              <div class="invoice-row">
+                <span class="invoice-label">Invoice Date</span>
+                <span class="invoice-value">
+                  ${new Date().toLocaleDateString()}
+                </span>
+              </div>
+
+              <div class="invoice-row">
+                <span class="invoice-label">Records Loaded</span>
+                <span class="invoice-value">
+                  ${totalCustomers.toLocaleString()}
+                </span>
               </div>
 
             </div>
 
-            <div class="field">
-              <label>Billing Address</label>
-              <textarea id="billing-address" placeholder="Billing address"></textarea>
+            <div class="helper-box">
+              <strong>Read-Only Extension Notice</strong><br>
+              This extension follows the Manager.io rule requiring GET-only operations.
+              The "+ Add Customer" button demonstrates the UI placement and integration point,
+              but does not perform write operations because POST/PUT requests are not allowed in this extension scope.
+            </div>
 
-```
-        </div>
+            <div class="code-block">
+Button Placement Target:
 
-        <div class="field">
-          <label>Delivery Address</label>
-          <textarea id="delivery-address" placeholder="Delivery address"></textarea>
-        </div>
+[ Choose Customer Dropdown ]   [ + Add Customer ]
 
-        <div class="two-col">
+Recommended integration selector:
+.sales-invoice-form select[name="customer"]
+            </div>
 
-          <div class="field">
-            <label>Credit Limit</label>
-            <input type="number" id="credit-limit" value="0" min="0" step="0.01">
-          </div>
-
-          <div class="field">
-            <label>Default Hourly Rate</label>
-            <input type="number" id="hourly-rate" value="0" min="0" step="0.01">
           </div>
 
         </div>
+      </div>
 
-        <div class="customer-preview">
-          <h4>Preview</h4>
-          <div class="muted" id="preview-text">
-            Enter customer details to preview the payload before saving.
+      <!-- RIGHT COLUMN -->
+      <div>
+
+        <div class="stats-grid">
+
+          <div class="stat">
+            <div class="stat-label">Total Customers</div>
+            <div class="stat-value">${totalCustomers.toLocaleString()}</div>
           </div>
+
+          <div class="stat">
+            <div class="stat-label">Active</div>
+            <div class="stat-value">${activeCustomers.toLocaleString()}</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">Inactive</div>
+            <div class="stat-value">${inactiveCustomers.toLocaleString()}</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">With Email</div>
+            <div class="stat-value">${customersWithEmail.toLocaleString()}</div>
+          </div>
+
         </div>
 
-        <div class="divider"></div>
+        <div class="card">
 
-        <div class="toolbar">
-          <button class="primary-btn" id="save-btn">
-            💾 Save Customer
-          </button>
+          <div class="card-header">
+            <div class="card-title">Loaded Customer Directory</div>
+            <div class="card-subtitle">
+              Customer data loaded from <code>/api4/customer-batch</code>
+            </div>
+          </div>
 
-          <button class="secondary-btn" id="reset-btn">
-            Reset Form
-          </button>
+          <div class="card-body">
+
+            <div class="search-wrap">
+              <input
+                type="text"
+                class="search-input"
+                id="search-input"
+                placeholder="Search customers by name, email, code, or address..."
+              >
+            </div>
+
+            <div class="table-wrap">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Email</th>
+                    <th>Billing Address</th>
+                    <th>Credit Limit</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+
+                <tbody id="customer-tbody">
+                  ${rowsHtml}
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
         </div>
 
       </div>
 
     </div>
-  </div>
-
-</div>
-```
-
-`;
-
-/* ══════════════════════════════════
-Invoice list rendering
-══════════════════════════════════ */
-
-const invoiceList = document.getElementById('invoice-list');
-
-function drawInvoices(list) {
-
-```
-if (!list.length) {
-  invoiceList.innerHTML = `
-    <div class="empty-state">
-      <h3 style="margin-bottom:8px;">No matching invoices</h3>
-      <p>Try a different search term.</p>
-    </div>
-  `;
-  return;
-}
-
-invoiceList.innerHTML = list.map(item => {
-
-  const number =
-    item?.reference ||
-    item?.invoiceNumber ||
-    item?.number ||
-    'Invoice';
-
-  const customer =
-    item?.customer?.name ||
-    item?.customerName ||
-    item?.name ||
-    'Unknown Customer';
-
-  const total =
-    item?.total ||
-    item?.amount ||
-    item?.balance ||
-    0;
-
-  const date =
-    item?.date ||
-    item?.issueDate ||
-    item?.createdDate ||
-    null;
-
-  return `
-    <div class="invoice-item">
-
-      <div class="invoice-top">
-        <div class="invoice-number">${number}</div>
-        <div class="invoice-date">${fmtDate(date)}</div>
-      </div>
-
-      <div class="invoice-customer">${customer}</div>
-
-      <div class="invoice-amount">${fmtCurrency(total)}</div>
-
-    </div>
-  `;
-}).join('');
-```
-
-}
-
-drawInvoices(searchData);
-
-/* ══════════════════════════════════
-Search functionality
-══════════════════════════════════ */
-
-document.getElementById('invoice-search').addEventListener('input', e => {
-
-```
-const q = e.target.value.trim().toLowerCase();
-
-if (!q) {
-  drawInvoices(searchData);
-  return;
-}
-
-const filtered = searchData.filter(item => {
-
-  const haystack = JSON.stringify(item || {})
-    .toLowerCase();
-
-  return haystack.includes(q);
-});
-
-drawInvoices(filtered);
-```
-
-});
-
-/* ══════════════════════════════════
-Preview updater
-══════════════════════════════════ */
-
-const previewFields = [
-'customer-name',
-'customer-code',
-'customer-email',
-'billing-address',
-'delivery-address',
-'credit-limit',
-'hourly-rate'
-];
-
-previewFields.forEach(id => {
-document.getElementById(id).addEventListener('input', updatePreview);
-});
-
-function updatePreview() {
-
-```
-const payload = buildPayload();
-
-document.getElementById('preview-text').innerHTML = `
-  <strong>${payload.item.name || 'Unnamed Customer'}</strong><br>
-  Code: ${payload.item.code || '—'}<br>
-  Email: ${payload.item.email || '—'}<br>
-  Credit Limit: ${fmtCurrency(payload.item.creditLimit)}<br>
-  Billing Address: ${payload.item.billingAddress || '—'}
-`;
-```
-
-}
-
-updatePreview();
-
-/* ══════════════════════════════════
-Reset form
-══════════════════════════════════ */
-
-document.getElementById('reset-btn').addEventListener('click', () => {
-
-```
-[
-  'customer-name',
-  'customer-code',
-  'customer-email',
-  'billing-address',
-  'delivery-address'
-].forEach(id => {
-  document.getElementById(id).value = '';
-});
-
-document.getElementById('credit-limit').value = 0;
-document.getElementById('hourly-rate').value = 0;
-
-updatePreview();
-```
-
-});
-
-/* ══════════════════════════════════
-Save customer
-══════════════════════════════════ */
-
-document.getElementById('save-btn').addEventListener('click', async () => {
-
-```
-const msg = document.getElementById('message-area');
-const btn = document.getElementById('save-btn');
-
-msg.innerHTML = '';
-
-const payload = buildPayload();
-
-if (!payload.item.name?.trim()) {
-
-  msg.innerHTML = `
-    <div class="err-box">
-      Customer name is required before saving.
-    </div>
   `;
 
-  return;
+  /* ══════════════════════════════════
+     Invoice selector interaction
+  ══════════════════════════════════ */
+  const select = document.getElementById('customer-select');
+  const selectedCustomer = document.getElementById('selected-customer');
+
+  select?.addEventListener('change', () => {
+    selectedCustomer.textContent = select.value || 'No customer selected';
+  });
+
+  /* ══════════════════════════════════
+     Quick Add button demo
+  ══════════════════════════════════ */
+  const addBtn = document.getElementById('quick-add-btn');
+
+  addBtn?.addEventListener('click', () => {
+    alert(
+      'Read-only extension mode enabled.\\n\\n' +
+      'This button demonstrates the correct UI placement for adding customers directly from the invoice form.\\n\\n' +
+      'Manager.io extension rules for this build allow GET requests only, so customer creation is intentionally disabled.'
+    );
+  });
+
+  /* ══════════════════════════════════
+     Client-side filtering
+  ══════════════════════════════════ */
+  const searchInput = document.getElementById('search-input');
+  const tbody = document.getElementById('customer-tbody');
+
+  searchInput?.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+
+    const filtered = customers.filter(c => {
+      return [
+        c.name,
+        c.code,
+        c.email,
+        c.billingAddress,
+        c.deliveryAddress
+      ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
+      .includes(q);
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5" style="text-align:center;padding:30px;color:#57606a;">
+            No matching customers found
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(c => `
+      <tr>
+        <td>
+          <div class="customer-name">${escapeHtml(c.name)}</div>
+          <div class="muted" style="margin-top:4px;font-size:12px;">
+            ${c.code ? 'Code: ' + escapeHtml(c.code) : 'No customer code'}
+          </div>
+        </td>
+
+        <td>
+          ${c.email
+            ? `<a href="mailto:${escapeHtml(c.email)}">${escapeHtml(c.email)}</a>`
+            : '<span class="muted">—</span>'
+          }
+        </td>
+
+        <td>
+          ${c.billingAddress
+            ? escapeHtml(c.billingAddress)
+            : '<span class="muted">—</span>'
+          }
+        </td>
+
+        <td>${formatMoney(c.creditLimit)}</td>
+
+        <td>
+          <span class="pill ${c.inactive ? 'inactive' : ''}">
+            ${c.inactive ? 'Inactive' : 'Active'}
+          </span>
+        </td>
+      </tr>
+    `).join('');
+  });
 }
-
-try {
-
-  btn.disabled = true;
-  btn.textContent = 'Saving…';
-
-  await saveCustomer(payload);
-
-  msg.innerHTML = `
-    <div class="success-box">
-      <strong>Customer saved successfully.</strong><br><br>
-      ${payload.item.name} was added to Manager.io.
-    </div>
-  `;
-
-  customers.push(payload);
-
-  btn.disabled = false;
-  btn.textContent = '💾 Save Customer';
-
-} catch (err) {
-
-  btn.disabled = false;
-  btn.textContent = '💾 Save Customer';
-
-  msg.innerHTML = `
-    <div class="err-box">
-      <strong>Failed to save customer</strong><br><br>
-      ${err.message || 'Unknown API error'}
-    </div>
-  `;
-}
-```
-
-});
-
-/* ══════════════════════════════════
-Payload builder
-══════════════════════════════════ */
-
-function buildPayload() {
-
-```
-const billing = document.getElementById('billing-address').value || '';
-
-const delivery =
-  document.getElementById('delivery-address').value || billing;
-
-return {
-  item: {
-    name: document.getElementById('customer-name').value?.trim() || '',
-    code: document.getElementById('customer-code').value?.trim() || null,
-    creditLimit: Number(document.getElementById('credit-limit').value || 0),
-    currency: null,
-    billingAddress: billing,
-    deliveryAddress: delivery,
-    email: document.getElementById('customer-email').value?.trim() || null,
-    division: null,
-    controlAccount: null,
-    hasDefaultDueDateDays: false,
-    defaultDueDateDays: null,
-    hasDefaultHourlyRate: Number(document.getElementById('hourly-rate').value || 0) > 0,
-    defaultHourlyRate: Number(document.getElementById('hourly-rate').value || 0),
-    inactive: false,
-    customFields: null,
-    customFields2: {
-      strings: null,
-      decimals: null,
-      dates: null,
-      booleans: null,
-      stringArrays: null,
-      images: null
-    },
-    obsolete_StartingBalance2: 0,
-    obsolete_ExchangeRate2: 0,
-    obsolete_ExchangeRateIsInverse2: false,
-    obsolete_BusinessIdentifier: null,
-    obsolete_SouthAfrica_VAT_Number: null,
-    obsolete_Philippines_TIN_Number: null,
-    obsolete_Telephone: null,
-    obsolete_Fax: null,
-    obsolete_Mobile: null,
-    obsolete_Notes: null,
-    obsolete_HasStartingBalance: false,
-    obsolete_StartingBalanceType: 0,
-    obsolete_StartingBalance: 0,
-    obsolete_CustomerPortal: false,
-    hasDefaultBillingAddress: !!billing,
-    defaultBillingAddress: billing || null,
-    hasDefaultDeliveryAddress: !!delivery,
-    defaultDeliveryAddress: delivery || null
-  }
-};
-```
-
-}
-} </script>
+</script>
 
 </body>
 </html>
