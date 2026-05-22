@@ -9,23 +9,10 @@
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
 
-  :root{
-    --bg:#ffffff;
-    --panel:#f6f8fa;
-    --border:#d0d7de;
-    --text:#24292f;
-    --muted:#57606a;
-    --primary:#0969da;
-    --primary-hover:#0550ae;
-    --danger:#cf222e;
-    --success:#1a7f37;
-    --shadow:0 2px 10px rgba(0,0,0,.06);
-  }
-
   body{
     font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    background:var(--bg);
-    color:var(--text);
+    background:#ffffff;
+    color:#24292f;
     min-height:100vh;
     padding:20px;
   }
@@ -36,11 +23,11 @@
     gap:10px;
     flex-wrap:wrap;
     padding:12px 16px;
-    margin-bottom:18px;
-    background:var(--panel);
-    border:1px solid var(--border);
+    margin-bottom:20px;
+    background:#f6f8fa;
+    border:1px solid #d0d7de;
     border-radius:12px;
-    box-shadow:var(--shadow);
+    box-shadow:0 1px 2px rgba(27,31,36,.04);
   }
 
   .load-btn,
@@ -49,38 +36,41 @@
     border:none;
     border-radius:8px;
     cursor:pointer;
-    font-size:13px;
     font-weight:700;
-    transition:all .15s ease;
+    transition:all .18s ease;
   }
 
-  .load-btn,
-  .primary-btn{
-    padding:9px 18px;
-    background:var(--primary);
+  .load-btn{
+    padding:9px 20px;
+    font-size:13px;
+    background:#0969da;
     color:#fff;
   }
 
   .load-btn:hover,
   .primary-btn:hover{
-    background:var(--primary-hover);
+    filter:brightness(.95);
   }
 
   .load-btn:disabled,
   .primary-btn:disabled{
-    opacity:.5;
+    opacity:.55;
     cursor:not-allowed;
   }
 
-  .secondary-btn{
-    padding:9px 14px;
-    background:#fff;
-    color:var(--text);
-    border:1px solid var(--border);
+  .primary-btn{
+    background:#1a7f37;
+    color:#fff;
+    padding:10px 16px;
+    font-size:14px;
   }
 
-  .secondary-btn:hover{
-    background:#f3f4f6;
+  .secondary-btn{
+    background:#f6f8fa;
+    color:#24292f;
+    border:1px solid #d0d7de;
+    padding:10px 16px;
+    font-size:14px;
   }
 
   .prog-wrap{
@@ -95,20 +85,21 @@
   .prog-bar{
     height:100%;
     width:0%;
-    background:var(--primary);
-    transition:width .25s ease;
+    background:#0969da;
+    border-radius:999px;
+    transition:width .25s;
   }
 
   .status-txt{
     font-size:12px;
-    color:var(--muted);
+    color:#57606a;
     white-space:nowrap;
   }
 
   .err-box{
-    color:var(--danger);
-    background:#fff5f5;
-    border:1px solid #ffd8d8;
+    color:#cf222e;
+    background:#fff8f8;
+    border:1px solid #ffcecb;
     border-radius:10px;
     padding:14px 16px;
     font-size:13px;
@@ -117,8 +108,8 @@
 
   .layout{
     display:grid;
-    grid-template-columns:380px 1fr;
-    gap:18px;
+    grid-template-columns: 1.1fr .9fr;
+    gap:20px;
   }
 
   @media (max-width: 980px){
@@ -129,37 +120,105 @@
 
   .card{
     background:#fff;
-    border:1px solid var(--border);
+    border:1px solid #d0d7de;
     border-radius:14px;
-    box-shadow:var(--shadow);
-    overflow:hidden;
-  }
-
-  .card-head{
-    padding:16px 18px;
-    border-bottom:1px solid var(--border);
-    background:#fbfbfc;
+    padding:18px;
+    box-shadow:0 2px 8px rgba(27,31,36,.05);
   }
 
   .card-title{
-    font-size:16px;
+    font-size:18px;
+    font-weight:800;
+    margin-bottom:14px;
+  }
+
+  .invoice-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+
+  .invoice-label{
+    font-size:14px;
     font-weight:700;
-    margin-bottom:4px;
+    color:#24292f;
   }
 
-  .card-sub{
-    color:var(--muted);
-    font-size:12px;
+  .customer-select{
+    flex:1;
+    min-width:260px;
+    border:1px solid #d0d7de;
+    border-radius:10px;
+    padding:12px 14px;
+    background:#fff;
+    font-size:14px;
+    color:#24292f;
   }
 
-  .card-body{
-    padding:18px;
+  .customer-select:focus,
+  input:focus,
+  textarea:focus{
+    outline:none;
+    border-color:#0969da;
+    box-shadow:0 0 0 3px rgba(9,105,218,.12);
   }
 
-  .form-grid{
+  .quick-add-btn{
+    background:#1f883d;
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    padding:12px 16px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+
+  .quick-add-btn:hover{
+    filter:brightness(.96);
+  }
+
+  .customer-preview{
+    background:#f6f8fa;
+    border:1px solid #d0d7de;
+    border-radius:10px;
+    padding:14px;
+    margin-top:8px;
+  }
+
+  .preview-row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:8px;
+    font-size:13px;
+  }
+
+  .preview-label{
+    color:#57606a;
+    font-weight:600;
+  }
+
+  .preview-value{
+    color:#24292f;
+    font-weight:700;
+    text-align:right;
+    word-break:break-word;
+  }
+
+  .grid{
     display:grid;
-    grid-template-columns:1fr;
+    grid-template-columns:1fr 1fr;
     gap:14px;
+  }
+
+  @media (max-width:640px){
+    .grid{
+      grid-template-columns:1fr;
+    }
   }
 
   .field{
@@ -169,162 +228,147 @@
   }
 
   .field label{
-    font-size:12px;
-    color:var(--muted);
-    font-weight:600;
+    font-size:13px;
+    font-weight:700;
+    color:#24292f;
   }
 
   .field input,
-  .field textarea,
-  .field select{
-    width:100%;
-    padding:11px 12px;
-    border:1px solid var(--border);
-    border-radius:10px;
-    font-size:14px;
-    outline:none;
-    transition:border-color .15s ease, box-shadow .15s ease;
-    background:#fff;
-  }
-
   .field textarea{
+    border:1px solid #d0d7de;
+    border-radius:10px;
+    padding:12px;
+    font-size:14px;
+    background:#fff;
     resize:vertical;
-    min-height:80px;
   }
 
-  .field input:focus,
-  .field textarea:focus,
-  .field select:focus{
-    border-color:var(--primary);
-    box-shadow:0 0 0 3px rgba(9,105,218,.15);
-  }
-
-  .invoice-row{
-    display:grid;
-    grid-template-columns:1fr auto;
-    gap:10px;
-    align-items:end;
-  }
-
-  .mini-note{
-    margin-top:8px;
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.5;
+  textarea{
+    min-height:90px;
   }
 
   .actions{
     display:flex;
     gap:10px;
+    margin-top:16px;
     flex-wrap:wrap;
-    margin-top:8px;
-  }
-
-  .success-box{
-    background:#edfdf3;
-    color:var(--success);
-    border:1px solid #aceebb;
-    padding:12px 14px;
-    border-radius:10px;
-    font-size:13px;
-    margin-bottom:14px;
-  }
-
-  .stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-    gap:14px;
-    margin-bottom:18px;
-  }
-
-  .stat{
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:16px;
-    background:#fff;
-  }
-
-  .stat-label{
-    font-size:12px;
-    color:var(--muted);
-    margin-bottom:8px;
-  }
-
-  .stat-value{
-    font-size:24px;
-    font-weight:800;
   }
 
   .table-wrap{
     overflow:auto;
-    border:1px solid var(--border);
+    border:1px solid #d0d7de;
     border-radius:12px;
   }
 
   table{
     width:100%;
     border-collapse:collapse;
-    min-width:800px;
-  }
-
-  th{
-    text-align:left;
-    font-size:12px;
-    color:var(--muted);
-    background:#f9fafb;
-    padding:12px 14px;
-    border-bottom:1px solid var(--border);
-    position:sticky;
-    top:0;
-    z-index:1;
-  }
-
-  td{
-    padding:12px 14px;
-    border-bottom:1px solid #edf1f4;
     font-size:13px;
+  }
+
+  thead{
+    background:#f6f8fa;
+  }
+
+  th, td{
+    padding:12px 14px;
+    border-bottom:1px solid #d8dee4;
+    text-align:left;
     vertical-align:top;
   }
 
-  tr:hover td{
-    background:#fafcff;
+  th{
+    font-weight:800;
+    color:#24292f;
+    white-space:nowrap;
   }
 
-  .pill{
+  tbody tr:hover{
+    background:#fafbfc;
+  }
+
+  .badge{
     display:inline-flex;
     align-items:center;
+    justify-content:center;
     padding:4px 10px;
     border-radius:999px;
     font-size:11px;
-    font-weight:700;
-    background:#e7f3ff;
-    color:var(--primary);
+    font-weight:800;
   }
 
-  .search-wrap{
-    margin-bottom:14px;
+  .badge-active{
+    background:#dafbe1;
+    color:#116329;
+  }
+
+  .badge-inactive{
+    background:#ffebe9;
+    color:#cf222e;
   }
 
   .empty{
     text-align:center;
-    padding:50px 20px;
-    color:var(--muted);
+    padding:48px 20px;
+    color:#57606a;
+    border:1px dashed #d0d7de;
+    border-radius:12px;
+    background:#fafbfc;
   }
 
-  .spinner{
-    width:16px;
-    height:16px;
-    border:2px solid rgba(255,255,255,.4);
-    border-top-color:#fff;
-    border-radius:50%;
-    display:inline-block;
-    animation:spin .8s linear infinite;
-    vertical-align:middle;
-    margin-right:8px;
+  .success-box{
+    margin-top:16px;
+    background:#dafbe1;
+    border:1px solid #7ee787;
+    color:#116329;
+    border-radius:10px;
+    padding:14px 16px;
+    font-size:14px;
+    font-weight:700;
   }
 
-  @keyframes spin{
-    to{ transform:rotate(360deg); }
+  .search-input{
+    width:100%;
+    margin-bottom:14px;
+    border:1px solid #d0d7de;
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:14px;
+  }
+
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:18px;
+  }
+
+  @media (max-width:640px){
+    .stats{
+      grid-template-columns:1fr;
+    }
+  }
+
+  .stat{
+    background:#f6f8fa;
+    border:1px solid #d0d7de;
+    border-radius:12px;
+    padding:16px;
+  }
+
+  .stat-label{
+    font-size:12px;
+    color:#57606a;
+    margin-bottom:8px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+  }
+
+  .stat-value{
+    font-size:24px;
+    font-weight:900;
+    color:#24292f;
   }
 </style>
 
@@ -340,7 +384,7 @@
   </div>
 
   <span class="status-txt" id="status-txt">
-    Press Load to fetch data from Manager
+    Press Load to fetch customer records from Manager.io
   </span>
 </div>
 
@@ -411,239 +455,265 @@ async function getCustomerBatch(onProgress) {
 /* ══════════════════════════════════
    Global state
 ══════════════════════════════════ */
-let ALL_CUSTOMERS = [];
+let CUSTOMER_CACHE = [];
+let FILTERED_CACHE = [];
+let CURRENT_SELECTED = null;
 
 /* ══════════════════════════════════
-   Utilities
+   Utility helpers
 ══════════════════════════════════ */
-function escapeHtml(str) {
-  return String(str ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
+function safe(v, fallback='—'){
+  return v ?? fallback;
 }
 
-function customerDisplayName(item) {
-  return (
-    item?.name ??
-    item?.customer ??
-    item?.display_name ??
-    item?.business_name ??
-    item?.full_name ??
-    item?.code ??
-    'Unnamed Customer'
-  );
+function fmtMoney(v){
+  return '$' + Number(v || 0).toLocaleString(undefined,{
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
 }
 
-function formatDate(date) {
-  if (!date) return '—';
-
-  try {
-    return new Date(date).toLocaleDateString(undefined, {
-      year:'numeric',
-      month:'short',
-      day:'numeric'
-    });
-  } catch {
-    return date;
-  }
+function escapeHtml(str){
+  return String(str || '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
 }
 
 /* ══════════════════════════════════
    Create customer (WRITE OPERATION)
 ══════════════════════════════════ */
-async function createCustomer(event) {
-  event.preventDefault();
+async function createCustomer() {
+  const saveBtn = document.getElementById('save-btn');
+  const successBox = document.getElementById('success-box');
 
-  const form = document.getElementById('customer-form');
-  const submitBtn = document.getElementById('save-btn');
-  const msgBox = document.getElementById('message-box');
+  const name = document.getElementById('cust-name').value.trim();
+  const code = document.getElementById('cust-code').value.trim();
+  const email = document.getElementById('cust-email').value.trim();
+  const billingAddress = document.getElementById('cust-billing').value.trim();
+  const deliveryAddress = document.getElementById('cust-delivery').value.trim();
+  const creditLimit = Number(document.getElementById('cust-credit').value || 0);
 
-  msgBox.innerHTML = '';
-
-  const payload = {
-    name: document.getElementById('customer-name')?.value?.trim() || '',
-    code: document.getElementById('customer-code')?.value?.trim() || '',
-    email: document.getElementById('customer-email')?.value?.trim() || '',
-    phone: document.getElementById('customer-phone')?.value?.trim() || '',
-    address_line_1: document.getElementById('customer-address1')?.value?.trim() || '',
-    address_line_2: document.getElementById('customer-address2')?.value?.trim() || '',
-    city: document.getElementById('customer-city')?.value?.trim() || '',
-    state: document.getElementById('customer-state')?.value?.trim() || '',
-    zip_code: document.getElementById('customer-zip')?.value?.trim() || '',
-    country: document.getElementById('customer-country')?.value?.trim() || '',
-    notes: document.getElementById('customer-notes')?.value?.trim() || ''
-  };
-
-  if (!payload.name) {
-    msgBox.innerHTML = `
-      <div class="err-box">
-        Customer name is required.
-      </div>
-    `;
+  if (!name) {
+    alert('Customer name is required.');
     return;
   }
 
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = '<span class="spinner"></span>Creating Customer...';
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Saving…';
 
   try {
+    const payload = {
+      item: {
+        name,
+        code: code || null,
+        email: email || null,
+        billingAddress: billingAddress || '',
+        deliveryAddress: deliveryAddress || '',
+        defaultBillingAddress: billingAddress || '',
+        defaultDeliveryAddress: deliveryAddress || '',
+        hasDefaultBillingAddress: !!billingAddress,
+        hasDefaultDeliveryAddress: !!deliveryAddress,
+        creditLimit,
+        inactive: false,
+        hasDefaultDueDateDays: false,
+        defaultDueDateDays: null,
+        hasDefaultHourlyRate: false,
+        defaultHourlyRate: 0,
+        currency: null,
+        division: null,
+        controlAccount: null
+      }
+    };
 
-    /* Primary write endpoint */
-    const result = await postMessageWithResponse({
+    /* WRITE CAPABILITY */
+    await postMessageWithResponse({
       type: 'api-request',
       method: 'POST',
-      path: '/api4/customer-form',
+      path: '/api4/customer',
       body: payload
     });
 
-    msgBox.innerHTML = `
-      <div class="success-box">
-        ✓ Customer created successfully and added to the database.
-      </div>
-    `;
-
-    form.reset();
-
-    /* Reload customer list */
-    await loadAllRecords();
-
-    console.log('Customer create response:', result);
-
-  } catch (primaryErr) {
-
-    try {
-
-      /* Fallback create endpoint */
-      const fallbackResult = await postMessageWithResponse({
-        type: 'api-request',
-        method: 'POST',
-        path: '/api4/customers',
-        body: payload
-      });
-
-      msgBox.innerHTML = `
-        <div class="success-box">
-          ✓ Customer created successfully using fallback endpoint.
-        </div>
-      `;
-
-      form.reset();
-
-      await loadAllRecords();
-
-      console.log('Fallback customer response:', fallbackResult);
-
-    } catch (fallbackErr) {
-
-      console.error(primaryErr);
-      console.error(fallbackErr);
-
-      msgBox.innerHTML = `
-        <div class="err-box">
-          <strong>Unable to create customer.</strong><br><br>
-          Primary Error: ${escapeHtml(primaryErr?.message || 'Unknown error')}<br>
-          Fallback Error: ${escapeHtml(fallbackErr?.message || 'Unknown error')}<br><br>
-          Ensure your Manager.io API version allows POST write operations.
-        </div>
-      `;
+    if (successBox) {
+      successBox.innerHTML = '✓ Customer created successfully. Reloading records…';
+      successBox.style.display = 'block';
     }
 
+    document.getElementById('customer-form').reset();
+
+    await loadAllRecords();
+
+  } catch (err) {
+    alert('Unable to create customer.\n\n' + err.message);
   } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = '💾 Save Customer';
+    saveBtn.disabled = false;
+    saveBtn.textContent = '💾 Save Customer';
   }
 }
 
 /* ══════════════════════════════════
-   Search filter
+   Search/filter customers
 ══════════════════════════════════ */
 function filterCustomers() {
-  const q = document.getElementById('search-input')?.value?.toLowerCase() || '';
+  const query = document.getElementById('search-input').value.trim().toLowerCase();
 
-  const filtered = ALL_CUSTOMERS.filter(item => {
-    const values = [
+  FILTERED_CACHE = CUSTOMER_CACHE.filter(customer => {
+    const item = customer?.item || {};
+
+    return [
       item?.name,
-      item?.customer,
       item?.email,
-      item?.phone,
-      item?.code
-    ].join(' ').toLowerCase();
-
-    return values.includes(q);
+      item?.code,
+      item?.billingAddress
+    ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+    .includes(query);
   });
 
-  renderTable(filtered);
+  renderCustomerTable(FILTERED_CACHE);
 }
 
 /* ══════════════════════════════════
-   Invoice customer select helper
+   Update selected customer preview
 ══════════════════════════════════ */
-function syncSelectedCustomer() {
-  const select = document.getElementById('invoice-customer-select');
-  const preview = document.getElementById('selected-customer-preview');
+function handleCustomerSelect() {
+  const select = document.getElementById('customer-select');
+  const value = select.value;
 
-  const option = select?.selectedOptions?.[0];
+  CURRENT_SELECTED = CUSTOMER_CACHE.find(c =>
+    c?.key === value ||
+    c?.item?.name === value
+  );
 
-  preview.innerHTML = option
-    ? `<span class="pill">Selected: ${escapeHtml(option.textContent)}</span>`
-    : '';
+  const preview = document.getElementById('customer-preview');
+
+  if (!CURRENT_SELECTED) {
+    preview.innerHTML = '<div style="color:#57606a;">No customer selected.</div>';
+    return;
+  }
+
+  const item = CURRENT_SELECTED?.item || {};
+
+  preview.innerHTML = `
+    <div class="preview-row">
+      <span class="preview-label">Customer</span>
+      <span class="preview-value">${escapeHtml(item?.name)}</span>
+    </div>
+
+    <div class="preview-row">
+      <span class="preview-label">Email</span>
+      <span class="preview-value">${escapeHtml(safe(item?.email))}</span>
+    </div>
+
+    <div class="preview-row">
+      <span class="preview-label">Code</span>
+      <span class="preview-value">${escapeHtml(safe(item?.code))}</span>
+    </div>
+
+    <div class="preview-row">
+      <span class="preview-label">Credit Limit</span>
+      <span class="preview-value">${fmtMoney(item?.creditLimit)}</span>
+    </div>
+
+    <div class="preview-row">
+      <span class="preview-label">Billing Address</span>
+      <span class="preview-value">${escapeHtml(safe(item?.billingAddress))}</span>
+    </div>
+  `;
 }
 
 /* ══════════════════════════════════
-   Render customer table
+   Open quick add area
 ══════════════════════════════════ */
-function renderTable(items) {
-  const target = document.getElementById('table-container');
+function focusQuickAdd() {
+  const formCard = document.getElementById('form-card');
+
+  if (formCard) {
+    formCard.scrollIntoView({
+      behavior:'smooth',
+      block:'start'
+    });
+  }
+
+  setTimeout(() => {
+    const input = document.getElementById('cust-name');
+    if (input) input.focus();
+  }, 300);
+}
+
+/* ══════════════════════════════════
+   Customer table renderer
+══════════════════════════════════ */
+function renderCustomerTable(items) {
+  const tableWrap = document.getElementById('table-wrap');
 
   if (!items.length) {
-    target.innerHTML = `
+    tableWrap.innerHTML = `
       <div class="empty">
-        <h3 style="margin-bottom:8px">No customers found</h3>
-        <p>Try adjusting your search or create a new customer.</p>
+        <div style="font-size:18px;font-weight:800;margin-bottom:8px;">
+          No customers found
+        </div>
+        <div>
+          Try adjusting your search or create a new customer.
+        </div>
       </div>
     `;
     return;
   }
 
-  const rows = items.map((item, index) => {
+  tableWrap.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Email</th>
+          <th>Billing Address</th>
+          <th>Credit Limit</th>
+          <th>Status</th>
+        </tr>
+      </thead>
 
-    const name = customerDisplayName(item);
+      <tbody>
+        ${items.map(customer => {
+          const item = customer?.item || {};
 
-    return `
-      <tr>
-        <td>${index + 1}</td>
-        <td>
-          <strong>${escapeHtml(name)}</strong>
-        </td>
-        <td>${escapeHtml(item?.email ?? '—')}</td>
-        <td>${escapeHtml(item?.phone ?? '—')}</td>
-        <td>${escapeHtml(item?.code ?? '—')}</td>
-        <td>${escapeHtml(item?._links?.self?.href ?? '—')}</td>
-        <td>${formatDate(item?.created_at ?? item?.created ?? item?.date)}</td>
-      </tr>
-    `;
-  }).join('');
+          return `
+            <tr>
+              <td>
+                <div style="font-weight:800;">
+                  ${escapeHtml(item?.name || 'Unnamed')}
+                </div>
 
-  target.innerHTML = `
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Customer</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Code</th>
-            <th>API Resource</th>
-            <th>Created</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>
+                <div style="font-size:12px;color:#57606a;margin-top:4px;">
+                  ${escapeHtml(item?.code || 'No Code')}
+                </div>
+              </td>
+
+              <td>
+                ${escapeHtml(item?.email || '—')}
+              </td>
+
+              <td>
+                ${escapeHtml(item?.billingAddress || '—')}
+              </td>
+
+              <td>
+                ${fmtMoney(item?.creditLimit)}
+              </td>
+
+              <td>
+                <span class="badge ${item?.inactive ? 'badge-inactive' : 'badge-active'}">
+                  ${item?.inactive ? 'Inactive' : 'Active'}
+                </span>
+              </td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
   `;
 }
 
@@ -651,7 +721,6 @@ function renderTable(items) {
    loadAllRecords
 ══════════════════════════════════ */
 async function loadAllRecords() {
-
   const btn    = document.getElementById('load-btn');
   const bar    = document.getElementById('prog-bar');
   const status = document.getElementById('status-txt');
@@ -659,13 +728,11 @@ async function loadAllRecords() {
 
   btn.disabled = true;
   btn.textContent = 'Loading…';
-
   bar.style.width = '0%';
+  app.innerHTML = '';
 
   try {
-
     const items = await getCustomerBatch((loaded, total, page) => {
-
       status.textContent = total
         ? `Page ${page} · ${loaded.toLocaleString()} / ${total.toLocaleString()} records`
         : `Page ${page} · ${loaded.toLocaleString()} records loaded…`;
@@ -675,31 +742,31 @@ async function loadAllRecords() {
       }
     });
 
-    ALL_CUSTOMERS = Array.isArray(items) ? items : [];
-
     bar.style.width = '100%';
-
-    status.textContent =
-      `✓ ${ALL_CUSTOMERS.length.toLocaleString()} records loaded`;
+    status.textContent = `✓ ${items.length.toLocaleString()} customer records loaded`;
 
     btn.textContent = '↺ Reload';
     btn.disabled = false;
 
-    render(ALL_CUSTOMERS);
+    render(items);
 
   } catch (err) {
-
     status.textContent = '⚠ ' + err.message;
-
     btn.textContent = '↺ Retry';
     btn.disabled = false;
 
     app.innerHTML = `
       <div class="err-box">
-        ⚠ ${escapeHtml(err.message)}
-        <br><br>
+        <div style="font-weight:800;margin-bottom:8px;">
+          Unable to load Manager.io data
+        </div>
+
+        <div style="margin-bottom:6px;">
+          ${escapeHtml(err.message)}
+        </div>
+
         <small>
-          Make sure this extension is running inside Manager.io and API access is enabled.
+          Make sure this extension is running inside Manager.io.
         </small>
       </div>
     `;
@@ -710,271 +777,213 @@ async function loadAllRecords() {
    render(items)
 ══════════════════════════════════ */
 function render(items) {
-
   const app = document.getElementById('app');
 
-  const total = items.length;
+  CUSTOMER_CACHE = Array.isArray(items) ? items : [];
+  FILTERED_CACHE = [...CUSTOMER_CACHE];
 
-  const sorted = [...items].sort((a,b) => {
-    return customerDisplayName(a).localeCompare(customerDisplayName(b));
-  });
+  const totalCustomers = CUSTOMER_CACHE.length;
 
-  const options = sorted.map(item => {
-    const name = customerDisplayName(item);
+  const activeCustomers = CUSTOMER_CACHE.filter(i =>
+    !i?.item?.inactive
+  ).length;
 
-    return `
-      <option value="${escapeHtml(name)}">
-        ${escapeHtml(name)}
-      </option>
-    `;
-  }).join('');
+  const totalCredit = CUSTOMER_CACHE.reduce((sum, customer) => {
+    return sum + Number(customer?.item?.creditLimit || 0);
+  }, 0);
+
+  const customerOptions = CUSTOMER_CACHE
+    .sort((a,b) => {
+      const an = a?.item?.name || '';
+      const bn = b?.item?.name || '';
+      return an.localeCompare(bn);
+    })
+    .map(customer => {
+      const name = customer?.item?.name || 'Unnamed';
+      const key = customer?.key || name;
+
+      return `
+        <option value="${escapeHtml(key)}">
+          ${escapeHtml(name)}
+        </option>
+      `;
+    })
+    .join('');
 
   app.innerHTML = `
-    <div class="layout">
-
-      <!-- LEFT PANEL -->
-      <div class="card">
-
-        <div class="card-head">
-          <div class="card-title">
-            Quick Customer Add
-          </div>
-
-          <div class="card-sub">
-            Add new customers directly from the sales invoice workflow.
-          </div>
-        </div>
-
-        <div class="card-body">
-
-          <div id="message-box"></div>
-
-          <!-- Simulated invoice customer row -->
-          <div class="field" style="margin-bottom:18px">
-
-            <label>
-              Sales Invoice — Customer Selection
-            </label>
-
-            <div class="invoice-row">
-
-              <select id="invoice-customer-select" onchange="syncSelectedCustomer()">
-                <option value="">Select Customer...</option>
-                ${options}
-              </select>
-
-              <button
-                type="button"
-                class="primary-btn"
-                onclick="document.getElementById('customer-name').focus()"
-              >
-                ➕ New Customer
-              </button>
-
-            </div>
-
-            <div id="selected-customer-preview" class="mini-note"></div>
-
-            <div class="mini-note">
-              This mimics the placement to the right of the customer dropdown
-              inside the sales invoice form.
-            </div>
-
-          </div>
-
-          <!-- Create Customer Form -->
-          <form id="customer-form" onsubmit="createCustomer(event)">
-
-            <div class="form-grid">
-
-              <div class="field">
-                <label>Customer Name *</label>
-                <input
-                  id="customer-name"
-                  type="text"
-                  required
-                  placeholder="Acme Corporation"
-                >
-              </div>
-
-              <div class="field">
-                <label>Customer Code</label>
-                <input
-                  id="customer-code"
-                  type="text"
-                  placeholder="CUST-001"
-                >
-              </div>
-
-              <div class="field">
-                <label>Email Address</label>
-                <input
-                  id="customer-email"
-                  type="email"
-                  placeholder="customer@example.com"
-                >
-              </div>
-
-              <div class="field">
-                <label>Phone Number</label>
-                <input
-                  id="customer-phone"
-                  type="text"
-                  placeholder="+1 555-123-4567"
-                >
-              </div>
-
-              <div class="field">
-                <label>Address Line 1</label>
-                <input
-                  id="customer-address1"
-                  type="text"
-                  placeholder="123 Main Street"
-                >
-              </div>
-
-              <div class="field">
-                <label>Address Line 2</label>
-                <input
-                  id="customer-address2"
-                  type="text"
-                  placeholder="Suite 200"
-                >
-              </div>
-
-              <div class="field">
-                <label>City</label>
-                <input
-                  id="customer-city"
-                  type="text"
-                  placeholder="New York"
-                >
-              </div>
-
-              <div class="field">
-                <label>State / Province</label>
-                <input
-                  id="customer-state"
-                  type="text"
-                  placeholder="NY"
-                >
-              </div>
-
-              <div class="field">
-                <label>ZIP / Postal Code</label>
-                <input
-                  id="customer-zip"
-                  type="text"
-                  placeholder="10001"
-                >
-              </div>
-
-              <div class="field">
-                <label>Country</label>
-                <input
-                  id="customer-country"
-                  type="text"
-                  placeholder="United States"
-                >
-              </div>
-
-              <div class="field">
-                <label>Notes</label>
-                <textarea
-                  id="customer-notes"
-                  placeholder="Additional notes or billing instructions..."
-                ></textarea>
-
-```
-          </div>
-
-        </div>
-
-        <div class="actions">
-
-          <button
-            id="save-btn"
-            type="submit"
-            class="primary-btn"
-          >
-            💾 Save Customer
-          </button>
-
-          <button
-            type="reset"
-            class="secondary-btn"
-          >
-            Reset
-          </button>
-
-        </div>
-
-      </form>
-
-    </div>
-  </div>
-
-  <!-- RIGHT PANEL -->
-  <div>
-
     <div class="stats">
-
       <div class="stat">
         <div class="stat-label">Total Customers</div>
         <div class="stat-value">
-          ${total.toLocaleString()}
+          ${totalCustomers.toLocaleString()}
         </div>
       </div>
 
       <div class="stat">
-        <div class="stat-label">API Endpoint</div>
-        <div class="stat-value" style="font-size:15px">
-          /api4/customer-batch
+        <div class="stat-label">Active Customers</div>
+        <div class="stat-value">
+          ${activeCustomers.toLocaleString()}
         </div>
       </div>
 
       <div class="stat">
-        <div class="stat-label">Write Access</div>
-        <div class="stat-value" style="font-size:15px">
-          ENABLED
+        <div class="stat-label">Combined Credit Limit</div>
+        <div class="stat-value">
+          ${fmtMoney(totalCredit)}
         </div>
       </div>
-
     </div>
 
-    <div class="card">
+    <div class="layout">
 
-      <div class="card-head">
+      <!-- LEFT -->
+      <div class="card">
+
         <div class="card-title">
-          Customer Database
+          Sales Invoice Form Integration
         </div>
 
-        <div class="card-sub">
-          Live records loaded through the paginated Manager.io API.
+        <div class="invoice-row">
+          <button class="quick-add-btn" onclick="focusQuickAdd()">
+            ➕ Add Customer
+          </button>
+
+          <div style="display:flex;flex-direction:column;gap:6px;flex:1;">
+            <span class="invoice-label">
+              Choose Customer
+            </span>
+
+            <select
+              class="customer-select"
+              id="customer-select"
+              onchange="handleCustomerSelect()"
+            >
+              <option value="">
+                Select a customer…
+              </option>
+
+              ${customerOptions}
+            </select>
+          </div>
         </div>
-      </div>
 
-      <div class="card-body">
+        <div id="customer-preview" class="customer-preview">
+          <div style="color:#57606a;">
+            Select a customer to preview details.
+          </div>
+        </div>
 
-        <div class="search-wrap">
+        <div style="margin-top:22px;">
           <input
             id="search-input"
+            class="search-input"
             type="text"
-            placeholder="Search customers..."
+            placeholder="Search customers by name, email, code, or address…"
             oninput="filterCustomers()"
-            style="
-              width:100%;
-              padding:11px 12px;
-              border:1px solid var(--border);
-              border-radius:10px;
-              font-size:14px;
-            "
           >
+
+          <div id="table-wrap" class="table-wrap"></div>
         </div>
 
-        <div id="table-container"></div>
-
       </div>
+
+      <!-- RIGHT -->
+      <div class="card" id="form-card">
+
+        <div class="card-title">
+          Quick Add Customer
+        </div>
+
+        <form id="customer-form" onsubmit="event.preventDefault(); createCustomer();">
+
+          <div class="grid">
+
+            <div class="field">
+              <label>Customer Name *</label>
+              <input
+                id="cust-name"
+                type="text"
+                placeholder="Acme Corporation"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label>Customer Code</label>
+              <input
+                id="cust-code"
+                type="text"
+                placeholder="ACM-100"
+              >
+            </div>
+
+            <div class="field">
+              <label>Email Address</label>
+              <input
+                id="cust-email"
+                type="email"
+                placeholder="billing@example.com"
+              >
+            </div>
+
+            <div class="field">
+              <label>Credit Limit</label>
+              <input
+                id="cust-credit"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="0.00"
+              >
+            </div>
+
+          </div>
+
+          <div class="field" style="margin-top:14px;">
+            <label>Billing Address</label>
+
+            <textarea
+              id="cust-billing"
+              placeholder="Enter billing address"
+            ></textarea>
+
+```
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Delivery Address</label>
+
+        <textarea
+          id="cust-delivery"
+          placeholder="Enter delivery address"
+        ></textarea>
+      </div>
+
+      <div class="actions">
+        <button
+          type="submit"
+          class="primary-btn"
+          id="save-btn"
+        >
+          💾 Save Customer
+        </button>
+
+        <button
+          type="reset"
+          class="secondary-btn"
+        >
+          Reset Form
+        </button>
+      </div>
+
+    </form>
+
+    <div
+      id="success-box"
+      class="success-box"
+      style="display:none;"
+    >
+      ✓ Customer saved successfully
     </div>
 
   </div>
@@ -984,7 +993,21 @@ function render(items) {
 
 `;
 
-renderTable(sorted);
+renderCustomerTable(FILTERED_CACHE);
+
+if (!CUSTOMER_CACHE.length) {
+document.getElementById('table-wrap').innerHTML = ` <div class="empty"> <div style="font-size:20px;font-weight:900;margin-bottom:10px;">
+No customers available </div>
+
+```
+    <div style="margin-bottom:14px;">
+      Create your first customer using the quick add form.
+    </div>
+  </div>
+`;
+```
+
+}
 } </script>
 
 </body>
