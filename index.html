@@ -4,15 +4,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Manager.io Customer Quick Add Extension</title>
+<title>Manager.io Customer Creator</title>
 
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
 
+  :root{
+    --bg:#ffffff;
+    --card:#ffffff;
+    --muted:#f6f8fa;
+    --border:#d0d7de;
+    --text:#24292f;
+    --sub:#57606a;
+    --blue:#0969da;
+    --blue2:#1f6feb;
+    --green:#1a7f37;
+    --red:#cf222e;
+    --shadow:0 1px 3px rgba(0,0,0,.06);
+    --radius:12px;
+  }
+
   body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background:#ffffff;
-    color:#24292f;
+    font-family:system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--text);
     min-height:100vh;
     padding:20px;
   }
@@ -24,37 +39,29 @@
     flex-wrap:wrap;
     padding:12px 16px;
     margin-bottom:18px;
-    background:#f6f8fa;
-    border:1px solid #d0d7de;
-    border-radius:12px;
-    box-shadow:0 1px 2px rgba(0,0,0,.04);
+    background:var(--muted);
+    border:1px solid var(--border);
+    border-radius:10px;
   }
 
   .load-btn {
-    padding:8px 20px;
+    padding:10px 18px;
     border:none;
     border-radius:8px;
     cursor:pointer;
     font-size:13px;
     font-weight:700;
-    background:#0969da;
+    background:var(--blue);
     color:#fff;
-    transition:all .15s;
+    transition:.15s;
   }
 
-  .load-btn:hover:not(:disabled) {
-    opacity:.92;
-    transform:translateY(-1px);
-  }
-
-  .load-btn:disabled {
-    opacity:.45;
-    cursor:not-allowed;
-  }
+  .load-btn:hover { opacity:.92; }
+  .load-btn:disabled { opacity:.45; cursor:not-allowed; }
 
   .prog-wrap {
     flex:1;
-    min-width:120px;
+    min-width:100px;
     height:6px;
     background:#d8dee4;
     border-radius:999px;
@@ -64,311 +71,331 @@
   .prog-bar {
     height:100%;
     width:0%;
-    background:#0969da;
+    background:var(--blue);
     border-radius:999px;
     transition:width .25s;
   }
 
   .status-txt {
     font-size:12px;
-    color:#57606a;
+    color:var(--sub);
     white-space:nowrap;
   }
 
   .err-box {
-    color:#cf222e;
+    color:var(--red);
     background:#fff8f8;
-    border:1px solid #ffcecb;
-    border-radius:12px;
+    border:1px solid #ffd8d3;
+    border-radius:10px;
     padding:14px 16px;
     font-size:13px;
     margin-bottom:16px;
   }
 
-  .layout {
+  .grid {
     display:grid;
-    grid-template-columns: 380px 1fr;
-    gap:18px;
+    grid-template-columns:420px 1fr;
+    gap:20px;
     align-items:start;
   }
 
-  @media (max-width: 1100px) {
-    .layout {
+  @media (max-width: 1100px){
+    .grid{
       grid-template-columns:1fr;
     }
   }
 
-  .card {
-    background:#fff;
-    border:1px solid #d0d7de;
-    border-radius:14px;
-    box-shadow:0 2px 8px rgba(0,0,0,.04);
-    overflow:hidden;
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
   }
 
-  .card-header {
-    padding:16px 18px;
-    border-bottom:1px solid #d8dee4;
-    background:#f6f8fa;
-  }
-
-  .card-title {
-    font-size:15px;
-    font-weight:700;
-    color:#24292f;
-  }
-
-  .card-subtitle {
-    font-size:12px;
-    color:#57606a;
-    margin-top:4px;
-  }
-
-  .card-body {
-    padding:18px;
-  }
-
-  .invoice-preview {
+  .card-header{
+    padding:18px 20px;
+    border-bottom:1px solid var(--border);
     display:flex;
-    flex-direction:column;
-    gap:18px;
-  }
-
-  .field-group {
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
-
-  .field-label {
-    font-size:12px;
-    font-weight:700;
-    color:#57606a;
-    text-transform:uppercase;
-    letter-spacing:.04em;
-  }
-
-  .customer-row {
-    display:flex;
+    justify-content:space-between;
     align-items:center;
     gap:10px;
   }
 
-  .customer-select {
-    flex:1;
-    min-width:0;
-    height:42px;
-    border:1px solid #d0d7de;
-    border-radius:10px;
-    padding:0 12px;
-    font-size:14px;
-    background:#fff;
-    color:#24292f;
+  .card-title{
+    font-size:18px;
+    font-weight:700;
   }
 
-  .customer-select:focus {
+  .card-sub{
+    margin-top:4px;
+    font-size:12px;
+    color:var(--sub);
+  }
+
+  .card-body{
+    padding:20px;
+  }
+
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-bottom:20px;
+  }
+
+  .stat{
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px;
+    background:#fbfcfd;
+  }
+
+  .stat-label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    color:var(--sub);
+    margin-bottom:8px;
+  }
+
+  .stat-value{
+    font-size:24px;
+    font-weight:700;
+  }
+
+  form{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .field-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+
+  @media (max-width:700px){
+    .field-grid{
+      grid-template-columns:1fr;
+    }
+  }
+
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+
+  label{
+    font-size:13px;
+    font-weight:600;
+    color:var(--text);
+  }
+
+  input,
+  textarea,
+  select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:#fff;
+    color:var(--text);
+    font-size:14px;
     outline:none;
-    border-color:#0969da;
+    transition:border-color .15s, box-shadow .15s;
+  }
+
+  textarea{
+    resize:vertical;
+    min-height:90px;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus{
+    border-color:var(--blue2);
     box-shadow:0 0 0 3px rgba(9,105,218,.12);
   }
 
-  .add-btn {
-    height:42px;
-    padding:0 14px;
+  .checkbox-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 0;
+  }
+
+  .checkbox-row input{
+    width:auto;
+  }
+
+  .btn-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:4px;
+  }
+
+  .btn{
     border:none;
-    border-radius:10px;
-    background:#2da44e;
-    color:#fff;
-    font-size:13px;
-    font-weight:700;
+    border-radius:9px;
     cursor:pointer;
-    white-space:nowrap;
-    transition:all .15s;
+    padding:11px 16px;
+    font-size:14px;
+    font-weight:700;
+    transition:.15s;
   }
 
-  .add-btn:hover {
+  .btn-primary{
+    background:var(--blue);
+    color:#fff;
+  }
+
+  .btn-primary:hover{
     opacity:.92;
-    transform:translateY(-1px);
   }
 
-  .invoice-box {
-    background:#f6f8fa;
-    border:1px solid #d8dee4;
-    border-radius:12px;
-    padding:14px;
+  .btn-secondary{
+    background:#f3f4f6;
+    color:var(--text);
+    border:1px solid var(--border);
   }
 
-  .invoice-row {
+  .btn-secondary:hover{
+    background:#eceff3;
+  }
+
+  .msg{
+    margin-top:16px;
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:13px;
+    display:none;
+  }
+
+  .msg.success{
+    display:block;
+    background:#f0fff4;
+    color:var(--green);
+    border:1px solid #b7ebc6;
+  }
+
+  .msg.error{
+    display:block;
+    background:#fff5f5;
+    color:var(--red);
+    border:1px solid #ffd8d3;
+  }
+
+  .toolbar{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:8px 0;
-    border-bottom:1px solid #eaeef2;
-    font-size:13px;
-  }
-
-  .invoice-row:last-child {
-    border-bottom:none;
-  }
-
-  .invoice-label {
-    color:#57606a;
-    font-weight:600;
-  }
-
-  .invoice-value {
-    color:#24292f;
-    font-weight:700;
-  }
-
-  .stats-grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-    gap:12px;
-    margin-bottom:18px;
-  }
-
-  .stat {
-    background:#f6f8fa;
-    border:1px solid #d8dee4;
-    border-radius:12px;
-    padding:14px;
-  }
-
-  .stat-label {
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.04em;
-    color:#57606a;
-    font-weight:700;
-    margin-bottom:6px;
-  }
-
-  .stat-value {
-    font-size:22px;
-    font-weight:800;
-    color:#0969da;
-  }
-
-  .search-wrap {
+    gap:10px;
     margin-bottom:16px;
+    flex-wrap:wrap;
   }
 
-  .search-input {
-    width:100%;
-    height:42px;
-    border:1px solid #d0d7de;
-    border-radius:10px;
-    padding:0 14px;
-    font-size:14px;
-    background:#fff;
+  .search{
+    flex:1;
+    min-width:240px;
   }
 
-  .search-input:focus {
-    outline:none;
-    border-color:#0969da;
-    box-shadow:0 0 0 3px rgba(9,105,218,.12);
-  }
-
-  .table-wrap {
-    border:1px solid #d8dee4;
+  .customer-table-wrap{
+    overflow:auto;
+    border:1px solid var(--border);
     border-radius:12px;
-    overflow:hidden;
-    background:#fff;
   }
 
-  table {
+  table{
     width:100%;
     border-collapse:collapse;
+    min-width:900px;
   }
 
-  thead {
+  thead{
     background:#f6f8fa;
+    position:sticky;
+    top:0;
+    z-index:1;
   }
 
-  th {
+  th, td{
+    padding:12px 14px;
+    border-bottom:1px solid #edf0f2;
     text-align:left;
-    padding:12px 14px;
-    font-size:12px;
-    font-weight:800;
-    color:#57606a;
-    border-bottom:1px solid #d8dee4;
-    text-transform:uppercase;
-    letter-spacing:.03em;
-  }
-
-  td {
-    padding:12px 14px;
-    font-size:13px;
-    border-bottom:1px solid #eaeef2;
     vertical-align:top;
+    font-size:13px;
   }
 
-  tbody tr:hover {
-    background:#f6f8fa;
+  th{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+    color:var(--sub);
   }
 
-  tbody tr:last-child td {
-    border-bottom:none;
+  tbody tr:hover{
+    background:#fafcff;
   }
 
-  .customer-name {
-    font-weight:700;
-    color:#24292f;
-  }
-
-  .muted {
-    color:#6e7781;
-  }
-
-  .pill {
+  .pill{
     display:inline-flex;
     align-items:center;
-    gap:6px;
     padding:4px 8px;
     border-radius:999px;
     font-size:11px;
     font-weight:700;
-    background:#dafbe1;
-    color:#116329;
   }
 
-  .pill.inactive {
-    background:#ffebe9;
-    color:#cf222e;
+  .pill.active{
+    background:#dcfce7;
+    color:#166534;
   }
 
-  .empty-state {
-    padding:60px 20px;
-    text-align:center;
-    color:#57606a;
+  .pill.inactive{
+    background:#fee2e2;
+    color:#991b1b;
   }
 
-  .empty-icon {
-    font-size:40px;
-    margin-bottom:12px;
-  }
-
-  .helper-box {
-    margin-top:16px;
-    padding:14px;
-    border-radius:12px;
-    background:#fff8c5;
-    border:1px solid #eac54f;
-    color:#6e4f00;
-    font-size:13px;
-    line-height:1.5;
-  }
-
-  .code-block {
-    margin-top:10px;
-    background:#24292f;
-    color:#f6f8fa;
-    border-radius:10px;
-    padding:12px;
-    overflow:auto;
+  .small{
     font-size:12px;
-    font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
+    color:var(--sub);
+  }
+
+  .empty{
+    padding:40px 20px;
+    text-align:center;
+    color:var(--sub);
+  }
+
+  .loading-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(255,255,255,.7);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:999;
+    backdrop-filter:blur(2px);
+  }
+
+  .loading-overlay.show{
+    display:flex;
+  }
+
+  .spinner{
+    width:42px;
+    height:42px;
+    border:4px solid #d0d7de;
+    border-top-color:var(--blue);
+    border-radius:50%;
+    animation:spin .7s linear infinite;
+  }
+
+  @keyframes spin{
+    to{ transform:rotate(360deg); }
   }
 </style>
 
@@ -378,13 +405,15 @@
 
 <div class="ctrl-bar">
   <button class="load-btn" id="load-btn" onclick="loadAllRecords()">⬇ Load All Records</button>
-  <div class="prog-wrap">
-    <div class="prog-bar" id="prog-bar"></div>
-  </div>
-  <span class="status-txt" id="status-txt">Press Load to fetch data from Manager</span>
+  <div class="prog-wrap"><div class="prog-bar" id="prog-bar"></div></div>
+  <span class="status-txt" id="status-txt">Press Load to fetch customers from Manager.io</span>
 </div>
 
 <div id="app"></div>
+
+<div class="loading-overlay" id="loading-overlay">
+  <div class="spinner"></div>
+</div>
 
 <script>
 /* ══════════════════════════════════
@@ -444,26 +473,132 @@ async function getCustomerBatch(onProgress) {
   return allItems;
 }
 
+let CUSTOMER_CACHE = [];
+
 /* ══════════════════════════════════
-   Format helpers
+   Utility Helpers
 ══════════════════════════════════ */
-function safe(v, fallback = '—') {
-  return v ?? fallback;
+function escapeHtml(value){
+  return String(value ?? '')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;');
 }
 
-function formatMoney(value) {
-  const num = Number(value || 0);
-  return '$' + num.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+function fmtCurrency(value){
+  const num = Number(value ?? 0);
+  return '$' + num.toLocaleString(undefined,{
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
   });
 }
 
-function escapeHtml(str) {
-  return String(str || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+function setMessage(type, text){
+  const box = document.getElementById('form-message');
+  if(!box) return;
+
+  box.className = 'msg ' + type;
+  box.innerHTML = text;
+}
+
+function clearMessage(){
+  const box = document.getElementById('form-message');
+  if(!box) return;
+
+  box.className = 'msg';
+  box.innerHTML = '';
+}
+
+function toggleLoading(show){
+  document.getElementById('loading-overlay').classList.toggle('show', show);
+}
+
+/* ══════════════════════════════════
+   Create Customer (WRITE API)
+══════════════════════════════════ */
+async function createCustomer(event){
+  event.preventDefault();
+
+  clearMessage();
+
+  const submitBtn = document.getElementById('submit-btn');
+
+  try{
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving...';
+
+    toggleLoading(true);
+
+    const payload = {
+      item: {
+        name: document.getElementById('name').value.trim(),
+        code: document.getElementById('code').value.trim() || null,
+        email: document.getElementById('email').value.trim() || null,
+        billingAddress: document.getElementById('billingAddress').value.trim() || '',
+        deliveryAddress: document.getElementById('deliveryAddress').value.trim() || '',
+        creditLimit: Number(document.getElementById('creditLimit').value || 0),
+        inactive: document.getElementById('inactive').checked,
+        hasDefaultBillingAddress: !!document.getElementById('billingAddress').value.trim(),
+        hasDefaultDeliveryAddress: !!document.getElementById('deliveryAddress').value.trim(),
+        defaultBillingAddress: document.getElementById('billingAddress').value.trim() || '',
+        defaultDeliveryAddress: document.getElementById('deliveryAddress').value.trim() || '',
+        hasDefaultDueDateDays: false,
+        defaultDueDateDays: null,
+        hasDefaultHourlyRate: false,
+        defaultHourlyRate: 0
+      }
+    };
+
+    if(!payload.item.name){
+      throw new Error('Customer name is required.');
+    }
+
+    const response = await postMessageWithResponse({
+      type: 'api-request',
+      method: 'POST',
+      path: '/api4/customer-batch',
+      body: payload
+    });
+
+    setMessage(
+      'success',
+      '✓ Customer created successfully. Reloading customer list...'
+    );
+
+    document.getElementById('customer-form').reset();
+
+    setTimeout(() => {
+      loadAllRecords();
+    }, 700);
+
+    console.log('Create response:', response);
+
+  }catch(err){
+    console.error(err);
+
+    setMessage(
+      'error',
+      '⚠ Unable to create customer.<br><small>' + escapeHtml(err.message || 'Unknown error') + '</small>'
+    );
+  }finally{
+    submitBtn.disabled = false;
+    submitBtn.textContent = '➕ Create Customer';
+    toggleLoading(false);
+  }
+}
+
+/* ══════════════════════════════════
+   Search/filter table
+══════════════════════════════════ */
+function filterCustomers(){
+  const q = document.getElementById('search-box')?.value?.toLowerCase() ?? '';
+  const rows = document.querySelectorAll('.customer-row');
+
+  rows.forEach(row => {
+    const txt = row.textContent.toLowerCase();
+    row.style.display = txt.includes(q) ? '' : 'none';
+  });
 }
 
 /* ══════════════════════════════════
@@ -486,13 +621,15 @@ async function loadAllRecords() {
         ? `Page ${page} · ${loaded.toLocaleString()} / ${total.toLocaleString()} records`
         : `Page ${page} · ${loaded.toLocaleString()} records loaded…`;
 
-      if (total && total > 0) {
+      if (total) {
         bar.style.width = Math.min(95, Math.round(loaded / total * 100)) + '%';
       }
     });
 
+    CUSTOMER_CACHE = items;
+
     bar.style.width = '100%';
-    status.textContent = `✓ ${items.length.toLocaleString()} customer records loaded`;
+    status.textContent = `✓ ${items.length.toLocaleString()} records loaded`;
 
     btn.textContent = '↺ Reload';
     btn.disabled = false;
@@ -507,350 +644,275 @@ async function loadAllRecords() {
 
     app.innerHTML = `
       <div class="err-box">
-        <strong>⚠ Unable to load customer records</strong><br><br>
-        ${escapeHtml(err.message)}<br><br>
-        <small>Make sure this extension is running inside Manager.io and the API is enabled.</small>
+        ⚠ ${escapeHtml(err.message)}
+        <br><br>
+        <small>Make sure this extension is running inside Manager.io.</small>
       </div>
     `;
   }
 }
 
 /* ══════════════════════════════════
-   Main renderer
+   Render UI
 ══════════════════════════════════ */
 function render(items) {
+
   const app = document.getElementById('app');
 
-  if (!Array.isArray(items) || items.length === 0) {
-    app.innerHTML = `
-      <div class="card">
-        <div class="empty-state">
-          <div class="empty-icon">📭</div>
-          <h2 style="margin-bottom:8px;">No Customers Found</h2>
-          <p>No customer records were returned from <code>/api4/customer-batch</code>.</p>
-        </div>
-      </div>
+  const totalCustomers = items.length;
+
+  const activeCustomers = items.filter(i => !i?.item?.inactive).length;
+
+  const totalCredit = items.reduce((sum, i) => {
+    return sum + Number(i?.item?.creditLimit ?? 0);
+  }, 0);
+
+  const rows = items.map((entry, index) => {
+
+    const item = entry?.item ?? {};
+
+    const name = item?.name ?? 'Unnamed';
+    const email = item?.email ?? '—';
+    const code = item?.code ?? '—';
+    const billing = item?.billingAddress ?? '—';
+    const creditLimit = item?.creditLimit ?? 0;
+    const inactive = item?.inactive ?? false;
+
+    return `
+      <tr class="customer-row">
+        <td>${index + 1}</td>
+        <td>
+          <strong>${escapeHtml(name)}</strong>
+          <div class="small">${escapeHtml(item?.uniqueName ?? '')}</div>
+        </td>
+        <td>${escapeHtml(code)}</td>
+        <td>${escapeHtml(email)}</td>
+        <td>${escapeHtml(billing)}</td>
+        <td>${fmtCurrency(creditLimit)}</td>
+        <td>
+          ${
+            inactive
+              ? '<span class="pill inactive">Inactive</span>'
+              : '<span class="pill active">Active</span>'
+          }
+        </td>
+      </tr>
     `;
-    return;
-  }
-
-  const customers = items
-    .map(i => ({
-      key: i?.key,
-      name: i?.item?.name ?? 'Unnamed Customer',
-      code: i?.item?.code,
-      email: i?.item?.email,
-      billingAddress: i?.item?.billingAddress,
-      deliveryAddress: i?.item?.deliveryAddress,
-      currency: i?.item?.currency,
-      creditLimit: i?.item?.creditLimit,
-      inactive: i?.item?.inactive,
-      timestamp: i?.item?.timestamp,
-      href: i?._links?.self?.href
-    }))
-    .sort((a, b) => String(a.name).localeCompare(String(b.name)));
-
-  const totalCustomers = customers.length;
-  const activeCustomers = customers.filter(c => !c.inactive).length;
-  const inactiveCustomers = customers.filter(c => c.inactive).length;
-  const customersWithEmail = customers.filter(c => c.email).length;
-
-  const optionsHtml = customers.map(c => `
-    <option value="${escapeHtml(c.name)}">
-      ${escapeHtml(c.name)}${c.code ? ' (' + escapeHtml(c.code) + ')' : ''}
-    </option>
-  `).join('');
-
-  const rowsHtml = customers.map(c => `
-    <tr>
-      <td>
-        <div class="customer-name">${escapeHtml(c.name)}</div>
-        <div class="muted" style="margin-top:4px;font-size:12px;">
-          ${c.code ? 'Code: ' + escapeHtml(c.code) : 'No customer code'}
-        </div>
-      </td>
-
-      <td>
-        ${c.email
-          ? `<a href="mailto:${escapeHtml(c.email)}">${escapeHtml(c.email)}</a>`
-          : '<span class="muted">—</span>'
-        }
-      </td>
-
-      <td>
-        ${c.billingAddress
-          ? escapeHtml(c.billingAddress)
-          : '<span class="muted">—</span>'
-        }
-      </td>
-
-      <td>
-        ${formatMoney(c.creditLimit)}
-      </td>
-
-      <td>
-        <span class="pill ${c.inactive ? 'inactive' : ''}">
-          ${c.inactive ? 'Inactive' : 'Active'}
-        </span>
-      </td>
-    </tr>
-  `).join('');
+  }).join('');
 
   app.innerHTML = `
-    <div class="layout">
+    <div class="grid">
 
-      <!-- LEFT COLUMN -->
+      <!-- Left Panel -->
       <div class="card">
 
         <div class="card-header">
-          <div class="card-title">Invoice Form Integration Preview</div>
-          <div class="card-subtitle">
-            Demonstrates the customer quick-add button positioned to the right of the customer selector
+          <div>
+            <div class="card-title">New Customer</div>
+            <div class="card-sub">
+              Create customers directly from the sales invoice workflow
+            </div>
           </div>
         </div>
 
         <div class="card-body">
 
-          <div class="invoice-preview">
+          <form id="customer-form">
 
-            <div class="field-group">
-              <div class="field-label">Choose Customer</div>
-
-              <div class="customer-row">
-
-                <select class="customer-select" id="customer-select">
-                  <option value="">Select customer...</option>
-                  ${optionsHtml}
-                </select>
-
-                <button class="add-btn" id="quick-add-btn">
-                  + Add Customer
-                </button>
-
-              </div>
-            </div>
-
-            <div class="invoice-box">
-
-              <div class="invoice-row">
-                <span class="invoice-label">Invoice Number</span>
-                <span class="invoice-value">INV-1001</span>
-              </div>
-
-              <div class="invoice-row">
-                <span class="invoice-label">Customer</span>
-                <span class="invoice-value" id="selected-customer">
-                  No customer selected
-                </span>
-              </div>
-
-              <div class="invoice-row">
-                <span class="invoice-label">Invoice Date</span>
-                <span class="invoice-value">
-                  ${new Date().toLocaleDateString()}
-                </span>
-              </div>
-
-              <div class="invoice-row">
-                <span class="invoice-label">Records Loaded</span>
-                <span class="invoice-value">
-                  ${totalCustomers.toLocaleString()}
-                </span>
-              </div>
-
-            </div>
-
-            <div class="helper-box">
-              <strong>Read-Only Extension Notice</strong><br>
-              This extension follows the Manager.io rule requiring GET-only operations.
-              The "+ Add Customer" button demonstrates the UI placement and integration point,
-              but does not perform write operations because POST/PUT requests are not allowed in this extension scope.
-            </div>
-
-            <div class="code-block">
-Button Placement Target:
-
-[ Choose Customer Dropdown ]   [ + Add Customer ]
-
-Recommended integration selector:
-.sales-invoice-form select[name="customer"]
-            </div>
-
-          </div>
-
-        </div>
-      </div>
-
-      <!-- RIGHT COLUMN -->
-      <div>
-
-        <div class="stats-grid">
-
-          <div class="stat">
-            <div class="stat-label">Total Customers</div>
-            <div class="stat-value">${totalCustomers.toLocaleString()}</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-label">Active</div>
-            <div class="stat-value">${activeCustomers.toLocaleString()}</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-label">Inactive</div>
-            <div class="stat-value">${inactiveCustomers.toLocaleString()}</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-label">With Email</div>
-            <div class="stat-value">${customersWithEmail.toLocaleString()}</div>
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="card-header">
-            <div class="card-title">Loaded Customer Directory</div>
-            <div class="card-subtitle">
-              Customer data loaded from <code>/api4/customer-batch</code>
-            </div>
-          </div>
-
-          <div class="card-body">
-
-            <div class="search-wrap">
+            <div class="field">
+              <label for="name">Customer Name *</label>
               <input
+                id="name"
                 type="text"
-                class="search-input"
-                id="search-input"
-                placeholder="Search customers by name, email, code, or address..."
+                placeholder="Enter customer name"
+                required
               >
             </div>
 
-            <div class="table-wrap">
+            <div class="field-grid">
 
-              <table>
+              <div class="field">
+                <label for="code">Customer Code</label>
+                <input
+                  id="code"
+                  type="text"
+                  placeholder="Optional code"
+                >
+              </div>
 
-                <thead>
-                  <tr>
-                    <th>Customer</th>
-                    <th>Email</th>
-                    <th>Billing Address</th>
-                    <th>Credit Limit</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-
-                <tbody id="customer-tbody">
-                  ${rowsHtml}
-                </tbody>
-
-              </table>
+              <div class="field">
+                <label for="email">Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="customer@email.com"
+                >
+              </div>
 
             </div>
 
+            <div class="field">
+              <label for="billingAddress">Billing Address</label>
+              <textarea
+                id="billingAddress"
+                placeholder="Billing address"
+              ></textarea>
+
+```
+        </div>
+
+        <div class="field">
+          <label for="deliveryAddress">Delivery Address</label>
+          <textarea
+            id="deliveryAddress"
+            placeholder="Delivery address"
+          ></textarea>
+        </div>
+
+        <div class="field">
+          <label for="creditLimit">Credit Limit</label>
+          <input
+            id="creditLimit"
+            type="number"
+            step="0.01"
+            min="0"
+            value="0"
+          >
+        </div>
+
+        <div class="checkbox-row">
+          <input id="inactive" type="checkbox">
+          <label for="inactive">Mark customer as inactive</label>
+        </div>
+
+        <div class="btn-row">
+          <button
+            id="submit-btn"
+            type="submit"
+            class="btn btn-primary"
+          >
+            ➕ Create Customer
+          </button>
+
+          <button
+            type="reset"
+            class="btn btn-secondary"
+            onclick="clearMessage()"
+          >
+            Reset
+          </button>
+        </div>
+
+        <div id="form-message" class="msg"></div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <!-- Right Panel -->
+  <div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Total Customers</div>
+        <div class="stat-value">
+          ${totalCustomers.toLocaleString()}
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Active Customers</div>
+        <div class="stat-value">
+          ${activeCustomers.toLocaleString()}
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Combined Credit Limit</div>
+        <div class="stat-value" style="font-size:18px">
+          ${fmtCurrency(totalCredit)}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-header">
+        <div>
+          <div class="card-title">Customer Directory</div>
+          <div class="card-sub">
+            Live customer records loaded from /api4/customer-batch
           </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <div class="toolbar">
+
+          <input
+            id="search-box"
+            class="search"
+            type="text"
+            placeholder="Search customers..."
+            oninput="filterCustomers()"
+          >
 
         </div>
+
+        ${
+          items.length === 0
+            ? `
+              <div class="empty">
+                No customer records found.
+              </div>
+            `
+            : `
+              <div class="customer-table-wrap">
+
+                <table>
+
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Code</th>
+                      <th>Email</th>
+                      <th>Billing Address</th>
+                      <th>Credit Limit</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    ${rows}
+                  </tbody>
+
+                </table>
+
+              </div>
+            `
+        }
 
       </div>
 
     </div>
-  `;
 
-  /* ══════════════════════════════════
-     Invoice selector interaction
-  ══════════════════════════════════ */
-  const select = document.getElementById('customer-select');
-  const selectedCustomer = document.getElementById('selected-customer');
+  </div>
 
-  select?.addEventListener('change', () => {
-    selectedCustomer.textContent = select.value || 'No customer selected';
-  });
+</div>
+```
 
-  /* ══════════════════════════════════
-     Quick Add button demo
-  ══════════════════════════════════ */
-  const addBtn = document.getElementById('quick-add-btn');
+`;
 
-  addBtn?.addEventListener('click', () => {
-    alert(
-      'Read-only extension mode enabled.\\n\\n' +
-      'This button demonstrates the correct UI placement for adding customers directly from the invoice form.\\n\\n' +
-      'Manager.io extension rules for this build allow GET requests only, so customer creation is intentionally disabled.'
-    );
-  });
-
-  /* ══════════════════════════════════
-     Client-side filtering
-  ══════════════════════════════════ */
-  const searchInput = document.getElementById('search-input');
-  const tbody = document.getElementById('customer-tbody');
-
-  searchInput?.addEventListener('input', () => {
-    const q = searchInput.value.trim().toLowerCase();
-
-    const filtered = customers.filter(c => {
-      return [
-        c.name,
-        c.code,
-        c.email,
-        c.billingAddress,
-        c.deliveryAddress
-      ]
-      .filter(Boolean)
-      .join(' ')
-      .toLowerCase()
-      .includes(q);
-    });
-
-    if (filtered.length === 0) {
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="5" style="text-align:center;padding:30px;color:#57606a;">
-            No matching customers found
-          </td>
-        </tr>
-      `;
-      return;
-    }
-
-    tbody.innerHTML = filtered.map(c => `
-      <tr>
-        <td>
-          <div class="customer-name">${escapeHtml(c.name)}</div>
-          <div class="muted" style="margin-top:4px;font-size:12px;">
-            ${c.code ? 'Code: ' + escapeHtml(c.code) : 'No customer code'}
-          </div>
-        </td>
-
-        <td>
-          ${c.email
-            ? `<a href="mailto:${escapeHtml(c.email)}">${escapeHtml(c.email)}</a>`
-            : '<span class="muted">—</span>'
-          }
-        </td>
-
-        <td>
-          ${c.billingAddress
-            ? escapeHtml(c.billingAddress)
-            : '<span class="muted">—</span>'
-          }
-        </td>
-
-        <td>${formatMoney(c.creditLimit)}</td>
-
-        <td>
-          <span class="pill ${c.inactive ? 'inactive' : ''}">
-            ${c.inactive ? 'Inactive' : 'Active'}
-          </span>
-        </td>
-      </tr>
-    `).join('');
-  });
-}
-</script>
+document
+.getElementById('customer-form')
+.addEventListener('submit', createCustomer);
+} </script>
 
 </body>
 </html>
