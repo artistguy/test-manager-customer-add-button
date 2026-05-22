@@ -4,189 +4,168 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Create Customer Form</title>
+<title>Form to create or edit a record with validation</title>
+
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:system-ui,sans-serif; background:#ffffff; color:#24292f; min-height:100vh; padding:20px; }
+  body {
+    font-family: system-ui, sans-serif;
+    background:#ffffff;
+    color:#24292f;
+    min-height:100vh;
+    padding:20px;
+  }
 
-.ctrl-bar {
-display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-padding:12px 16px; margin-bottom:18px;
-background:#f6f8fa; border:1px solid #d0d7de; border-radius:10px;
-}
-.load-btn {
-padding:8px 20px; border:none; border-radius:7px; cursor:pointer;
-font-size:13px; font-weight:700; background:#0969da; color:#fff;
-}
-.load-btn:disabled { opacity:.45; cursor:not-allowed; }
+  .ctrl-bar {
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    padding:12px 16px; margin-bottom:18px;
+    background:#f6f8fa; border:1px solid #d0d7de; border-radius:10px;
+  }
+  .load-btn {
+    padding:8px 20px; border:none; border-radius:7px; cursor:pointer;
+    font-size:13px; font-weight:700; background:#0969da; color:#fff;
+  }
+  .load-btn:disabled { opacity:.45; cursor:not-allowed; }
 
-.prog-wrap { flex:1; min-width:120px; height:6px; background:#d0d7de; border-radius:4px; overflow:hidden; }
-.prog-bar  { height:100%; width:0%; background:#0969da; transition:width .25s; }
+  .prog-wrap { flex:1; min-width:120px; height:5px; background:#d0d7de; border-radius:3px; overflow:hidden; }
+  .prog-bar { height:100%; width:0%; background:#0969da; transition:width .25s; }
 
-.status-txt { font-size:12px; color:#57606a; white-space:nowrap; }
+  .status-txt { font-size:12px; color:#57606a; white-space:nowrap; }
 
-.grid {
-display:grid;
-grid-template-columns: 360px 1fr;
-gap:16px;
-}
+  .err-box {
+    color:#cf222e; background:#fff5f5;
+    border:1px solid #ffd0d0;
+    border-radius:8px;
+    padding:12px;
+    margin-bottom:12px;
+  }
 
-.card {
-border:1px solid #d0d7de;
-border-radius:12px;
-padding:14px;
-background:#fff;
-}
+  /* Layout */
+  .layout {
+    display:grid;
+    grid-template-columns: 320px 1fr;
+    gap:16px;
+  }
 
-.card h3 {
-font-size:14px;
-margin-bottom:10px;
-color:#24292f;
-}
+  .panel {
+    border:1px solid #d0d7de;
+    border-radius:10px;
+    background:#fff;
+    overflow:hidden;
+  }
 
-label {
-font-size:12px;
-color:#57606a;
-display:block;
-margin-top:10px;
-margin-bottom:4px;
-}
+  .panel-header {
+    padding:10px 12px;
+    background:#f6f8fa;
+    border-bottom:1px solid #d0d7de;
+    font-size:13px;
+    font-weight:700;
+  }
 
-input, textarea, select {
-width:100%;
-padding:8px 10px;
-border:1px solid #d0d7de;
-border-radius:8px;
-font-size:13px;
-outline:none;
-}
+  /* List */
+  .search {
+    width:100%;
+    padding:10px;
+    border:none;
+    border-bottom:1px solid #d0d7de;
+    outline:none;
+  }
 
-textarea { min-height:70px; resize:vertical; }
+  .list {
+    max-height:65vh;
+    overflow:auto;
+  }
 
-.row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .item {
+    padding:10px 12px;
+    border-bottom:1px solid #f0f0f0;
+    cursor:pointer;
+  }
+  .item:hover { background:#f6f8fa; }
+  .item.active { background:#eaf2ff; }
 
-.btn {
-margin-top:12px;
-padding:10px 12px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:700;
-font-size:13px;
-background:#1a7f37;
-color:#fff;
-}
+  .muted { color:#57606a; font-size:12px; }
 
-.btn.secondary {
-background:#0969da;
-}
+  /* Form */
+  .form {
+    padding:12px;
+    display:grid;
+    gap:10px;
+  }
 
-.table {
-width:100%;
-border-collapse:collapse;
-font-size:13px;
-}
+  .row {
+    display:grid;
+    grid-template-columns: 160px 1fr;
+    gap:10px;
+    align-items:center;
+  }
 
-.table th, .table td {
-border-bottom:1px solid #eaeef2;
-padding:8px;
-text-align:left;
-}
+  label { font-size:13px; color:#24292f; }
 
-.pill {
-display:inline-block;
-padding:2px 8px;
-border-radius:999px;
-font-size:11px;
-background:#f6f8fa;
-border:1px solid #d0d7de;
-}
+  input, textarea {
+    width:100%;
+    padding:8px 10px;
+    border:1px solid #d0d7de;
+    border-radius:6px;
+    font-size:13px;
+    outline:none;
+  }
 
-.err-box {
-color:#cf222e;
-background:#fff5f5;
-border:1px solid #ffd0d0;
-border-radius:8px;
-padding:12px;
-font-size:13px;
-}
+  input:focus, textarea:focus {
+    border-color:#0969da;
+  }
 
-.muted { color:#57606a; font-size:12px; }
+  textarea { min-height:70px; resize:vertical; }
 
-.list-wrap {
-max-height:70vh;
-overflow:auto;
-} </style>
+  .actions {
+    display:flex;
+    gap:10px;
+    margin-top:8px;
+  }
+
+  .btn {
+    padding:8px 12px;
+    border-radius:7px;
+    border:1px solid #d0d7de;
+    background:#f6f8fa;
+    cursor:pointer;
+    font-weight:600;
+    font-size:13px;
+  }
+
+  .btn.primary {
+    background:#0969da;
+    color:#fff;
+    border:none;
+  }
+
+  .error {
+    color:#cf222e;
+    font-size:12px;
+  }
+
+  .empty {
+    padding:20px;
+    color:#57606a;
+    text-align:center;
+  }
+</style>
 
 </head>
 
 <body>
 
 <div class="ctrl-bar">
-  <button class="load-btn" id="load-btn" onclick="loadAllRecords()">⬇ Load Customers</button>
+  <button class="load-btn" id="load-btn" onclick="loadAllRecords()">⬇ Load All Records</button>
   <div class="prog-wrap"><div class="prog-bar" id="prog-bar"></div></div>
-  <span class="status-txt" id="status-txt">Ready</span>
+  <span class="status-txt" id="status-txt">Press Load to fetch data from Manager</span>
 </div>
 
-<div class="grid">
-
-  <!-- FORM -->
-
-  <div class="card">
-    <h3>➕ New Customer</h3>
-
-```
-<label>Name *</label>
-<input id="name" placeholder="Customer name">
-
-<label>Email</label>
-<input id="email" placeholder="email@example.com">
-
-<div class="row">
-  <div>
-    <label>Credit Limit</label>
-    <input id="creditLimit" type="number" value="0">
-  </div>
-  <div>
-    <label>Inactive</label>
-    <select id="inactive">
-      <option value="false">Active</option>
-      <option value="true">Inactive</option>
-    </select>
-  </div>
-</div>
-
-<label>Billing Address</label>
-<textarea id="billingAddress"></textarea>
-
-<label>Delivery Address</label>
-<textarea id="deliveryAddress"></textarea>
-
-<button class="btn" onclick="createCustomer()">Create Customer</button>
-
-<div id="form-status" class="muted" style="margin-top:10px;"></div>
-```
-
-  </div>
-
-  <!-- LIST -->
-
-  <div class="card list-wrap">
-    <h3>📋 Customers</h3>
-    <input id="search" placeholder="Search..." oninput="render(window.__items || [])" style="margin-bottom:10px;">
-
-```
-<div id="list"></div>
-```
-
-  </div>
-
-</div>
+<div id="app"></div>
 
 <script>
-
 /* ══════════════════════════════════
-   DO NOT MODIFY
+   postMessage helper — DO NOT MODIFY
 ══════════════════════════════════ */
 function postMessageWithResponse(message) {
   return new Promise((resolve, reject) => {
@@ -195,6 +174,7 @@ function postMessageWithResponse(message) {
       window.removeEventListener('message', handler);
       reject(new Error('Timeout — is this running inside Manager.io?'));
     }, 15000);
+
     function handler(event) {
       if (event.data?.type?.endsWith('-response') && event.data?.requestId === requestId) {
         clearTimeout(timer);
@@ -202,13 +182,14 @@ function postMessageWithResponse(message) {
         resolve(event.data.body);
       }
     }
+
     window.addEventListener('message', handler);
     window.parent.postMessage({ ...message, requestId }, '*');
   });
 }
 
 /* ══════════════════════════════════
-   PAGINATION LOOP (UNCHANGED)
+   pagination — DO NOT MODIFY
 ══════════════════════════════════ */
 async function getCustomerBatch(onProgress) {
   const allItems = [];
@@ -241,133 +222,217 @@ async function getCustomerBatch(onProgress) {
   return allItems;
 }
 
-/* ══════════════════════════════════
-   LOAD
-══════════════════════════════════ */
+/* ══════════════════════════════════ */
+let state = {
+  items: [],
+  selectedIndex: null,
+  errors: {}
+};
+
+/* Load */
 async function loadAllRecords() {
-  const btn = document.getElementById('load-btn');
-  const bar = document.getElementById('prog-bar');
+  const btn    = document.getElementById('load-btn');
+  const bar    = document.getElementById('prog-bar');
   const status = document.getElementById('status-txt');
+  const app    = document.getElementById('app');
 
   btn.disabled = true;
-  status.textContent = "Loading...";
+  btn.textContent = 'Loading…';
+  bar.style.width = '0%';
+  app.innerHTML = '';
 
   try {
     const items = await getCustomerBatch((loaded, total, page) => {
-      status.textContent = `Page ${page} · ${loaded} loaded`;
-      if (total) bar.style.width = Math.min(95, (loaded/total)*100) + '%';
+      status.textContent = total
+        ? `Page ${page} · ${loaded.toLocaleString()} / ${total.toLocaleString()}`
+        : `Page ${page} · ${loaded.toLocaleString()} loaded…`;
+
+      if (total) bar.style.width = Math.min(95, Math.round(loaded / total * 100)) + '%';
     });
 
+    state.items = items || [];
     bar.style.width = '100%';
-    status.textContent = `Loaded ${items.length} customers`;
 
-    window.__items = items;
-    render(items);
+    status.textContent = `✓ ${state.items.length.toLocaleString()} records loaded`;
+    btn.textContent = '↺ Reload';
+    btn.disabled = false;
 
-  } catch (e) {
-    status.textContent = "Error";
-    document.getElementById('list').innerHTML =
-      `<div class="err-box">${e.message}</div>`;
+    render(state.items);
+
+  } catch (err) {
+    status.textContent = '⚠ ' + err.message;
+    btn.textContent = '↺ Retry';
+    btn.disabled = false;
+
+    app.innerHTML = `<div class="err-box">⚠ ${err.message}</div>`;
   }
-
-  btn.disabled = false;
-  btn.textContent = "↺ Reload";
 }
 
 /* ══════════════════════════════════
-   CREATE CUSTOMER (WRITE OP)
+   Validation
 ══════════════════════════════════ */
-async function createCustomer() {
-  const status = document.getElementById('form-status');
+function validate(customer) {
+  const errors = {};
 
-  const payload = {
-    item: {
-      name: document.getElementById('name').value,
-      email: document.getElementById('email').value || null,
-      creditLimit: Number(document.getElementById('creditLimit').value || 0),
-      billingAddress: document.getElementById('billingAddress').value || "",
-      deliveryAddress: document.getElementById('deliveryAddress').value || "",
-      inactive: document.getElementById('inactive').value === "true"
-    }
-  };
-
-  if (!payload.item.name) {
-    status.textContent = "Name is required";
-    return;
+  if (!customer.name?.trim()) {
+    errors.name = "Name is required";
   }
 
-  try {
-    status.textContent = "Creating...";
-
-    await postMessageWithResponse({
-      type: 'api-request',
-      method: 'POST',
-      path: '/api4/customer',
-      body: payload
-    });
-
-    status.textContent = "✓ Customer created";
-
-    // reload list
-    await loadAllRecords();
-
-  } catch (e) {
-    status.textContent = "Error: " + e.message;
+  if (customer.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)) {
+    errors.email = "Invalid email format";
   }
+
+  if (customer.creditLimit != null && customer.creditLimit < 0) {
+    errors.creditLimit = "Credit limit cannot be negative";
+  }
+
+  return errors;
 }
 
 /* ══════════════════════════════════
-   RENDER
+   Render UI
 ══════════════════════════════════ */
 function render(items) {
-  const list = document.getElementById('list');
-  const q = (document.getElementById('search')?.value || "").toLowerCase();
+  const app = document.getElementById('app');
 
   if (!items || items.length === 0) {
-    list.innerHTML = "<p class='muted'>No customers loaded</p>";
+    app.innerHTML = `<div class="empty">No customers found</div>`;
     return;
   }
 
-  const filtered = items.filter(x => {
-    const name = (x?.item?.name || "").toLowerCase();
-    return name.includes(q);
-  });
+  const selected = state.selectedIndex != null ? items[state.selectedIndex] : items[0];
+  if (state.selectedIndex == null) state.selectedIndex = 0;
 
-  if (filtered.length === 0) {
-    list.innerHTML = "<p class='muted'>No matches</p>";
-    return;
-  }
-
-  let html = `
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Credit</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
-  for (const c of filtered) {
-    const i = c?.item || {};
-    html += `
-      <tr>
-        <td>${i.name || "-"}</td>
-        <td>${i.email || "-"}</td>
-        <td>$${(i.creditLimit || 0).toLocaleString()}</td>
-        <td>${i.inactive ? '<span class="pill">Inactive</span>' : '<span class="pill">Active</span>'}</td>
-      </tr>
+  const listHtml = items.map((it, idx) => {
+    const name = it?.item?.name || 'Unnamed';
+    const code = it?.item?.code || '';
+    return `
+      <div class="item ${idx === state.selectedIndex ? 'active' : ''}"
+           onclick="selectItem(${idx})">
+        <div><b>${name}</b></div>
+        <div class="muted">${code}</div>
+      </div>
     `;
-  }
+  }).join('');
 
-  html += "</tbody></table>";
-  list.innerHTML = html;
+  const formErrors = state.errors || {};
+
+  const c = selected?.item || {};
+
+  app.innerHTML = `
+    <div class="layout">
+
+      <div class="panel">
+        <div class="panel-header">Customers</div>
+        <input class="search" placeholder="Search..." oninput="filterList(this.value)">
+        <div class="list" id="list">
+          ${listHtml}
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">Edit Customer (local only)</div>
+
+        <div class="form">
+          <div class="row">
+            <label>Name *</label>
+            <div>
+              <input id="name" value="${c.name || ''}" oninput="updateField('name', this.value)">
+              <div class="error">${formErrors.name || ''}</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <label>Email</label>
+            <div>
+              <input id="email" value="${c.email || ''}" oninput="updateField('email', this.value)">
+              <div class="error">${formErrors.email || ''}</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <label>Code</label>
+            <input id="code" value="${c.code || ''}" oninput="updateField('code', this.value)">
+          </div>
+
+          <div class="row">
+            <label>Credit Limit</label>
+            <div>
+              <input type="number" id="creditLimit" value="${c.creditLimit || 0}"
+                oninput="updateField('creditLimit', Number(this.value))">
+              <div class="error">${formErrors.creditLimit || ''}</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <label>Billing Address</label>
+            <textarea oninput="updateField('billingAddress', this.value)">${c.billingAddress || ''}</textarea>
+
+```
+      </div>
+
+      <div class="row">
+        <label>Delivery Address</label>
+        <textarea oninput="updateField('deliveryAddress', this.value)">${c.deliveryAddress || ''}</textarea>
+      </div>
+
+      <div class="row">
+        <label>Inactive</label>
+        <input type="checkbox" ${c.inactive ? 'checked' : ''} onclick="updateField('inactive', this.checked)">
+      </div>
+
+      <div class="actions">
+        <button class="btn" onclick="revalidate()">Validate</button>
+        <button class="btn primary" onclick="resetLocal()">Reset</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+```
+
+`;
 }
+
+/* ══════════════════════════════════
+Interaction
+══════════════════════════════════ */
+function selectItem(idx) {
+state.selectedIndex = idx;
+state.errors = {};
+render(state.items);
+}
+
+function updateField(field, value) {
+const item = state.items[state.selectedIndex]?.item;
+if (!item) return;
+
+item[field] = value;
+}
+
+function revalidate() {
+const item = state.items[state.selectedIndex]?.item;
+state.errors = validate(item);
+render(state.items);
+}
+
+function resetLocal() {
+state.errors = {};
+render(state.items);
+}
+
+function filterList(q) {
+const list = document.querySelectorAll('.item');
+list.forEach(el => {
+el.style.display = el.innerText.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+});
+}
+
+/* initial empty render */
+document.getElementById('app').innerHTML =
+`<div class="empty">Load records to begin editing</div>`;
 
 </script>
 
 </body>
-</html> 
+</html>
