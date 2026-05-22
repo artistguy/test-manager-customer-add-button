@@ -1,1 +1,315 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Add a button to add a new customer from the sales invoice form.</title>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:system-ui,sans-serif; background:#ffffff; color:#24292f; min-height:100vh; padding:20px; }
+
+.ctrl-bar {
+display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+padding:12px 16px; margin-bottom:18px;
+background:#f6f8fa; border:1px solid #d0d7de; border-radius:10px;
+}
+.load-btn {
+padding:8px 20px; border:none; border-radius:7px; cursor:pointer;
+font-size:13px; font-weight:700; background:#0969da; color:#fff;
+}
+.load-btn:disabled { opacity:.45; cursor:not-allowed; }
+
+.prog-wrap { flex:1; min-width:120px; height:6px; background:#d0d7de; border-radius:3px; overflow:hidden; }
+.prog-bar  { height:100%; width:0%; background:#0969da; transition:width .2s; }
+
+.status-txt { font-size:12px; color:#57606a; white-space:nowrap; }
+
+.btn-secondary {
+padding:8px 12px;
+border:1px solid #d0d7de;
+background:#fff;
+border-radius:7px;
+cursor:pointer;
+font-weight:600;
+font-size:13px;
+}
+.btn-secondary:hover { background:#f6f8fa; }
+
+.panel {
+background:#fff;
+border:1px solid #d0d7de;
+border-radius:10px;
+overflow:hidden;
+}
+
+.panel-header {
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 14px;
+background:#f6f8fa;
+border-bottom:1px solid #d0d7de;
+}
+
+.panel-header h2 {
+font-size:14px;
+font-weight:700;
+}
+
+.search {
+padding:7px 10px;
+border:1px solid #d0d7de;
+border-radius:7px;
+font-size:13px;
+min-width:200px;
+}
+
+table {
+width:100%;
+border-collapse:collapse;
+}
+
+th, td {
+padding:10px 12px;
+border-bottom:1px solid #eee;
+font-size:13px;
+text-align:left;
+}
+
+th {
+background:#fafbfc;
+font-size:12px;
+color:#57606a;
+text-transform:uppercase;
+letter-spacing:.04em;
+}
+
+tr:hover { background:#f6f8fa; }
+
+.tag {
+display:inline-block;
+padding:2px 6px;
+border-radius:6px;
+font-size:11px;
+background:#eef3ff;
+color:#0969da;
+font-weight:600;
+}
+
+.empty {
+padding:24px;
+text-align:center;
+color:#57606a;
+}
+
+.err-box {
+color:#cf222e;
+background:#fff5f5;
+border:1px solid #ffd7d7;
+border-radius:8px;
+padding:12px 16px;
+font-size:13px;
+} </style>
+
+</head>
+<body>
+
+<div class="ctrl-bar">
+  <button class="load-btn" id="load-btn" onclick="loadAllRecords()">⬇ Load Customers</button>
+  <button class="btn-secondary" onclick="openCreateCustomer()">＋ New Customer</button>
+
+  <div class="prog-wrap"><div class="prog-bar" id="prog-bar"></div></div>
+  <span class="status-txt" id="status-txt">Ready</span>
+</div>
+
+<div id="app"></div>
+
+<script>
+/* ══════════════════════════════════
+   postMessage helper — DO NOT MODIFY
+══════════════════════════════════ */
+function postMessageWithResponse(message) {
+  return new Promise((resolve, reject) => {
+    const requestId = crypto.randomUUID();
+    const timer = setTimeout(() => {
+      window.removeEventListener('message', handler);
+      reject(new Error('Timeout — is this running inside Manager.io?'));
+    }, 15000);
+    function handler(event) {
+      if (event.data?.type?.endsWith('-response') && event.data?.requestId === requestId) {
+        clearTimeout(timer);
+        window.removeEventListener('message', handler);
+        resolve(event.data.body);
+      }
+    }
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ ...message, requestId }, '*');
+  });
+}
+
+/* ══════════════════════════════════
+   pagination loader — DO NOT MODIFY
+══════════════════════════════════ */
+async function getCustomerBatch(onProgress) {
+  const allItems = [];
+  let nextToken  = null;
+  let pageNum    = 0;
+  let apiTotal   = null;
+
+  do {
+    const path = nextToken
+      ? '/api4/customer-batch?PageSize=99999&next_page_token=' + encodeURIComponent(nextToken)
+      : '/api4/customer-batch?PageSize=99999';
+
+    const data = await postMessageWithResponse({ type: 'api-request', method: 'GET', path });
+
+    const page = Array.isArray(data) ? data : (data.items || data.data || []);
+    allItems.push(...page);
+
+    nextToken = data.next_page_token || data.nextPageToken || data._links?.next?.href || null;
+
+    if (apiTotal === null) {
+      apiTotal = data.totalCount ?? data.total ?? data.count ?? null;
+    }
+
+    pageNum++;
+    if (onProgress) onProgress(allItems.length, apiTotal, pageNum);
+    if (pageNum >= 1000) break;
+
+  } while (nextToken);
+
+  return allItems;
+}
+
+/* ══════════════════════════════════
+   open create customer form
+══════════════════════════════════ */
+function openCreateCustomer() {
+  // Opens Manager.io customer creation screen
+  window.open('/openapi/put-customer', '_blank');
+}
+
+/* ══════════════════════════════════
+   load button handler
+══════════════════════════════════ */
+async function loadAllRecords() {
+  const btn    = document.getElementById('load-btn');
+  const bar    = document.getElementById('prog-bar');
+  const status = document.getElementById('status-txt');
+  const app    = document.getElementById('app');
+
+  btn.disabled = true;
+  btn.textContent = 'Loading…';
+  app.innerHTML = '';
+
+  try {
+    const items = await getCustomerBatch((loaded, total, page) => {
+      status.textContent = total
+        ? `Page ${page} · ${loaded.toLocaleString()} / ${total.toLocaleString()}`
+        : `Page ${page} · ${loaded.toLocaleString()} loaded`;
+
+      if (total) {
+        bar.style.width = Math.min(95, Math.round(loaded / total * 100)) + '%';
+      }
+    });
+
+    bar.style.width = '100%';
+    btn.textContent = '↺ Reload';
+    btn.disabled = false;
+
+    render(items);
+
+  } catch (err) {
+    btn.textContent = '↺ Retry';
+    btn.disabled = false;
+    app.innerHTML = `<div class="err-box">⚠ ${err.message}</div>`;
+  }
+}
+
+/* ══════════════════════════════════
+   render(items) — FULL IMPLEMENTATION
+══════════════════════════════════ */
+function render(items) {
+  const app = document.getElementById('app');
+
+  const rows = items || [];
+
+  if (!rows.length) {
+    app.innerHTML = `<div class="empty">No customers found. Click “New Customer” to add one.</div>`;
+    return;
+  }
+
+  const get = (r, path) => path.split('.').reduce((o,k)=>o?.[k], r);
+
+  let html = `
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Customers (${rows.length.toLocaleString()})</h2>
+        <input class="search" placeholder="Search customers..." oninput="filterTable(this.value)">
+      </div>
+
+      <div style="overflow:auto;">
+        <table id="customer-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Billing</th>
+              <th>Credit Limit</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+  `;
+
+  for (const r of rows) {
+    const item = r?.item || r;
+
+    const name   = item?.name ?? '—';
+    const email  = item?.email ?? '—';
+    const bill   = item?.billingAddress ?? '—';
+    const credit = (item?.creditLimit ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 });
+    const status = item?.inactive ? 'Inactive' : 'Active';
+
+    html += `
+      <tr>
+        <td><strong>${name}</strong></td>
+        <td>${email}</td>
+        <td>${bill}</td>
+        <td>$${credit}</td>
+        <td>${item?.inactive ? '<span class="tag">Inactive</span>' : '<span class="tag">Active</span>'}</td>
+      </tr>
+    `;
+  }
+
+  html += `
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  app.innerHTML = html;
+}
+
+/* ══════════════════════════════════
+   simple client-side filter
+══════════════════════════════════ */
+function filterTable(q) {
+  const table = document.getElementById('customer-table');
+  if (!table) return;
+
+  const rows = table.querySelectorAll('tbody tr');
+  const query = (q || '').toLowerCase();
+
+  rows.forEach(r => {
+    const text = r.innerText.toLowerCase();
+    r.style.display = text.includes(query) ? '' : 'none';
+  });
+}
+</script>
+
+</body>
+</html>
 
