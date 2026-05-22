@@ -4,440 +4,351 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sales Invoice Customer Quick Add</title>
+<title>Manager.io Customer Quick Add</title>
 
 <style>
-  * { box-sizing:border-box; margin:0; padding:0; }
+*{box-sizing:border-box;margin:0;padding:0}
 
-  :root{
-    --bg:#ffffff;
-    --panel:#ffffff;
-    --panel-soft:#f6f8fa;
-    --border:#d0d7de;
-    --text:#24292f;
-    --muted:#57606a;
-    --blue:#0969da;
-    --blue-soft:#ddf4ff;
-    --green:#1a7f37;
-    --green-soft:#dafbe1;
-    --red:#cf222e;
-    --red-soft:#ffebe9;
-    --shadow:0 10px 30px rgba(31,35,40,.08);
-  }
+:root{
+  --bg:#ffffff;
+  --panel:#ffffff;
+  --panel-soft:#f6f8fa;
+  --border:#d0d7de;
+  --text:#24292f;
+  --muted:#57606a;
+  --blue:#0969da;
+  --blue-soft:#ddf4ff;
+  --green:#1a7f37;
+  --green-soft:#dafbe1;
+  --red:#cf222e;
+  --red-soft:#ffebe9;
+  --shadow:0 8px 24px rgba(140,149,159,.15);
+}
 
-  body {
-    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    min-height:100vh;
-    padding:20px;
-  }
+body{
+  font-family:system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding:20px;
+}
 
-  .ctrl-bar {
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-    padding:12px 16px;
-    margin-bottom:18px;
-    background:#f6f8fa;
-    border:1px solid #d0d7de;
-    border-radius:12px;
-    box-shadow:var(--shadow);
-  }
+.ctrl-bar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  padding:12px 16px;
+  margin-bottom:18px;
+  background:#f6f8fa;
+  border:1px solid #d0d7de;
+  border-radius:12px;
+  box-shadow:var(--shadow);
+}
 
-  .load-btn {
-    padding:8px 20px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:13px;
-    font-weight:700;
-    background:#0969da;
-    color:#fff;
-    transition:all .15s;
-  }
+.load-btn{
+  padding:8px 20px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:700;
+  background:#0969da;
+  color:#fff;
+}
 
-  .load-btn:hover:not(:disabled){
-    filter:brightness(1.05);
-    transform:translateY(-1px);
-  }
+.load-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
 
-  .load-btn:disabled {
-    opacity:.45;
-    cursor:not-allowed;
-  }
+.prog-wrap{
+  flex:1;
+  min-width:100px;
+  height:5px;
+  background:#d0d7de;
+  border-radius:3px;
+  overflow:hidden;
+}
 
-  .prog-wrap {
-    flex:1;
-    min-width:100px;
-    height:5px;
-    background:#d0d7de;
-    border-radius:999px;
-    overflow:hidden;
-  }
+.prog-bar{
+  height:100%;
+  width:0%;
+  background:#0969da;
+  transition:width .25s;
+}
 
-  .prog-bar {
-    height:100%;
-    width:0%;
-    background:#0969da;
-    border-radius:999px;
-    transition:width .25s;
-  }
+.status-txt{
+  font-size:12px;
+  color:#57606a;
+  white-space:nowrap;
+}
 
-  .status-txt {
-    font-size:12px;
-    color:#57606a;
-    white-space:nowrap;
-  }
+.err-box{
+  color:#cf222e;
+  background:#fff8f8;
+  border:1px solid #ffcecb;
+  border-radius:10px;
+  padding:14px 16px;
+  margin-bottom:16px;
+}
 
-  .err-box {
-    color:#cf222e;
-    background:#fff8f8;
-    border:1px solid #ffcecb;
-    border-radius:10px;
-    padding:16px;
-    font-size:13px;
-    margin-bottom:16px;
-  }
+.hero{
+  background:linear-gradient(180deg,#fff,#f6f8fa);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:26px;
+  margin-bottom:20px;
+  box-shadow:var(--shadow);
+}
 
-  .hero{
-    background:linear-gradient(180deg,#ffffff,#f6f8fa);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:28px;
-    margin-bottom:22px;
-    box-shadow:var(--shadow);
-  }
+.hero h1{
+  font-size:28px;
+  margin-bottom:8px;
+}
 
-  .hero h1{
-    font-size:30px;
-    margin-bottom:10px;
-    letter-spacing:-0.03em;
-  }
+.hero p{
+  color:var(--muted);
+  line-height:1.6;
+}
 
-  .hero p{
-    color:var(--muted);
-    line-height:1.6;
-    max-width:850px;
-  }
+.layout{
+  display:grid;
+  grid-template-columns:420px 1fr;
+  gap:20px;
+}
 
-  .stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:16px;
-    margin-bottom:22px;
-  }
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
+  box-shadow:var(--shadow);
+}
 
-  .stat{
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:18px;
-    box-shadow:var(--shadow);
-  }
+.card h2{
+  margin-bottom:18px;
+  font-size:20px;
+}
 
-  .stat-label{
-    color:var(--muted);
-    font-size:12px;
-    text-transform:uppercase;
-    letter-spacing:.06em;
-    margin-bottom:10px;
-    font-weight:700;
-  }
+.field{
+  margin-bottom:18px;
+}
 
-  .stat-value{
-    font-size:30px;
-    font-weight:800;
-    letter-spacing:-0.04em;
-  }
+.field label{
+  display:block;
+  margin-bottom:8px;
+  font-size:12px;
+  font-weight:700;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
 
+.customer-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+}
+
+select,input{
+  width:100%;
+  padding:12px 14px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#fff;
+  color:var(--text);
+  font-size:14px;
+  outline:none;
+}
+
+select:focus,input:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 4px rgba(9,105,218,.1);
+}
+
+.add-btn{
+  padding:0 16px;
+  border:none;
+  border-radius:10px;
+  background:var(--blue);
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.validation{
+  border-radius:12px;
+  padding:14px;
+  font-size:14px;
+  line-height:1.5;
+  border:1px solid transparent;
+}
+
+.validation.info{
+  background:var(--blue-soft);
+  border-color:#9cd7ff;
+  color:#0969da;
+}
+
+.validation.success{
+  background:var(--green-soft);
+  border-color:#95d8a6;
+  color:#1a7f37;
+}
+
+.validation.error{
+  background:var(--red-soft);
+  border-color:#ffb3ad;
+  color:#cf222e;
+}
+
+.table-wrap{
+  overflow:auto;
+  border:1px solid var(--border);
+  border-radius:14px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:720px;
+}
+
+thead{
+  background:#f6f8fa;
+}
+
+th{
+  text-align:left;
+  padding:14px 16px;
+  font-size:12px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  border-bottom:1px solid var(--border);
+}
+
+td{
+  padding:14px 16px;
+  border-bottom:1px solid #eef1f4;
+  vertical-align:top;
+  font-size:14px;
+}
+
+tbody tr:hover{
+  background:#fafbfc;
+}
+
+.tag{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.tag.readonly{
+  background:#ddf4ff;
+  color:#0969da;
+}
+
+.tag.valid{
+  background:#dafbe1;
+  color:#1a7f37;
+}
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.35);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:999;
+}
+
+.modal{
+  width:100%;
+  max-width:520px;
+  background:#fff;
+  border-radius:20px;
+  border:1px solid var(--border);
+  overflow:hidden;
+  box-shadow:0 25px 80px rgba(0,0,0,.2);
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 24px;
+  border-bottom:1px solid var(--border);
+}
+
+.modal-body{
+  padding:24px;
+}
+
+.close-btn{
+  border:none;
+  background:none;
+  font-size:24px;
+  cursor:pointer;
+  color:var(--muted);
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:20px;
+}
+
+.btn-secondary{
+  border:1px solid var(--border);
+  background:#fff;
+  padding:10px 16px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.btn-primary{
+  border:none;
+  background:#0969da;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.helper{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.empty{
+  text-align:center;
+  padding:60px 20px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:#fff;
+}
+
+@media(max-width:960px){
   .layout{
-    display:grid;
-    grid-template-columns:420px 1fr;
-    gap:22px;
-  }
-
-  .card{
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:22px;
-    box-shadow:var(--shadow);
-  }
-
-  .card h2{
-    font-size:20px;
-    margin-bottom:18px;
-    letter-spacing:-0.02em;
-  }
-
-  .invoice-form{
-    display:flex;
-    flex-direction:column;
-    gap:18px;
-  }
-
-  .field{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
-
-  .field label{
-    font-size:12px;
-    font-weight:700;
-    color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:.08em;
+    grid-template-columns:1fr;
   }
 
   .customer-row{
-    display:grid;
-    grid-template-columns:1fr auto;
-    gap:10px;
-    align-items:center;
+    grid-template-columns:1fr;
   }
-
-  select,
-  input{
-    width:100%;
-    padding:12px 14px;
-    border-radius:10px;
-    border:1px solid var(--border);
-    background:#fff;
-    color:var(--text);
-    font-size:14px;
-    outline:none;
-    transition:border .15s, box-shadow .15s;
-  }
-
-  select:focus,
-  input:focus{
-    border-color:var(--blue);
-    box-shadow:0 0 0 4px rgba(9,105,218,.12);
-  }
-
-  .quick-add-btn{
-    height:44px;
-    padding:0 16px;
-    border:none;
-    border-radius:10px;
-    background:var(--blue);
-    color:#fff;
-    font-weight:700;
-    cursor:pointer;
-    transition:all .15s;
-    white-space:nowrap;
-  }
-
-  .quick-add-btn:hover{
-    filter:brightness(1.05);
-    transform:translateY(-1px);
-  }
-
-  .validation{
-    margin-top:4px;
-    padding:14px;
-    border-radius:12px;
-    font-size:14px;
-    line-height:1.5;
-    border:1px solid transparent;
-  }
-
-  .validation.success{
-    background:var(--green-soft);
-    border-color:#95d8a6;
-    color:var(--green);
-  }
-
-  .validation.error{
-    background:var(--red-soft);
-    border-color:#ffb3ad;
-    color:var(--red);
-  }
-
-  .validation.info{
-    background:var(--blue-soft);
-    border-color:#9cd7ff;
-    color:var(--blue);
-  }
-
-  .modal-backdrop{
-    position:fixed;
-    inset:0;
-    background:rgba(15,23,42,.35);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    z-index:999;
-  }
-
-  .modal{
-    width:100%;
-    max-width:520px;
-    background:#fff;
-    border-radius:20px;
-    border:1px solid var(--border);
-    box-shadow:0 30px 80px rgba(0,0,0,.18);
-    overflow:hidden;
-  }
-
-  .modal-head{
-    padding:20px 24px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-  }
-
-  .modal-head h3{
-    font-size:20px;
-    letter-spacing:-0.02em;
-  }
-
-  .close-btn{
-    border:none;
-    background:none;
-    cursor:pointer;
-    font-size:22px;
-    color:var(--muted);
-  }
-
-  .modal-body{
-    padding:24px;
-    display:flex;
-    flex-direction:column;
-    gap:16px;
-  }
-
-  .inline-help{
-    font-size:13px;
-    color:var(--muted);
-    line-height:1.5;
-  }
-
-  .modal-actions{
-    display:flex;
-    justify-content:flex-end;
-    gap:10px;
-    margin-top:10px;
-  }
-
-  .btn-secondary{
-    border:1px solid var(--border);
-    background:#fff;
-    color:var(--text);
-    padding:10px 16px;
-    border-radius:10px;
-    cursor:pointer;
-    font-weight:600;
-  }
-
-  .btn-primary{
-    border:none;
-    background:var(--blue);
-    color:#fff;
-    padding:10px 16px;
-    border-radius:10px;
-    cursor:pointer;
-    font-weight:700;
-  }
-
-  .directory-table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:680px;
-  }
-
-  .table-wrap{
-    overflow:auto;
-    border-radius:16px;
-    border:1px solid var(--border);
-  }
-
-  .directory-table thead{
-    background:#f6f8fa;
-  }
-
-  .directory-table th{
-    text-align:left;
-    padding:14px 16px;
-    font-size:12px;
-    color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:.08em;
-    border-bottom:1px solid var(--border);
-  }
-
-  .directory-table td{
-    padding:14px 16px;
-    border-bottom:1px solid #eef1f4;
-    font-size:14px;
-    vertical-align:top;
-  }
-
-  .directory-table tbody tr:hover{
-    background:#fafbfc;
-  }
-
-  .tag{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    padding:6px 10px;
-    border-radius:999px;
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:.04em;
-  }
-
-  .tag.valid{
-    background:#dafbe1;
-    color:#1a7f37;
-  }
-
-  .tag.readonly{
-    background:#ddf4ff;
-    color:#0969da;
-  }
-
-  .empty{
-    text-align:center;
-    padding:70px 20px;
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:18px;
-    color:var(--muted);
-  }
-
-  .empty h3{
-    color:var(--text);
-    margin-bottom:10px;
-    font-size:24px;
-  }
-
-  .search-box{
-    margin-bottom:18px;
-  }
-
-  .helper{
-    margin-top:8px;
-    font-size:12px;
-    color:var(--muted);
-    line-height:1.5;
-  }
-
-  @media (max-width:980px){
-    .layout{
-      grid-template-columns:1fr;
-    }
-
-    .customer-row{
-      grid-template-columns:1fr;
-    }
-  }
+}
 </style>
 
 </head>
@@ -511,27 +422,27 @@ async function getCustomerBatch(onProgress) {
 }
 
 /* ══════════════════════════════════
-   Load button handler
+   loadAllRecords
 ══════════════════════════════════ */
 async function loadAllRecords() {
-  const btn    = document.getElementById('load-btn');
-  const bar    = document.getElementById('prog-bar');
+  const btn = document.getElementById('load-btn');
+  const bar = document.getElementById('prog-bar');
   const status = document.getElementById('status-txt');
-  const app    = document.getElementById('app');
+  const app = document.getElementById('app');
 
   btn.disabled = true;
   btn.textContent = 'Loading…';
   bar.style.width = '0%';
   app.innerHTML = '';
 
-  try {
-    const items = await getCustomerBatch((loaded, total, page) => {
+  try{
+    const items = await getCustomerBatch((loaded,total,page)=>{
       status.textContent = total
         ? `Page ${page} · ${loaded.toLocaleString()} / ${total.toLocaleString()} records`
         : `Page ${page} · ${loaded.toLocaleString()} records loaded…`;
 
-      if (total) {
-        bar.style.width = Math.min(95, Math.round(loaded / total * 100)) + '%';
+      if(total){
+        bar.style.width = Math.min(95,Math.round(loaded/total*100)) + '%';
       }
     });
 
@@ -542,24 +453,20 @@ async function loadAllRecords() {
 
     render(items);
 
-  } catch (err) {
+  }catch(err){
     status.textContent = '⚠ ' + err.message;
     btn.textContent = '↺ Retry';
     btn.disabled = false;
 
     app.innerHTML = `
       <div class="err-box">
-        <strong>⚠ Failed to load customer records</strong><br><br>
-        ${escapeHtml(err.message)}<br><br>
-        <small>Make sure this extension is running inside Manager.io.</small>
+        ⚠ ${escapeHtml(err.message)}
+        <br><small>Make sure this is running inside Manager.io</small>
       </div>
     `;
   }
 }
 
-/* ══════════════════════════════════
-   Utility helpers
-══════════════════════════════════ */
 function escapeHtml(str){
   return String(str ?? '')
     .replaceAll('&','&amp;')
@@ -568,79 +475,59 @@ function escapeHtml(str){
     .replaceAll('"','&quot;');
 }
 
-function getCustomerName(item, index){
+function getCustomerName(item,index){
   return (
     item?.name ??
     item?.displayName ??
     item?.customerName ??
     item?.fullName ??
     item?.email ??
-    item?.code ??
-    `Customer ${index + 1}`
+    `Customer ${index+1}`
   );
 }
 
-function getCustomerId(item, index){
+function getCustomerId(item,index){
   return (
     item?.id ??
-    item?.customerId ??
     item?._links?.self?.href ??
-    `customer-${index + 1}`
+    `customer-${index+1}`
   );
 }
 
 /* ══════════════════════════════════
-   Main render
+   render(items)
 ══════════════════════════════════ */
-function render(items) {
+function render(items){
   const app = document.getElementById('app');
 
-  if (!Array.isArray(items) || items.length === 0) {
+  if(!Array.isArray(items) || items.length === 0){
     app.innerHTML = `
       <div class="empty">
-        <h3>No Customers Found</h3>
-        <p>The customer-batch endpoint returned zero customer records.</p>
+        <h2>No Customer Records Found</h2>
+        <p style="margin-top:10px;color:#57606a;">
+          The API returned zero customer records.
+        </p>
       </div>
     `;
     return;
   }
 
-  const customers = items.map((item, index) => ({
-    raw:item,
-    id:getCustomerId(item, index),
-    name:getCustomerName(item, index),
+  const customers = items.map((item,index)=>({
+    id:getCustomerId(item,index),
+    name:getCustomerName(item,index),
     self:item?._links?.self?.href ?? '—',
     schema:item?._links?.describedBy?.href ?? '—',
     create:item?._actions?.create?.href ?? '—'
   }));
 
-  const uniqueCreateEndpoints = new Set(
-    customers.map(c => c.create).filter(Boolean)
-  ).size;
-
   app.innerHTML = `
     <div class="hero">
       <h1>Sales Invoice Customer Quick Add</h1>
       <p>
-        Add new customers directly from the sales invoice form using a quick-add button beside the customer dropdown field. Includes validation checks, duplicate prevention, and read-only API awareness.
+        Add a quick-add button beside the customer dropdown inside the sales invoice form.
+        This extension validates customer information and prepares records locally.
+        Because this extension is restricted to GET-only operations, direct database writes are disabled.
       </p>
-    </div>
-
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-label">Loaded Customers</div>
-        <div class="stat-value">${customers.length.toLocaleString()}</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Create Endpoints</div>
-        <div class="stat-value">${uniqueCreateEndpoints.toLocaleString()}</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Extension Mode</div>
-        <div class="stat-value" style="font-size:22px;">READ ONLY</div>
-      </div>
     </div>
 
     <div class="layout">
@@ -649,76 +536,62 @@ function render(items) {
 
         <h2>Sales Invoice Form</h2>
 
-        <div class="invoice-form">
+        <div class="field">
+          <label>Customer</label>
 
-          <div class="field">
-            <label>Customer</label>
+          <div class="customer-row">
 
-            <div class="customer-row">
+            <select id="customer-select">
+              <option value="">Select Customer</option>
 
-              <select id="customer-select">
-                <option value="">Select Customer</option>
+              ${customers.map(customer=>`
+                <option value="${escapeHtml(customer.id)}">
+                  ${escapeHtml(customer.name)}
+                </option>
+              `).join('')}
 
-                ${customers.map(customer => `
-                  <option value="${escapeHtml(customer.id)}">
-                    ${escapeHtml(customer.name)}
-                  </option>
-                `).join('')}
+            </select>
 
-              </select>
-
-              <button class="quick-add-btn" id="open-modal-btn">
-                + Add Customer
-              </button>
-
-            </div>
-
-            <div class="helper">
-              The quick-add button appears to the right of the customer dropdown selection field.
-            </div>
+            <button class="add-btn" id="open-modal-btn">
+              + Add Customer
+            </button>
 
           </div>
 
-          <div class="field">
-            <label>Invoice Reference</label>
-            <input type="text" placeholder="INV-1001">
+          <div class="helper">
+            Button placement simulates the Manager.io sales invoice customer selector layout.
           </div>
+        </div>
 
-          <div class="field">
-            <label>Description</label>
-            <input type="text" placeholder="Invoice notes or product summary">
-          </div>
+        <div class="field">
+          <label>Invoice Reference</label>
+          <input type="text" placeholder="INV-1001">
+        </div>
 
-          <div class="validation info" id="validation-box">
-            Customer validation is waiting for input.
-          </div>
-
+        <div class="validation info" id="validation-box">
+          Waiting for customer selection.
         </div>
 
       </div>
 
       <div class="card">
 
-        <h2>Customer Directory</h2>
-
-        <div class="search-box">
-          <input type="text" id="directory-search" placeholder="Search customers...">
-        </div>
+        <h2>Customer Database Preview</h2>
 
         <div class="table-wrap">
 
-          <table class="directory-table">
+          <table>
 
             <thead>
               <tr>
                 <th>Customer</th>
-                <th>Self Link</th>
+                <th>Self Endpoint</th>
                 <th>Create Endpoint</th>
                 <th>Status</th>
               </tr>
             </thead>
 
-            <tbody id="directory-body"></tbody>
+            <tbody id="table-body"></tbody>
 
           </table>
 
@@ -733,38 +606,34 @@ function render(items) {
       <div class="modal">
 
         <div class="modal-head">
-          <h3>Add New Customer</h3>
-          <button class="close-btn" id="close-modal-btn">×</button>
+          <h3>Quick Add Customer</h3>
+          <button class="close-btn" id="close-btn">×</button>
         </div>
 
         <div class="modal-body">
 
-          <div class="inline-help">
-            This extension is operating in READ-ONLY mode. Validation and preview are supported, but customer creation is not submitted to the API.
-          </div>
-
           <div class="field">
             <label>Customer Name</label>
-            <input type="text" id="new-customer-name" placeholder="Enter customer name">
+            <input type="text" id="new-name" placeholder="Customer name">
           </div>
 
           <div class="field">
             <label>Email Address</label>
-            <input type="email" id="new-customer-email" placeholder="customer@example.com">
+            <input type="email" id="new-email" placeholder="customer@example.com">
           </div>
 
           <div class="field">
             <label>Company</label>
-            <input type="text" id="new-customer-company" placeholder="Optional company name">
+            <input type="text" id="new-company" placeholder="Optional company">
           </div>
 
           <div class="validation info" id="modal-validation">
-            Enter customer information to validate before adding.
+            Enter customer details for validation.
           </div>
 
           <div class="modal-actions">
             <button class="btn-secondary" id="cancel-btn">Cancel</button>
-            <button class="btn-primary" id="validate-btn">Validate Customer</button>
+            <button class="btn-primary" id="validate-btn">Validate</button>
           </div>
 
         </div>
@@ -774,117 +643,92 @@ function render(items) {
     </div>
   `;
 
+  const tableBody = document.getElementById('table-body');
+
+  tableBody.innerHTML = customers.map(customer=>`
+    <tr>
+      <td><strong>${escapeHtml(customer.name)}</strong></td>
+
+      <td style="max-width:220px;word-break:break-all;color:#57606a;">
+        ${escapeHtml(customer.self)}
+      </td>
+
+      <td style="max-width:220px;word-break:break-all;color:#57606a;">
+        ${escapeHtml(customer.create)}
+      </td>
+
+      <td>
+        <span class="tag valid">VALID</span>
+        <span class="tag readonly">GET ONLY</span>
+      </td>
+    </tr>
+  `).join('');
+
   const customerSelect = document.getElementById('customer-select');
   const validationBox = document.getElementById('validation-box');
-  const modalBackdrop = document.getElementById('modal-backdrop');
-  const openModalBtn = document.getElementById('open-modal-btn');
-  const closeModalBtn = document.getElementById('close-modal-btn');
-  const cancelBtn = document.getElementById('cancel-btn');
-  const validateBtn = document.getElementById('validate-btn');
-  const modalValidation = document.getElementById('modal-validation');
-  const directorySearch = document.getElementById('directory-search');
-  const directoryBody = document.getElementById('directory-body');
 
-  /* Render customer directory table */
-  function renderTable(query=''){
-    const q = query.trim().toLowerCase();
+  customerSelect.addEventListener('change',()=>{
+    const value = customerSelect.value;
 
-    const filtered = customers.filter(customer =>
-      customer.name.toLowerCase().includes(q)
-    );
-
-    directoryBody.innerHTML = filtered.map(customer => `
-      <tr>
-        <td>
-          <strong>${escapeHtml(customer.name)}</strong>
-        </td>
-
-        <td style="max-width:220px;word-break:break-all;color:#57606a;">
-          ${escapeHtml(customer.self)}
-        </td>
-
-        <td style="max-width:220px;word-break:break-all;color:#57606a;">
-          ${escapeHtml(customer.create)}
-        </td>
-
-        <td>
-          <span class="tag valid">VALIDATED</span>
-          &nbsp;
-          <span class="tag readonly">READ ONLY</span>
-        </td>
-      </tr>
-    `).join('');
-
-    if (filtered.length === 0) {
-      directoryBody.innerHTML = `
-        <tr>
-          <td colspan="4" style="text-align:center;color:#57606a;padding:40px;">
-            No matching customers found.
-          </td>
-        </tr>
-      `;
-    }
-  }
-
-  /* Customer dropdown validation */
-  customerSelect.addEventListener('change', () => {
-    const selectedId = customerSelect.value;
-
-    if (!selectedId) {
+    if(!value){
       validationBox.className = 'validation error';
-      validationBox.textContent = 'Please select a valid customer before continuing.';
+      validationBox.textContent = 'Please select a customer.';
       return;
     }
 
-    const customer = customers.find(c => c.id === selectedId);
+    const customer = customers.find(c=>c.id === value);
 
     validationBox.className = 'validation success';
     validationBox.innerHTML = `
-      Customer <strong>${escapeHtml(customer?.name ?? 'Unknown')}</strong> validated successfully for invoice assignment.
+      Customer <strong>${escapeHtml(customer?.name ?? 'Unknown')}</strong>
+      validated successfully for invoice usage.
     `;
   });
 
-  /* Modal open */
+  const modalBackdrop = document.getElementById('modal-backdrop');
+  const openModalBtn = document.getElementById('open-modal-btn');
+  const closeBtn = document.getElementById('close-btn');
+  const cancelBtn = document.getElementById('cancel-btn');
+  const validateBtn = document.getElementById('validate-btn');
+  const modalValidation = document.getElementById('modal-validation');
+
+  function closeModal(){
+    modalBackdrop.style.display = 'none';
+  }
+
   function openModal(){
     modalBackdrop.style.display = 'flex';
   }
 
-  /* Modal close */
-  function closeModal(){
-    modalBackdrop.style.display = 'none';
+  openModalBtn.addEventListener('click',openModal);
+  closeBtn.addEventListener('click',closeModal);
+  cancelBtn.addEventListener('click',closeModal);
 
-    document.getElementById('new-customer-name').value = '';
-    document.getElementById('new-customer-email').value = '';
-    document.getElementById('new-customer-company').value = '';
+  modalBackdrop.addEventListener('click',(e)=>{
+    if(e.target === modalBackdrop){
+      closeModal();
+    }
+  });
 
-    modalValidation.className = 'validation info';
-    modalValidation.textContent = 'Enter customer information to validate before adding.';
-  }
+  validateBtn.addEventListener('click',()=>{
 
-  openModalBtn.addEventListener('click', openModal);
-  closeModalBtn.addEventListener('click', closeModal);
-  cancelBtn.addEventListener('click', closeModal);
+    const name = document.getElementById('new-name').value.trim();
+    const email = document.getElementById('new-email').value.trim();
+    const company = document.getElementById('new-company').value.trim();
 
-  /* Validation logic for quick add */
-  validateBtn.addEventListener('click', () => {
-
-    const name = document.getElementById('new-customer-name').value.trim();
-    const email = document.getElementById('new-customer-email').value.trim();
-    const company = document.getElementById('new-customer-company').value.trim();
-
-    if (!name) {
+    if(!name){
       modalValidation.className = 'validation error';
       modalValidation.textContent = 'Customer name is required.';
       return;
     }
 
-    if (name.length < 2) {
+    if(name.length < 2){
       modalValidation.className = 'validation error';
       modalValidation.textContent = 'Customer name must contain at least 2 characters.';
       return;
     }
 
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if(email && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){
       modalValidation.className = 'validation error';
       modalValidation.textContent = 'Please enter a valid email address.';
       return;
@@ -894,7 +738,7 @@ function render(items) {
       customer.name.toLowerCase() === name.toLowerCase()
     );
 
-    if (duplicate) {
+    if(duplicate){
       modalValidation.className = 'validation error';
       modalValidation.textContent = 'A customer with this name already exists.';
       return;
@@ -903,27 +747,15 @@ function render(items) {
     modalValidation.className = 'validation success';
 
     modalValidation.innerHTML = `
-      Customer validation passed.<br><br>
+      Customer passed validation successfully.<br><br>
       <strong>Name:</strong> ${escapeHtml(name)}<br>
       <strong>Email:</strong> ${escapeHtml(email || 'Not provided')}<br>
       <strong>Company:</strong> ${escapeHtml(company || 'Not provided')}<br><br>
-      Ready for creation endpoint preview in Manager.io.
+
+      This extension is restricted to GET-only operations,
+      so database write operations are disabled by Manager.io extension rules.
     `;
   });
-
-  /* Close modal on backdrop click */
-  modalBackdrop.addEventListener('click', (e) => {
-    if (e.target === modalBackdrop) {
-      closeModal();
-    }
-  });
-
-  /* Search directory */
-  directorySearch.addEventListener('input', (e) => {
-    renderTable(e.target.value);
-  });
-
-  renderTable('');
 }
 </script>
 
