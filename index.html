@@ -1,94 +1,181 @@
-<!doctype html>
+╔══════════════════════════════════════════════════════════════╗
+║   MANAGER.IO EXTENSION — COMPLETE BUILD PROMPT              ║
+╚══════════════════════════════════════════════════════════════╝
 
+TASK
+────────────────────────────────────────────────────────────
+Build a complete, working Manager.io browser extension.
+Goal:           Form to create or edit a new customer.
+Visual style:   light
+Primary endpoint: GET /api4/customer-batch
+
+MANAGER.IO EXTENSION RULES
+────────────────────────────────────────────────────────────
+1. An extension is a SINGLE self-contained HTML file.
+2. It is loaded inside an <iframe> by Manager.io.
+3. The ONLY way to call the Manager API is postMessageWithResponse().
+   The exact implementation is in the skeleton below — copy it verbatim.
+4. /api4/ENDPOINT is automatically scoped to the current business.
+5. No backend, no npm, no build step — pure HTML/CSS/JS.
+6. CDN libraries (Chart.js, Fuse.js, etc.) are allowed via <script src>.
+7. This is a READ-ONLY (GET) extension — do not include write operations.
+8. PAGINATION REQUIRED: API returns max 50 records per page.
+   The fetch function in the skeleton handles this automatically.
+   DO NOT simplify it to a single fetch — data will silently be capped.
+
+DATA SCHEMA
+────────────────────────────────────────────────────────────
+  Endpoint: GET /api4/customer-batch
+  Fields (dot-notation path | type | sample value)
+
+    [_summary]
+      _summary.endpoint                            String  →  customer-batch
+      _summary.totalLoaded                         Number  →  1
+      _summary.pages                               Number  →  1
+      _summary.elapsedMs                           Number  →  8
+      _summary.stoppedEarly                        Boolean  →  false
+
+    [items]
+      items.0.item.name                            String  →  Cody
+      items.0.item.code                            Null  →  null
+      items.0.item.creditLimit                     Number  →  0
+      items.0.item.currency                        Null  →  null
+      items.0.item.billingAddress                  String  →  mine
+      items.0.item.deliveryAddress                 String  →  mine
+      items.0.item.email                           Null  →  null
+      items.0.item.division                        Null  →  null
+      items.0.item.controlAccount                  Null  →  null
+      items.0.item.hasDefaultDueDateDays           Boolean  →  false
+      items.0.item.defaultDueDateDays              Null  →  null
+      items.0.item.hasDefaultHourlyRate            Boolean  →  false
+      items.0.item.defaultHourlyRate               Number  →  0
+      items.0.item.inactive                        Boolean  →  false
+      items.0.item.customFields                    Null  →  null
+      items.0.item.customFields2.strings           Null  →  null
+      items.0.item.customFields2.decimals          Null  →  null
+      items.0.item.customFields2.dates             Null  →  null
+      items.0.item.customFields2.booleans          Null  →  null
+      items.0.item.customFields2.stringArrays      Null  →  null
+      items.0.item.customFields2.images            Null  →  null
+      items.0.item.hasDefaultBillingAddress        Boolean  →  true
+      items.0.item.defaultBillingAddress           String  →  mine
+      items.0.item.hasDefaultDeliveryAddress       Boolean  →  true
+      items.0.item.defaultDeliveryAddress          String  →  mine
+      items.0.item.nameWithCode                    String  →  Cody
+      items.0.item.text                            String  →  Cody
+      items.0.item.uniqueName                      String  →  Cody
+      items.0.item.isBillableExpense               Boolean  →  false
+      items.0.item.isControlAccountForInvestments  Boolean  →  false
+      items.0.item.isWithholdingTaxPayablePayable  Boolean  →  false
+      items.0.item.isAccountsReceivable            Boolean  →  false
+      items.0.item.isAccountsPayable               Boolean  →  false
+      items.0.item.isCashAtBank                    Boolean  →  false
+      items.0.item.isInterAccountTransfers         Boolean  →  false
+      items.0.item.isInventoryOnHand               Boolean  →  false
+      items.0.item.isControlAccountForCapitalAccounts Boolean  →  false
+      items.0.item.isEmployeeClearingAccount       Boolean  →  false
+      items.0.item.isControlAccountForSpecialAccounts Boolean  →  false
+      items.0.item.isControlAccountForFixedAssets  Boolean  →  false
+      items.0.item.isControlAccountForFixedAssetsAccumulatedDepreciation Boolean  →  false
+      items.0.item.isControlAccountForIntangibleAssets Boolean  →  false
+      items.0.item.isControlAccountForIntangibleAssetsAccumulatedAmortization Boolean  →  false
+      items.0.item.hasCustomers                    Boolean  →  false
+      items.0.item.hasInvestments                  Boolean  →  false
+      items.0.item.hasSuppliers                    Boolean  →  false
+      items.0.item.hasFixedAssets                  Boolean  →  false
+      items.0.item.hasIntangibleAssets             Boolean  →  false
+      items.0.item.isProfitAndLossAccount          Boolean  →  false
+      items.0.item.hasExpenseClaimPayers           Boolean  →  false
+      items.0.item.taxCodeEnabled                  Boolean  →  true
+      items.0.item.divisionEnabled                 Boolean  →  false
+      items.0.item.projectEnabled                  Boolean  →  true
+      items.0.item.canHaveCurrencyAmount           Boolean  →  false
+      items.0.item.timestamp                       Number  →  639150071904918700
+      items.0._links.self.href                     String  →  /api4/customer?q=ogYNd…
+      items.0._actions.edit.href                   String  →  /openapi/put-customer.…
+      items.0._actions.delete.href                 String  →  /openapi/delete-custom…
+
+  Endpoint: GET /api4/customer-batch
+  Fields (dot-notation path | type | sample value)
+
+    [key]
+      key                                          UUID  →  019e4d1f-cddb-7a58-877…
+
+    [item]
+      item.name                                    String  →  Cody
+      item.code                                    Null  →  null
+      item.creditLimit                             Number  →  0
+      item.currency                                Null  →  null
+      item.billingAddress                          String  →  mine
+      item.deliveryAddress                         String  →  mine
+      item.email                                   Null  →  null
+      item.division                                Null  →  null
+      item.controlAccount                          Null  →  null
+      item.hasDefaultDueDateDays                   Boolean  →  false
+      item.defaultDueDateDays                      Null  →  null
+      item.hasDefaultHourlyRate                    Boolean  →  false
+      item.defaultHourlyRate                       Number  →  0
+      item.inactive                                Boolean  →  false
+      item.customFields                            Null  →  null
+      item.customFields2.strings                   Null  →  null
+      item.customFields2.decimals                  Null  →  null
+      item.customFields2.dates                     Null  →  null
+      item.customFields2.booleans                  Null  →  null
+      item.customFields2.stringArrays              Null  →  null
+      item.customFields2.images                    Null  →  null
+      item.obsolete_StartingBalance2               Number  →  0
+      item.obsolete_ExchangeRate2                  Number  →  0
+      item.obsolete_ExchangeRateIsInverse2         Boolean  →  false
+      item.obsolete_BusinessIdentifier             Null  →  null
+      item.obsolete_SouthAfrica_VAT_Number         Null  →  null
+      item.obsolete_Philippines_TIN_Number         Null  →  null
+      item.obsolete_Telephone                      Null  →  null
+      item.obsolete_Fax                            Null  →  null
+      item.obsolete_Mobile                         Null  →  null
+      item.obsolete_Notes                          Null  →  null
+      item.obsolete_HasStartingBalance             Boolean  →  false
+      item.obsolete_StartingBalanceType            Number  →  0
+      item.obsolete_StartingBalance                Number  →  0
+      item.obsolete_CustomerPortal                 Boolean  →  false
+      item.hasDefaultBillingAddress                Boolean  →  true
+      item.defaultBillingAddress                   String  →  mine
+      item.hasDefaultDeliveryAddress               Boolean  →  true
+      item.defaultDeliveryAddress                  String  →  mine
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  COMPLETE EXTENSION SKELETON
+  Replace every ??? with real implementation.
+  DO NOT modify postMessage or the pagination loop.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Form to create a new customer directly from the sales invoice form.</title>
+<title>Form to create or edit a new customer.</title>
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:system-ui,sans-serif; background:#fafafa; color:#111827; min-height:100vh; padding:20px; }
+  body { font-family:system-ui,sans-serif; background:#ffffff; color:#24292f; min-height:100vh; padding:20px; }
 
-.ctrl-bar {
-display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-padding:12px 16px; margin-bottom:18px;
-background:#ffffff; border:1px solid #e5e7eb; border-radius:10px;
-}
-.load-btn {
-padding:8px 20px; border:none; border-radius:7px; cursor:pointer;
-font-size:13px; font-weight:700; background:#6366f1; color:#fff; transition:opacity .15s;
-}
-.load-btn:disabled { opacity:.45; cursor:not-allowed; }
-.prog-wrap { flex:1; min-width:100px; height:5px; background:#e5e7eb; border-radius:3px; overflow:hidden; }
-.prog-bar  { height:100%; width:0%; background:#6366f1; border-radius:3px; transition:width .25s; }
-.status-txt { font-size:12px; color:#6b7280; white-space:nowrap; }
-.err-box { color:#dc2626; background:#ffffff; border:1px solid #e5e7eb; border-radius:8px; padding:12px 16px; font-size:13px; margin-bottom:16px; }
+  .ctrl-bar {
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    padding:12px 16px; margin-bottom:18px;
+    background:#f6f8fa; border:1px solid #d0d7de; border-radius:10px;
+  }
+  .load-btn {
+    padding:8px 20px; border:none; border-radius:7px; cursor:pointer;
+    font-size:13px; font-weight:700; background:#0969da; color:#fff; transition:opacity .15s;
+  }
+  .load-btn:disabled { opacity:.45; cursor:not-allowed; }
+  .prog-wrap { flex:1; min-width:100px; height:5px; background:#d0d7de; border-radius:3px; overflow:hidden; }
+  .prog-bar  { height:100%; width:0%; background:#0969da; border-radius:3px; transition:width .25s; }
+  .status-txt { font-size:12px; color:#57606a; white-space:nowrap; }
+  .err-box { color:#cf222e; background:#f6f8fa; border:1px solid #d0d7de; border-radius:8px; padding:12px 16px; font-size:13px; margin-bottom:16px; }
 
-/* Minimal UI components */
-.panel {
-background:#fff;
-border:1px solid #e5e7eb;
-border-radius:10px;
-padding:14px;
-margin-bottom:14px;
-}
-.row {
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-align-items:center;
-justify-content:space-between;
-}
-.search {
-flex:1;
-min-width:220px;
-padding:10px 12px;
-border:1px solid #e5e7eb;
-border-radius:8px;
-font-size:13px;
-}
-.stat {
-font-size:12px;
-color:#6b7280;
-padding:6px 10px;
-background:#f9fafb;
-border:1px solid #e5e7eb;
-border-radius:8px;
-}
-table {
-width:100%;
-border-collapse:collapse;
-font-size:13px;
-}
-th, td {
-text-align:left;
-padding:10px;
-border-bottom:1px solid #e5e7eb;
-vertical-align:top;
-}
-th {
-font-size:12px;
-color:#6b7280;
-font-weight:600;
-background:#fafafa;
-}
-tr:hover td { background:#fafafa; }
-.badge {
-display:inline-block;
-padding:3px 8px;
-border-radius:999px;
-font-size:11px;
-border:1px solid #e5e7eb;
-background:#f9fafb;
-color:#374151;
-}
-.inactive { opacity:.6; }
-.empty {
-padding:20px;
-text-align:center;
-color:#6b7280;
-} </style>
-
+  /* ??? Add your component styles here */
+</style>
 </head>
 <body>
 
@@ -98,9 +185,13 @@ color:#6b7280;
   <span class="status-txt" id="status-txt">Press Load to fetch data from Manager</span>
 </div>
 
+<!-- ??? Add your HTML structure here -->
 <div id="app"></div>
 
 <script>
+/* ══════════════════════════════════
+   postMessage helper — DO NOT MODIFY
+══════════════════════════════════ */
 function postMessageWithResponse(message) {
   return new Promise((resolve, reject) => {
     const requestId = crypto.randomUUID();
@@ -120,6 +211,13 @@ function postMessageWithResponse(message) {
   });
 }
 
+/* ══════════════════════════════════
+   getCustomerBatch
+   Fetches ALL pages — DO NOT SIMPLIFY.
+   Manager.io returns ≤50 records per call.
+   This loop follows next_page_token until
+   every record is loaded.
+══════════════════════════════════ */
 async function getCustomerBatch(onProgress) {
   const allItems = [];
   let nextToken  = null;
@@ -151,6 +249,9 @@ async function getCustomerBatch(onProgress) {
   return allItems;
 }
 
+/* ══════════════════════════════════
+   loadAllRecords — wired to Load button
+══════════════════════════════════ */
 async function loadAllRecords() {
   const btn    = document.getElementById('load-btn');
   const bar    = document.getElementById('prog-bar');
@@ -184,109 +285,102 @@ async function loadAllRecords() {
   }
 }
 
-/* ===========================
-   render(items) IMPLEMENTED
-=========================== */
+/* ══════════════════════════════════
+   render(items) — IMPLEMENT THIS
+   items = all records from /api4/customer-batch
+══════════════════════════════════ */
 function render(items) {
   const app = document.getElementById('app');
 
-  if (!items || items.length === 0) {
-    app.innerHTML = `<div class="panel empty">No customers found. Load data to begin.</div>`;
-    return;
-  }
+  /*
+  ??? IMPLEMENT YOUR UI HERE
 
-  const customers = items.map(x => x?.item).filter(Boolean);
+  Available fields on each item:
+      // _summary.endpoint
+      // _summary.totalLoaded
+      // _summary.pages
+      // _summary.elapsedMs
+      // _summary.stoppedEarly
+      // items.0.item.name
+      // items.0.item.code
+      // items.0.item.creditLimit
+      // items.0.item.currency
+      // items.0.item.billingAddress
+      // items.0.item.deliveryAddress
+      // items.0.item.email
+      // items.0.item.division
+      // items.0.item.controlAccount
+      // items.0.item.hasDefaultDueDateDays
+      // items.0.item.defaultDueDateDays
+      // items.0.item.hasDefaultHourlyRate
+      // items.0.item.defaultHourlyRate
+      // items.0.item.inactive
+      // items.0.item.customFields
 
-  const total = customers.length;
-  const active = customers.filter(c => !c?.inactive).length;
-  const inactive = total - active;
+  Goal: Form to create or edit a new customer.
 
-  let query = "";
+  Access pattern examples:
+  //   item._summary?.endpoint
+  //   item._summary?.totalLoaded
+  //   item._summary?.pages
+  //   item._summary?.elapsedMs
+  //   item._summary?.stoppedEarly
+  //   item.items?.0?.item?.name
 
-  const container = document.createElement('div');
+  Helpful snippets:
+  const total   = items.length;
+  const sum     = items.reduce((a,b) => a + (b?._summary.totalLoaded||0), 0);
+  const fmt     = v => '$' + (v||0).toLocaleString(undefined, { minimumFractionDigits:2 });
+  const sorted  = [...items].sort((a,b) => (b?._summary.totalLoaded||0) - (a?._summary.totalLoaded||0));
+  const grouped = items.reduce((m,i)=>{ const k=i?.someKey; (m[k]=m[k]||[]).push(i); return m; }, {});
+  */
 
-  container.innerHTML = `
-    <div class="panel">
-      <div class="row">
-        <input class="search" id="searchBox" placeholder="Search customers by name, email, or address..." />
-        <div class="stat">Total: ${total.toLocaleString()}</div>
-        <div class="stat">Active: ${active.toLocaleString()}</div>
-        <div class="stat">Inactive: ${inactive.toLocaleString()}</div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Billing Address</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-      <div id="emptyState" class="empty" style="display:none;">No matching customers</div>
-    </div>
-  `;
-
-  app.innerHTML = "";
-  app.appendChild(container);
-
-  const tbody = container.querySelector('#tableBody');
-  const emptyState = container.querySelector('#emptyState');
-  const searchBox = container.querySelector('#searchBox');
-
-  function draw(list) {
-    tbody.innerHTML = "";
-
-    if (!list.length) {
-      emptyState.style.display = "block";
-      return;
-    }
-    emptyState.style.display = "none";
-
-    for (const c of list) {
-      const tr = document.createElement('tr');
-
-      const name = c?.nameWithCode || c?.name || c?.text || "—";
-      const email = c?.email || "—";
-      const address = c?.billingAddress || "—";
-      const inactive = c?.inactive ? true : false;
-
-      tr.className = inactive ? "inactive" : "";
-
-      tr.innerHTML = `
-        <td><strong>${name}</strong></td>
-        <td>${email}</td>
-        <td>${address}</td>
-        <td>${inactive ? '<span class="badge">Inactive</span>' : '<span class="badge">Active</span>'}</td>
-      `;
-
-      tbody.appendChild(tr);
-    }
-  }
-
-  function filter(val) {
-    query = val.toLowerCase().trim();
-
-    const filtered = customers.filter(c => {
-      const name = (c?.nameWithCode || c?.name || c?.text || "").toLowerCase();
-      const email = (c?.email || "").toLowerCase();
-      const addr = (c?.billingAddress || "").toLowerCase();
-
-      return name.includes(query) || email.includes(query) || addr.includes(query);
-    });
-
-    draw(filtered);
-  }
-
-  searchBox.addEventListener('input', e => filter(e.target.value));
-
-  draw(customers);
+  app.innerHTML = `<p style="color:#57606a;padding:20px">??? Implement render(items) — ${items.length} records available</p>`;
 }
-</script>
-
+<\/script>
 </body>
 </html>
+
+FINAL INSTRUCTIONS
+────────────────────────────────────────────────────────────
+OUTPUT FORMAT
+• Return ONLY the raw HTML — starting with <!doctype html>.
+• NO markdown fences, NO preamble, NO trailing notes. Just HTML.
+
+ARCHITECTURE — NON-NEGOTIABLE
+• Single, self-contained HTML file. All JS and CSS inline.
+• postMessageWithResponse() copied exactly from the skeleton.
+• CDN libs via <script src> are allowed.
+
+PAGINATION — DO NOT SIMPLIFY
+• Manager.io returns at most 50 records per request.
+• Keep the full pagination loop — it follows next_page_token.
+• Never replace it with a single fetch call.
+
+IMPLEMENTATION
+• Goal: Form to create or edit a new customer.
+• Fully implement render(items). No stubs, no placeholders.
+• Use field paths exactly as shown in DATA SCHEMA.
+• Prefer optional chaining: item?.field rather than item.field.
+
+VISUAL QUALITY — LIGHT THEME
+• Apply the light theme consistently. Look polished and production-ready.
+• Format numbers with locale separators. Dates must be human-readable.
+• Currency: correct symbol + 2 decimal places.
+
+ROBUSTNESS
+• Empty dataset → show clear empty-state message.
+• API errors → catch all rejections, show user-friendly error panel.
+• Null/undefined fields → optional chaining + nullish fallbacks.
+• Division by zero → guard all percentages and averages.
+
+CODE CLARITY
+• Brief inline comments above each major section.
+
+SELF-CHECK BEFORE FINISHING
+✓ File starts with <!doctype html>, no markdown fences?
+✓ postMessageWithResponse() copied verbatim?
+✓ Full pagination loop present and untouched?
+✓ render(items) fully implemented (not a stub)?
+✓ Edge cases handled (empty, error, single record)?
+✓ UI matches the light theme and looks production-ready?
