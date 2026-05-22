@@ -4,10 +4,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Form to create or edit a record with validation</title>
+<title>Customer Manager</title>
 
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
+
   body {
     font-family: system-ui, sans-serif;
     background:#ffffff;
@@ -17,33 +18,64 @@
   }
 
   .ctrl-bar {
-    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-    padding:12px 16px; margin-bottom:18px;
-    background:#f6f8fa; border:1px solid #d0d7de; border-radius:10px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    padding:12px 16px;
+    margin-bottom:18px;
+    background:#f6f8fa;
+    border:1px solid #d0d7de;
+    border-radius:10px;
   }
+
   .load-btn {
-    padding:8px 20px; border:none; border-radius:7px; cursor:pointer;
-    font-size:13px; font-weight:700; background:#0969da; color:#fff;
+    padding:8px 18px;
+    border:none;
+    border-radius:7px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:700;
+    background:#0969da;
+    color:#fff;
   }
-  .load-btn:disabled { opacity:.45; cursor:not-allowed; }
 
-  .prog-wrap { flex:1; min-width:120px; height:5px; background:#d0d7de; border-radius:3px; overflow:hidden; }
-  .prog-bar { height:100%; width:0%; background:#0969da; transition:width .25s; }
+  .load-btn:disabled { opacity:.5; cursor:not-allowed; }
 
-  .status-txt { font-size:12px; color:#57606a; white-space:nowrap; }
+  .prog-wrap {
+    flex:1;
+    min-width:120px;
+    height:6px;
+    background:#d0d7de;
+    border-radius:4px;
+    overflow:hidden;
+  }
+
+  .prog-bar {
+    height:100%;
+    width:0%;
+    background:#0969da;
+    transition:width .2s;
+  }
+
+  .status-txt {
+    font-size:12px;
+    color:#57606a;
+    white-space:nowrap;
+  }
 
   .err-box {
-    color:#cf222e; background:#fff5f5;
-    border:1px solid #ffd0d0;
+    padding:12px 14px;
+    border:1px solid #d0d7de;
     border-radius:8px;
-    padding:12px;
+    background:#fff5f5;
+    color:#cf222e;
     margin-bottom:12px;
   }
 
-  /* Layout */
   .layout {
     display:grid;
-    grid-template-columns: 320px 1fr;
+    grid-template-columns: 1fr 1.2fr;
     gap:16px;
   }
 
@@ -58,11 +90,10 @@
     padding:10px 12px;
     background:#f6f8fa;
     border-bottom:1px solid #d0d7de;
-    font-size:13px;
     font-weight:700;
+    font-size:13px;
   }
 
-  /* List */
   .search {
     width:100%;
     padding:10px;
@@ -71,77 +102,83 @@
     outline:none;
   }
 
-  .list {
-    max-height:65vh;
-    overflow:auto;
+  .table {
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
   }
 
-  .item {
-    padding:10px 12px;
-    border-bottom:1px solid #f0f0f0;
+  .table tr {
     cursor:pointer;
   }
-  .item:hover { background:#f6f8fa; }
-  .item.active { background:#eaf2ff; }
 
-  .muted { color:#57606a; font-size:12px; }
+  .table tr:hover {
+    background:#f6f8fa;
+  }
 
-  /* Form */
+  .table td {
+    padding:8px 10px;
+    border-bottom:1px solid #f0f0f0;
+  }
+
+  .selected {
+    background:#e7f1ff !important;
+  }
+
   .form {
     padding:12px;
     display:grid;
+    grid-template-columns:1fr 1fr;
     gap:10px;
   }
 
-  .row {
-    display:grid;
-    grid-template-columns: 160px 1fr;
-    gap:10px;
-    align-items:center;
+  .form label {
+    font-size:12px;
+    color:#57606a;
+    margin-bottom:4px;
+    display:block;
   }
 
-  label { font-size:13px; color:#24292f; }
+  .field {
+    display:flex;
+    flex-direction:column;
+  }
 
-  input, textarea {
-    width:100%;
-    padding:8px 10px;
+  input {
+    padding:8px;
     border:1px solid #d0d7de;
     border-radius:6px;
-    font-size:13px;
     outline:none;
   }
 
-  input:focus, textarea:focus {
+  input:focus {
     border-color:#0969da;
   }
 
-  textarea { min-height:70px; resize:vertical; }
+  .full { grid-column:1 / -1; }
 
   .actions {
+    grid-column:1 / -1;
     display:flex;
     gap:10px;
-    margin-top:8px;
+    margin-top:6px;
   }
 
   .btn {
     padding:8px 12px;
-    border-radius:7px;
-    border:1px solid #d0d7de;
-    background:#f6f8fa;
-    cursor:pointer;
-    font-weight:600;
+    border:none;
+    border-radius:6px;
+    font-weight:700;
     font-size:13px;
   }
 
-  .btn.primary {
-    background:#0969da;
-    color:#fff;
-    border:none;
-  }
+  .btn-primary { background:#0969da; color:#fff; }
+  .btn-secondary { background:#f6f8fa; border:1px solid #d0d7de; }
 
-  .error {
-    color:#cf222e;
+  .hint {
     font-size:12px;
+    color:#57606a;
+    margin-top:6px;
   }
 
   .empty {
@@ -158,14 +195,14 @@
 <div class="ctrl-bar">
   <button class="load-btn" id="load-btn" onclick="loadAllRecords()">⬇ Load All Records</button>
   <div class="prog-wrap"><div class="prog-bar" id="prog-bar"></div></div>
-  <span class="status-txt" id="status-txt">Press Load to fetch data from Manager</span>
+  <span class="status-txt" id="status-txt">Press Load to fetch customers</span>
 </div>
 
 <div id="app"></div>
 
 <script>
 /* ══════════════════════════════════
-   postMessage helper — DO NOT MODIFY
+   DO NOT MODIFY
 ══════════════════════════════════ */
 function postMessageWithResponse(message) {
   return new Promise((resolve, reject) => {
@@ -189,7 +226,7 @@ function postMessageWithResponse(message) {
 }
 
 /* ══════════════════════════════════
-   pagination — DO NOT MODIFY
+   PAGINATION LOOP (DO NOT CHANGE)
 ══════════════════════════════════ */
 async function getCustomerBatch(onProgress) {
   const allItems = [];
@@ -222,216 +259,207 @@ async function getCustomerBatch(onProgress) {
   return allItems;
 }
 
-/* ══════════════════════════════════ */
-let state = {
-  items: [],
-  selectedIndex: null,
-  errors: {}
+/* ══════════════════════════════════
+   GLOBAL STATE
+══════════════════════════════════ */
+window.__state = {
+  customers: [],
+  filtered: [],
+  selected: null,
+  search: ''
 };
 
-/* Load */
+/* ══════════════════════════════════
+   LOAD DATA
+══════════════════════════════════ */
 async function loadAllRecords() {
-  const btn    = document.getElementById('load-btn');
-  const bar    = document.getElementById('prog-bar');
+  const btn = document.getElementById('load-btn');
+  const bar = document.getElementById('prog-bar');
   const status = document.getElementById('status-txt');
-  const app    = document.getElementById('app');
 
   btn.disabled = true;
   btn.textContent = 'Loading…';
   bar.style.width = '0%';
-  app.innerHTML = '';
 
   try {
     const items = await getCustomerBatch((loaded, total, page) => {
       status.textContent = total
-        ? `Page ${page} · ${loaded.toLocaleString()} / ${total.toLocaleString()}`
-        : `Page ${page} · ${loaded.toLocaleString()} loaded…`;
-
-      if (total) bar.style.width = Math.min(95, Math.round(loaded / total * 100)) + '%';
+        ? `Page ${page} · ${loaded} / ${total}`
+        : `Page ${page} · ${loaded} loaded`;
+      if (total) bar.style.width = Math.min(95, (loaded / total) * 100) + '%';
     });
 
-    state.items = items || [];
-    bar.style.width = '100%';
+    window.__state.customers = items;
+    window.__state.filtered = items;
 
-    status.textContent = `✓ ${state.items.length.toLocaleString()} records loaded`;
+    bar.style.width = '100%';
+    status.textContent = `✓ ${items.length} customers loaded`;
+
     btn.textContent = '↺ Reload';
     btn.disabled = false;
 
-    render(state.items);
+    render(items);
 
   } catch (err) {
-    status.textContent = '⚠ ' + err.message;
+    status.textContent = 'Error: ' + err.message;
     btn.textContent = '↺ Retry';
     btn.disabled = false;
-
-    app.innerHTML = `<div class="err-box">⚠ ${err.message}</div>`;
+    document.getElementById('app').innerHTML =
+      `<div class="err-box">${err.message}</div>`;
   }
 }
 
 /* ══════════════════════════════════
-   Validation
+   VALIDATION
 ══════════════════════════════════ */
-function validate(customer) {
-  const errors = {};
+function validateCustomer(c) {
+  const errors = [];
 
-  if (!customer.name?.trim()) {
-    errors.name = "Name is required";
+  if (!c.name || c.name.trim().length === 0) {
+    errors.push("Name is required");
   }
 
-  if (customer.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)) {
-    errors.email = "Invalid email format";
+  if (c.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email)) {
+    errors.push("Invalid email format");
   }
 
-  if (customer.creditLimit != null && customer.creditLimit < 0) {
-    errors.creditLimit = "Credit limit cannot be negative";
+  if (c.creditLimit != null && c.creditLimit < 0) {
+    errors.push("Credit limit cannot be negative");
   }
 
   return errors;
 }
 
 /* ══════════════════════════════════
-   Render UI
+   SELECT CUSTOMER
+══════════════════════════════════ */
+function selectCustomer(index) {
+  window.__state.selected = index;
+  render(window.__state.customers);
+}
+
+/* ══════════════════════════════════
+   UPDATE FIELD
+══════════════════════════════════ */
+function updateField(field, value) {
+  const idx = window.__state.selected;
+  if (idx == null) return;
+
+  const raw = window.__state.customers[idx];
+  const c = raw.item || raw;
+
+  c[field] = field === 'creditLimit' ? Number(value) : value;
+
+  render(window.__state.customers);
+}
+
+/* ══════════════════════════════════
+   RENDER UI
 ══════════════════════════════════ */
 function render(items) {
   const app = document.getElementById('app');
 
-  if (!items || items.length === 0) {
-    app.innerHTML = `<div class="empty">No customers found</div>`;
-    return;
-  }
+  const normalized = items.map(x => x.item ? x.item : x);
 
-  const selected = state.selectedIndex != null ? items[state.selectedIndex] : items[0];
-  if (state.selectedIndex == null) state.selectedIndex = 0;
+  const state = window.__state;
 
-  const listHtml = items.map((it, idx) => {
-    const name = it?.item?.name || 'Unnamed';
-    const code = it?.item?.code || '';
-    return `
-      <div class="item ${idx === state.selectedIndex ? 'active' : ''}"
-           onclick="selectItem(${idx})">
-        <div><b>${name}</b></div>
-        <div class="muted">${code}</div>
-      </div>
-    `;
-  }).join('');
+  const selectedItem = state.selected != null ? normalized[state.selected] : null;
 
-  const formErrors = state.errors || {};
+  const filtered = state.search
+    ? normalized.filter(c =>
+        (c.name || '').toLowerCase().includes(state.search.toLowerCase()) ||
+        (c.email || '').toLowerCase().includes(state.search.toLowerCase())
+      )
+    : normalized;
 
-  const c = selected?.item || {};
+  let html = `
+  <div class="layout">
 
-  app.innerHTML = `
-    <div class="layout">
+    <div class="panel">
+      <div class="panel-header">Customers (${filtered.length})</div>
+      <input class="search" placeholder="Search name or email..."
+        oninput="window.__state.search=this.value; render(window.__state.customers)" />
 
-      <div class="panel">
-        <div class="panel-header">Customers</div>
-        <input class="search" placeholder="Search..." oninput="filterList(this.value)">
-        <div class="list" id="list">
-          ${listHtml}
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-header">Edit Customer (local only)</div>
-
-        <div class="form">
-          <div class="row">
-            <label>Name *</label>
-            <div>
-              <input id="name" value="${c.name || ''}" oninput="updateField('name', this.value)">
-              <div class="error">${formErrors.name || ''}</div>
-            </div>
-          </div>
-
-          <div class="row">
-            <label>Email</label>
-            <div>
-              <input id="email" value="${c.email || ''}" oninput="updateField('email', this.value)">
-              <div class="error">${formErrors.email || ''}</div>
-            </div>
-          </div>
-
-          <div class="row">
-            <label>Code</label>
-            <input id="code" value="${c.code || ''}" oninput="updateField('code', this.value)">
-          </div>
-
-          <div class="row">
-            <label>Credit Limit</label>
-            <div>
-              <input type="number" id="creditLimit" value="${c.creditLimit || 0}"
-                oninput="updateField('creditLimit', Number(this.value))">
-              <div class="error">${formErrors.creditLimit || ''}</div>
-            </div>
-          </div>
-
-          <div class="row">
-            <label>Billing Address</label>
-            <textarea oninput="updateField('billingAddress', this.value)">${c.billingAddress || ''}</textarea>
-
-```
-      </div>
-
-      <div class="row">
-        <label>Delivery Address</label>
-        <textarea oninput="updateField('deliveryAddress', this.value)">${c.deliveryAddress || ''}</textarea>
-      </div>
-
-      <div class="row">
-        <label>Inactive</label>
-        <input type="checkbox" ${c.inactive ? 'checked' : ''} onclick="updateField('inactive', this.checked)">
-      </div>
-
-      <div class="actions">
-        <button class="btn" onclick="revalidate()">Validate</button>
-        <button class="btn primary" onclick="resetLocal()">Reset</button>
-      </div>
+      <table class="table">
+        ${filtered.length === 0 ? `<tr><td class="empty">No customers found</td></tr>` : filtered.map((c, i) => {
+          const globalIndex = normalized.indexOf(c);
+          const isSel = state.selected === globalIndex;
+          return `
+            <tr class="${isSel ? 'selected' : ''}" onclick="selectCustomer(${globalIndex})">
+              <td><strong>${c.name || 'Unnamed'}</strong><br><small>${c.email || ''}</small></td>
+            </tr>
+          `;
+        }).join('')}
+      </table>
     </div>
+
+    <div class="panel">
+      <div class="panel-header">Customer Editor</div>
+
+      ${selectedItem ? `
+        ${(() => {
+          const errors = validateCustomer(selectedItem);
+
+          return `
+          ${errors.length ? `<div class="err-box">${errors.join('<br>')}</div>` : ''}
+
+          <div class="form">
+
+            <div class="field full">
+              <label>Name *</label>
+              <input value="${selectedItem.name || ''}" oninput="updateField('name', this.value)">
+            </div>
+
+            <div class="field">
+              <label>Email</label>
+              <input value="${selectedItem.email || ''}" oninput="updateField('email', this.value)">
+            </div>
+
+            <div class="field">
+              <label>Credit Limit</label>
+              <input type="number" value="${selectedItem.creditLimit || 0}"
+                oninput="updateField('creditLimit', this.value)">
+            </div>
+
+            <div class="field full">
+              <label>Billing Address</label>
+              <input value="${selectedItem.billingAddress || ''}"
+                oninput="updateField('billingAddress', this.value)">
+            </div>
+
+            <div class="field full">
+              <label>Delivery Address</label>
+              <input value="${selectedItem.deliveryAddress || ''}"
+                oninput="updateField('deliveryAddress', this.value)">
+            </div>
+
+            <div class="field">
+              <label>Inactive</label>
+              <input type="checkbox" ${selectedItem.inactive ? 'checked' : ''}
+                onchange="updateField('inactive', this.checked)">
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-secondary" onclick="render(window.__state.customers)">Reset View</button>
+              <button class="btn btn-primary" onclick="alert('Read-only mode: changes are local only')">Save</button>
+            </div>
+
+            <div class="hint">Read-only extension — edits are not persisted to Manager.io</div>
+
+          </div>`;
+        })()}
+      ` : `<div class="empty">Select a customer to view or edit</div>`}
+
+    </div>
+
   </div>
+  `;
 
-</div>
-```
-
-`;
-}
-
-/* ══════════════════════════════════
-Interaction
-══════════════════════════════════ */
-function selectItem(idx) {
-state.selectedIndex = idx;
-state.errors = {};
-render(state.items);
-}
-
-function updateField(field, value) {
-const item = state.items[state.selectedIndex]?.item;
-if (!item) return;
-
-item[field] = value;
-}
-
-function revalidate() {
-const item = state.items[state.selectedIndex]?.item;
-state.errors = validate(item);
-render(state.items);
-}
-
-function resetLocal() {
-state.errors = {};
-render(state.items);
-}
-
-function filterList(q) {
-const list = document.querySelectorAll('.item');
-list.forEach(el => {
-el.style.display = el.innerText.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
-});
+  app.innerHTML = html;
 }
 
 /* initial empty render */
-document.getElementById('app').innerHTML =
-`<div class="empty">Load records to begin editing</div>`;
-
+render([]);
 </script>
 
 </body>
